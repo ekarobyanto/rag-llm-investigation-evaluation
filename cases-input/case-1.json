@@ -1,0 +1,504 @@
+{
+  "case_1_medium": {
+    "case": {
+      "title": "The Procurement Ledger Discrepancy",
+      "description": "On October 14, 2026, an internal audit at Apex Logistics Corp revealed an unauthorized vendor payment of $45,000 processed between 14:00 and 16:00. The payment was routed to an unverified entity named 'Vertex Supplies'. The investigator must determine which financial officer authorized this fraudulent transaction."
+    },
+    "suspects": [
+      {
+        "name": "David Vance",
+        "profile": "Senior Procurement Manager who has administrative access to the vendor payment portal and was under investigation for a previous expense report anomaly."
+      },
+      {
+        "name": "Elena Rostova",
+        "profile": "Junior Financial Analyst responsible for verifying new vendor accounts. She recently complained about excessive workload and lack of oversight."
+      },
+      {
+        "name": "Marcus Brody",
+        "profile": "Chief Financial Officer who holds final approval authority for all transactions exceeding $10,000. He claims he was in a board meeting during the incident window."
+      },
+      {
+        "name": "Sarah Jenkins",
+        "profile": "IT Systems Administrator with access to all financial databases, who recently submitted her two-week resignation notice."
+      }
+    ],
+    "evidence": [
+      {
+        "type": "financial_record",
+        "category": "financial",
+        "difficulty_weight": 0.9,
+        "content": "Transaction ID TXN-998211 at 14:45 shows a disbursement of $45,000 to Vertex Supplies, authorized using credentials assigned to Marcus Brody."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.8,
+        "content": "Access control badge logs indicate Marcus Brody entered Boardroom B at 13:55 and did not exit until 16:05."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.9,
+        "content": "David Vance stated: 'I was in my private office typing up the quarterly procurement report from 14:00 to 16:00 and did not use any network systems.'"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.7,
+        "content": "Badge reader logs show David Vance scanned into the Executive Suite wing at 14:10, which houses the CFO office, and scanned out at 15:20."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.9,
+        "content": "An encrypted email draft saved in David Vance's corporate account at 11:15 contains the routing number and banking details for 'Vertex Supplies'."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Elena Rostova stated: 'I was at my desk in the open-plan finance pool the entire afternoon processing invoices, which Marcus Brody can confirm.'"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.2,
+        "content": "Network login logs show Elena Rostova's workstation was actively processing standard invoice batches continuously from 13:00 to 17:00."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "An internal HR email dated October 10 shows Sarah Jenkins expressing severe dissatisfaction regarding her denied bonus application."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Sarah Jenkins' server room access badge was used to enter Server Room 3 at 13:45 and exit at 16:15."
+      },
+      {
+        "type": "cctv_log",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "CCTV camera 4 captures Sarah Jenkins inside Server Room 3 performing physical maintenance on server racks from 14:00 to 15:45."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "A routine utility payment of $1,200 to City Power Corp was auto-executed by the system at 14:15."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "An all-hands email from HR regarding the upcoming company holiday party was distributed to all staff at 14:30."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "A colleague stated: 'David Vance has been complaining about high personal credit card debts and mentioned needing a fast liquidity solution.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Digital forensic analysis reveals Marcus Brody's terminal in his private office was utilized to approve TXN-998211 at 14:45 while he was away."
+      },
+      {
+        "type": "cctv_log",
+        "category": "contradiction",
+        "difficulty_weight": 0.4,
+        "content": "CCTV corridor camera 2 shows Elena Rostova leaving her desk to go to the cafeteria at 14:30 and returning at 15:00."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Petty cash log shows Elena Rostova withdrew $20 for office kitchen supplies at 11:00."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "A calendar invite confirms Marcus Brody was scheduled for the Boardroom B meeting from 14:00 to 16:00."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "A network vulnerability scan completed at 13:00 showed no external intrusions or malware active on the core financial servers."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "The office receptionist stated: 'I saw Sarah Jenkins arrive at work at 08:45 carrying a laptop bag and a coffee.'"
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Sarah Jenkins sent a system maintenance notification to the entire department at 13:30 regarding scheduled database indexing."
+      }
+    ],
+    "ground_truth": {
+      "correct_suspect_name": "David Vance",
+      "contradiction_pairs": [
+        {
+          "evidence_index_1": 2,
+          "evidence_index_2": 3,
+          "explanation": "David Vance claims he was in his private office typing a report from 14:00 to 16:00, but badge logs prove he left that area and entered the Executive Suite wing between 14:10 and 15:20."
+        },
+        {
+          "evidence_index_1": 5,
+          "evidence_index_2": 14,
+          "explanation": "Elena Rostova claims she was at her desk the entire afternoon, but CCTV shows she was away in the cafeteria from 14:30 to 15:00."
+        }
+      ],
+      "relevant_evidence_indices": [0, 1, 3, 4, 13],
+      "optimal_next_actions": [
+        "INTERROGATE_SUSPECT",
+        "EXAMINE_EVIDENCE",
+        "SUBMIT_DEDUCTION"
+      ]
+    }
+  },
+  "case_2_hard": {
+    "case": {
+      "title": "The Missing Quantum Blueprint",
+      "description": "On November 3, 2026, between 20:00 and 22:00, a physical high-security storage drive containing the proprietary blueprints for the NextGen Quantum Processor vanished from the Vault Room at Novatech Research Labs. The investigator must determine which researcher executed the theft."
+    },
+    "suspects": [
+      {
+        "name": "Dr. Aris Thorne",
+        "profile": "Lead Quantum Physicist who designed the architecture. He openly opposed the commercialization contract signed with a foreign defense contractor."
+      },
+      {
+        "name": "Dr. Clara Mendoza",
+        "profile": "Senior Materials Scientist who had authorized vault access privileges. Her private research firm recently filed for bankruptcy protection."
+      },
+      {
+        "name": "Julian Vance",
+        "profile": "Laboratory Security Officer on duty monitoring the main console during the evening shift who recently purchased an expensive sports car."
+      },
+      {
+        "name": "Dr. Raymond Finch",
+        "profile": "Junior Research Fellow whose contract was terminated earlier that day, scheduled to leave the facility permanently at midnight."
+      }
+    ],
+    "evidence": [
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.9,
+        "content": "Vault Room access logs show Dr. Clara Mendoza's biometric badge was scanned at the entrance door at 20:42 and scanned out at 20:55."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.8,
+        "content": "Dr. Clara Mendoza stated: 'I lost my physical proximity badge around 19:30 during dinner in the cafeteria, and I stayed in the Main Lab finishing my paperwork until 22:00.'"
+      },
+      {
+        "type": "cctv_log",
+        "category": "contradiction",
+        "difficulty_weight": 0.9,
+        "content": "Cafeteria CCTV footage from 19:15 to 19:45 shows Dr. Clara Mendoza keeping her physical badge visibly clipped to her white lab coat the entire time."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.8,
+        "content": "An external email from Dr. Clara Mendoza's personal address sent to an encrypted contact at 17:00 reads: 'The asset will be secured tonight before the late shift ends. Prepare the transfer.'"
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Dr. Aris Thorne stated: 'I left the research facility entirely at 19:00 to have dinner with my wife at Bistro West; we did not return until the following morning.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.9,
+        "content": "A bank statement linked to Dr. Clara Mendoza reveals an anonymous offshore wire transfer deposit of $250,000 pending execution upon verification."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "GPS vehicle tracking log indicates Dr. Aris Thorne's vehicle arrived at Bistro West parking lot at 19:25 and remained stationary until 22:15."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Julian Vance stated: 'I remained locked inside the Central Security Command Room monitoring all primary video feeds from 18:00 to 00:00 without any breaks.'"
+      },
+      {
+        "type": "cctv_log",
+        "category": "location",
+        "difficulty_weight": 0.6,
+        "content": "Corridor CCTV at 20:38 shows Julian Vance walking toward the break room vending machines and returning with a beverage at 20:50."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.3,
+        "content": "Dr. Raymond Finch stated: 'I spent my final evening packing my personal textbooks and clean-up samples in Office 4B. I didn't even go near the vault corridor.'"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "Badge history for Office 4B registers Dr. Raymond Finch entering at 18:30 and exiting with a large cardboard box at 21:15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "Latent fingerprint analysis performed on the empty protective drive casing inside the vault recovered a high-quality match belonging to Dr. Clara Mendoza."
+      },
+      {
+        "type": "cctv_log",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Main lobby camera shows a routine courier delivery driver dropping off specialized lab chemicals at the reception desk at 20:15."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Automated HVAC system logs show a slight temperature variance in the Server Room at 20:30 due to routine backup cycles."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Dr. Raymond Finch received an automated exit interview questionnaire from HR at 19:00 with instructions for badge return."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Julian Vance's bank statement logs a routine monthly auto-debit transaction for his vehicle insurance premium at 21:00."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Dust fiber analysis from the Vault floor indicated standard industrial carpet cleaner residue applied during previous weekend maintenance."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "The front desk receptionist stated: 'Dr. Aris Thorne said goodnight to me when he passed the lobby doors around 18:55.'"
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "A facility-wide broadcast email from IT scheduled database defragmentation for midnight on November 3."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Facility gate sensors recorded Dr. Aris Thorne's registered vehicle tag exiting the perimeter parking structure at 19:02."
+      }
+    ],
+    "ground_truth": {
+      "correct_suspect_name": "Dr. Clara Mendoza",
+      "contradiction_pairs": [
+        {
+          "evidence_index_1": 1,
+          "evidence_index_2": 2,
+          "explanation": "Dr. Clara Mendoza claims she lost her physical badge during dinner at 19:30, but the cafeteria CCTV explicitly confirms the badge remained clipped to her coat during that entire window."
+        },
+        {
+          "evidence_index_1": 7,
+          "evidence_index_2": 8,
+          "explanation": "Julian Vance claims he remained locked inside the Central Security Command Room continuously, but CCTV shows him out in the corridor visiting vending machines between 20:38 and 20:50."
+        }
+      ],
+      "relevant_evidence_indices": [0, 2, 3, 5, 11],
+      "optimal_next_actions": [
+        "EXAMINE_EVIDENCE",
+        "REVIEW_TIMELINE",
+        "SUBMIT_DEDUCTION"
+      ]
+    }
+  },
+  "case_3_hard_plus": {
+    "case": {
+      "title": "Operation Midnight Leak",
+      "description": "On December 12, 2026, between 01:00 and 04:00, a highly confidential pricing spreadsheet detailing next year's government contract bids was downloaded via an authorized VPN connection and leaked to a prominent competitor. The investigator must isolate the specific operative responsible for the credential misuse."
+    },
+    "suspects": [
+      {
+        "name": "Victor Sterling",
+        "profile": "Director of Government Relations who negotiated the bidding parameters. He has full remote access privileges and was seen arguing with the CEO regarding equity distribution."
+      },
+      {
+        "name": "Nadia Volkov",
+        "profile": "Senior Database Engineer who designed the security access architecture. She routinely works unusual late-night hours from her home office."
+      },
+      {
+        "name": "Arthur Pendelton",
+        "profile": "VP of Strategy who compiled the final figures. He has an unblemished 15-year career record but holds a secret brokerage account suffering heavy market losses."
+      },
+      {
+        "name": "Elena Rostova",
+        "profile": "Compliance Officer who audited the spreadsheet safety protocols. She recently downloaded large data volumes for a legitimate quarterly review."
+      }
+    ],
+    "evidence": [
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.9,
+        "content": "VPN firewall connection logs show a successful remote connection using the account credentials of Arthur Pendelton initiated at 01:15 and terminated at 03:45."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.9,
+        "content": "Arthur Pendelton stated: 'I was sound asleep at home all night. My personal corporate laptop was turned off and stored safely inside my locked briefcase in the study.'"
+      },
+      {
+        "type": "location_report",
+        "category": "contradiction",
+        "difficulty_weight": 0.9,
+        "content": "Residential smart-meter electrical data for Arthur Pendelton's household reveals a significant power surge matching a high-performance workstation boot sequence occurring between 01:10 and 03:50."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "ISP metadata tracking reveals that the remote VPN connection at 01:15 originated precisely from the residential IP address assigned exclusively to Arthur Pendelton's home fiber line."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Victor Sterling stated: 'I was hosting a late-night dinner party at my downtown apartment until 02:30. Seven different corporate clients can verify my presence.'"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Ride-share receipt data confirms Victor Sterling took an Uber from the downtown core back to his residence, arriving home at 02:55."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.8,
+        "content": "Nadia Volkov stated: 'I was running automated database optimization scripts from my home system from 01:00 to 04:00, which required my full undivided attention.'"
+      },
+      {
+        "type": "location_report",
+        "category": "contradiction",
+        "difficulty_weight": 0.8,
+        "content": "Database transaction query logs show that Nadia Volkov's personal developer account credentials recorded absolutely zero active query executions or script runs between 00:30 and 05:00."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.8,
+        "content": "An encrypted outbound email recovered from Arthur Pendelton's personal laptop cache, dated December 10, states: 'The final pricing grid will be finalized on the 12th. Have the payment escrow ready.'"
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Elena Rostova stated: 'I finished my compliance extraction tasks before midnight and shut down my terminal completely by 23:30 to rest.'"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.4,
+        "content": "Corporate internal perimeter security logs indicate Elena Rostova's active office badge did not pass any entrance gates after 18:00 on December 11."
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.9,
+        "content": "A hidden cryptocurrency wallet address linked to Arthur Pendelton's private cryptographic key received an inbound transaction of 5.5 Bitcoin at 04:15, immediately following the data leak window."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Victor Sterling's credit card statement shows a charge of $450 at the Downtown Oyster Bar timestamped at 23:45 on December 11."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Nadia Volkov received an automated system alert regarding low disk space on Backup Server B at 02:15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Routine antivirus scanner logs indicate a successful clean definition update across all corporate workstations at 03:00."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "An office security guard stated: 'The building was completely quiet after midnight. Only the cleaning crew was active on floors 2 and 3.'"
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Elena Rostova sent an email to the HR department at 17:15 on December 11 requesting a vacation day extension for the holidays."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "External weather station logs for the residential district report heavy snowfall and freezing temperatures between 01:00 and 05:00."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "An automated recurring monthly subscription payment for Arthur Pendelton's premium cloud storage account was processed at 02:00."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "A standard firmware integrity check on the main corporate router at 01:00 indicated all security patches were fully up to date."
+      }
+    ],
+    "ground_truth": {
+      "correct_suspect_name": "Arthur Pendelton",
+      "contradiction_pairs": [
+        {
+          "evidence_index_1": 1,
+          "evidence_index_2": 2,
+          "explanation": "Arthur Pendelton claims his laptop was completely turned off and stored away all night, but residential smart-meter data reveals a substantial electricity spike matching a high-performance workstation operation during the exact window of the leak."
+        },
+        {
+          "evidence_index_1": 6,
+          "evidence_index_2": 7,
+          "explanation": "Nadia Volkov claims she was actively executing database optimization scripts from 01:00 to 04:00, but official database logs demonstrate absolute zero execution activity occurred on her account."
+        }
+      ],
+      "relevant_evidence_indices": [0, 2, 3, 8, 11],
+      "optimal_next_actions": [
+        "INTERROGATE_SUSPECT",
+        "EXAMINE_EVIDENCE",
+        "REVIEW_TIMELINE",
+        "SUBMIT_DEDUCTION"
+      ]
+    }
+  }
+}

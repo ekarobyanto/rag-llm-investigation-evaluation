@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 model Case {
@@ -15,8 +17,10 @@ model Case {
   updatedAt   DateTime @updatedAt
 
   suspects              Suspect[]
-  evidence             Evidence[]
+  evidence              Evidence[]
   investigationSessions InvestigationSession[]
+  groundTruth           CaseGroundTruth?
+  evaluationScenarios   EvaluationScenario[]
 
   @@map("cases")
 }
@@ -27,22 +31,40 @@ model Suspect {
   name    String
   profile String @db.Text
 
-  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  case        Case             @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  groundTruths CaseGroundTruth[]
 
   @@map("suspects")
 }
 
 model Evidence {
-  id        String   @id @default(cuid())
-  caseId    String
-  type      String
-  content   String   @db.Text
-  embedding Vector(1536)?
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  caseId          String
+  type            String
+  category        String   @default("general")
+  content         String   @db.Text
+  difficultyWeight Float   @default(1.0)
+  embedding       Unsupported("vector(1536)")?
+  createdAt       DateTime @default(now())
 
   case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
   @@map("evidence")
+}
+
+model CaseGroundTruth {
+  id                   String   @id @default(cuid())
+  caseId               String   @unique
+  correctSuspectId     String
+  contradictionPairs   Json
+  relevantEvidenceIds  Json
+  optimalNextActions   Json
+  createdAt            DateTime @default(now())
+
+  case             Case    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  correctSuspect   Suspect @relation(fields: [correctSuspectId], references: [id])
+
+  @@map("case_ground_truth")
 }
 
 model InvestigationSession {
@@ -52,11 +74,26 @@ model InvestigationSession {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  case              Case                    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  case              Case               @relation(fields: [caseId], references: [id], onDelete: Cascade)
   investigationLogs InvestigationLog[]
   aiInteractionLogs AIInteractionLog[]
+  deduction         Deduction?
 
   @@map("investigation_sessions")
+}
+
+model Deduction {
+  id                String   @id @default(cuid())
+  sessionId         String   @unique
+  suspectId         String
+  reasoning         String   @db.Text
+  isCorrect         Boolean
+  correctSuspectId  String
+  submittedAt       DateTime @default(now())
+
+  session InvestigationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("deductions")
 }
 
 model InvestigationLog {
@@ -72,25 +109,53 @@ model InvestigationLog {
 }
 
 model AIInteractionLog {
-  id                     String   @id @default(cuid())
-  sessionId              String
-  caseId                 String
-  userPrompt             String   @db.Text
-  retrievedContext       String?  @db.Text
-  aiResponse             String   @db.Text
-  ragEnabled             Boolean
-  retrievalTimeMs        Int?
-  llmResponseTimeMs      Int
-  totalResponseTimeMs    Int
-  promptTokens           Int
-  completionTokens       Int
-  totalTokens            Int
-  hallucinationDetected  Boolean  @default(false)
-  hallucinationReason    String?  @db.Text
-  correctnessScore       Float?
-  createdAt              DateTime @default(now())
+  id                      String   @id @default(cuid())
+  sessionId               String
+  caseId                  String
+  scenarioId              String?
+  userPrompt              String   @db.Text
+  retrievedContext        String?  @db.Text
+  retrievedEvidenceIds    Json?
+  retrievalScores         Json?
+  retrievalSuccess        Boolean  @default(false)
+  retrievalPrecision      Float?
+  retrievalRecall         Float?
+  topKAccuracy            Boolean?
+  aiResponse              String   @db.Text
+  structuredRecommendation Json?
+  ragEnabled              Boolean
+  retrievalTimeMs         Int?
+  llmResponseTimeMs       Int
+  totalResponseTimeMs     Int
+  promptTokens            Int
+  completionTokens        Int
+  totalTokens             Int
+  estimatedCost           Float?
+  hallucinationDetected   Boolean  @default(false)
+  hallucinationReason     String?  @db.Text
+  correctnessScore        Float?
+  promptTemplateVersion   String   @default("v1")
+  createdAt               DateTime @default(now())
 
-  session InvestigationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session  InvestigationSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  scenario EvaluationScenario?   @relation(fields: [scenarioId], references: [id], onDelete: SetNull)
 
   @@map("ai_interaction_logs")
+}
+
+model EvaluationScenario {
+  id                     String   @id @default(cuid())
+  caseId                 String
+  prompt                 String   @db.Text
+  difficulty             String   // "easy" | "medium" | "hard"
+  requiredEvidenceIds    Json     // string[]
+  expectedActions        Json     // Array<{ action_type, target }>
+  expectedContradictions Json?    // Array<{ evidence_a, evidence_b }>
+  notes                  String?  @db.Text
+  createdAt              DateTime @default(now())
+
+  case        Case               @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  interactionLogs AIInteractionLog[]
+
+  @@map("evaluation_scenarios")
 }

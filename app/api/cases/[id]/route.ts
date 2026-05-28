@@ -3,11 +3,12 @@ import { prisma } from "@/lib/db"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const caseData = await prisma.case.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         suspects: true,
         evidence: true,

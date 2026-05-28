@@ -137,7 +137,7 @@ Each case includes:
 All configurable via `lib/rag.ts`:
 - RAG evidence limit (default: 5)
 - Investigation history limit (default: 10)
-- LLM model (default: gpt-4-turbo)
+- LLM model (default: gpt-4o)
 - Embedding model (default: text-embedding-3-small)
 - Temperature and token limits
 

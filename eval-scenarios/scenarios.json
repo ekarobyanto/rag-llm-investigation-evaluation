@@ -1,0 +1,114 @@
+[
+  {
+    "caseTitle": "The Procurement Ledger Discrepancy",
+    "prompt": "Who should be interrogated next based on the evidence?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [0, 2, 3, 4, 13],
+    "expectedActions": [
+      { "action_type": "INTERROGATE", "target": "David Vance" }
+    ],
+    "expectedContradictions": [
+      { "evidence_index_a": 2, "evidence_index_b": 3 }
+    ],
+    "notes": "David Vance authorized transaction via Marcus terminal. Badge logs contradict his alibi."
+  },
+  {
+    "caseTitle": "The Procurement Ledger Discrepancy",
+    "prompt": "Which suspect has the strongest alibi?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [1, 9],
+    "expectedActions": [
+      { "action_type": "EXAMINE_EVIDENCE", "target": "Marcus Brody" }
+    ],
+    "expectedContradictions": [],
+    "notes": "Marcus Brody confirmed in boardroom; Sarah Jenkins confirmed in server room via CCTV."
+  },
+  {
+    "caseTitle": "The Procurement Ledger Discrepancy",
+    "prompt": "Identify any contradictions in suspect statements.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [2, 3, 5, 14],
+    "expectedActions": [
+      { "action_type": "REVIEW_TIMELINE", "target": "David Vance" }
+    ],
+    "expectedContradictions": [
+      { "evidence_index_a": 2, "evidence_index_b": 3 },
+      { "evidence_index_a": 5, "evidence_index_b": 14 }
+    ],
+    "notes": "Two contradiction pairs to surface."
+  },
+  {
+    "caseTitle": "The Missing Quantum Blueprint",
+    "prompt": "Which suspect is the most likely thief?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [0, 2, 3, 5, 11],
+    "expectedActions": [
+      { "action_type": "SUBMIT_DEDUCTION", "target": "Dr. Clara Mendoza" }
+    ],
+    "expectedContradictions": [
+      { "evidence_index_a": 1, "evidence_index_b": 2 }
+    ],
+    "notes": "Clara: badge access + fingerprint + financial motive + email + contradicted alibi."
+  },
+  {
+    "caseTitle": "The Missing Quantum Blueprint",
+    "prompt": "What financial motive evidence exists?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [5],
+    "expectedActions": [
+      { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Clara Mendoza" }
+    ],
+    "expectedContradictions": [],
+    "notes": "Offshore wire transfer to Clara."
+  },
+  {
+    "caseTitle": "The Missing Quantum Blueprint",
+    "prompt": "Did Dr. Aris Thorne have opportunity?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [4, 6, 19],
+    "expectedActions": [
+      { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Aris Thorne" }
+    ],
+    "expectedContradictions": [],
+    "notes": "Thorne left at 19:00 per gate logs + GPS confirms restaurant from 19:25-22:15. No opportunity."
+  },
+  {
+    "caseTitle": "Operation Midnight Leak",
+    "prompt": "Which suspect leaked the pricing spreadsheet?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [0, 2, 3, 8, 11],
+    "expectedActions": [
+      { "action_type": "SUBMIT_DEDUCTION", "target": "Arthur Pendelton" }
+    ],
+    "expectedContradictions": [
+      { "evidence_index_a": 1, "evidence_index_b": 2 },
+      { "evidence_index_a": 6, "evidence_index_b": 7 }
+    ],
+    "notes": "Arthur: VPN from his home IP, smart meter contradicts asleep claim, crypto payment after leak."
+  },
+  {
+    "caseTitle": "Operation Midnight Leak",
+    "prompt": "Find timeline conflicts in suspect testimony.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [1, 2, 6, 7],
+    "expectedActions": [
+      { "action_type": "REVIEW_TIMELINE", "target": "Arthur Pendelton" }
+    ],
+    "expectedContradictions": [
+      { "evidence_index_a": 1, "evidence_index_b": 2 },
+      { "evidence_index_a": 6, "evidence_index_b": 7 }
+    ],
+    "notes": "Arthur asleep claim vs smart meter; Nadia DB scripts claim vs zero query logs."
+  },
+  {
+    "caseTitle": "Operation Midnight Leak",
+    "prompt": "Could Victor Sterling have done it?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [4, 5],
+    "expectedActions": [
+      { "action_type": "EXAMINE_EVIDENCE", "target": "Victor Sterling" }
+    ],
+    "expectedContradictions": [],
+    "notes": "Dinner party witnesses + Uber receipt place him elsewhere during leak window."
+  }
+]
