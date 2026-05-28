@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  suspects              Suspect[]
+  evidence             Evidence[]
+  investigationSessions InvestigationSession[]
+
+  @@map("cases")
+}
+
+model Suspect {
+  id      String @id @default(cuid())
+  caseId  String
+  name    String
+  profile String @db.Text
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@map("suspects")
+}
+
+model Evidence {
+  id        String   @id @default(cuid())
+  caseId    String
+  type      String
+  content   String   @db.Text
+  embedding Vector(1536)?
+  createdAt DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@map("evidence")
+}
+
+model InvestigationSession {
+  id         String   @id @default(cuid())
+  caseId     String
+  ragEnabled Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  case              Case                    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  investigationLogs InvestigationLog[]
+  aiInteractionLogs AIInteractionLog[]
+
+  @@map("investigation_sessions")
+}
+
+model InvestigationLog {
+  id        String   @id @default(cuid())
+  sessionId String
+  action    String
+  target    String?
+  createdAt DateTime @default(now())
+
+  session InvestigationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("investigation_logs")
+}
+
+model AIInteractionLog {
+  id                     String   @id @default(cuid())
+  sessionId              String
+  caseId                 String
+  userPrompt             String   @db.Text
+  retrievedContext       String?  @db.Text
+  aiResponse             String   @db.Text
+  ragEnabled             Boolean
+  retrievalTimeMs        Int?
+  llmResponseTimeMs      Int
+  totalResponseTimeMs    Int
+  promptTokens           Int
+  completionTokens       Int
+  totalTokens            Int
+  hallucinationDetected  Boolean  @default(false)
+  hallucinationReason    String?  @db.Text
+  correctnessScore       Float?
+  createdAt              DateTime @default(now())
+
+  session InvestigationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("ai_interaction_logs")
+}
