@@ -1,5 +1,6 @@
 import { prisma } from "./db"
 import { generateAIResponse } from "./rag"
+import type { RetrievalMethod } from "./retrieval"
 import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
 
@@ -82,7 +83,7 @@ export async function seedScenarios(): Promise<ScenarioSeedSummary> {
 
 export interface RunResult {
   scenarioId: string
-  ragEnabled: boolean
+  retrievalMethod: RetrievalMethod
   logId: string
   correctnessScore: number | null
   retrievalPrecision: number | null
@@ -96,7 +97,7 @@ export interface RunResult {
 
 export async function runScenario(
   scenarioId: string,
-  ragEnabled: boolean
+  retrievalMethod: RetrievalMethod
 ): Promise<RunResult> {
   const scenario = await prisma.evaluationScenario.findUnique({
     where: { id: scenarioId },
@@ -105,7 +106,7 @@ export async function runScenario(
   if (!scenario) throw new Error(`Scenario ${scenarioId} not found`)
 
   const session = await prisma.investigationSession.create({
-    data: { caseId: scenario.caseId, ragEnabled },
+    data: { caseId: scenario.caseId, retrievalMethod },
   })
 
   const expectedActions = scenario.expectedActions as unknown as Array<{
@@ -118,7 +119,7 @@ export async function runScenario(
     scenario.prompt,
     scenario.caseId,
     session.id,
-    ragEnabled,
+    retrievalMethod,
     {
       requiredEvidenceIds,
       expectedActions,
@@ -143,7 +144,12 @@ export async function runScenario(
       structuredRecommendation: result.structuredRecommendation
         ? JSON.parse(JSON.stringify(result.structuredRecommendation))
         : undefined,
-      ragEnabled,
+      retrievalMethod,
+      sparseScores: result.retrieval.sparseScores ?? undefined,
+      denseScores: result.retrieval.denseScores ?? undefined,
+      fusionScores: result.retrieval.fusionScores ?? undefined,
+      fusionMethod: result.retrieval.fusionMethod ?? undefined,
+      embeddingTimeMs: result.timings.embeddingTimeMs ?? undefined,
       retrievalTimeMs: result.timings.retrievalTimeMs,
       llmResponseTimeMs: result.timings.llmResponseTimeMs,
       totalResponseTimeMs: result.timings.totalResponseTimeMs,
@@ -158,7 +164,7 @@ export async function runScenario(
 
   return {
     scenarioId: scenario.id,
-    ragEnabled,
+    retrievalMethod,
     logId: log.id,
     correctnessScore: result.correctnessScore,
     retrievalPrecision: result.retrieval.retrievalPrecision,
@@ -171,7 +177,11 @@ export async function runScenario(
   }
 }
 
-export async function runAllScenarios(modes: Array<"ON" | "OFF" | "BOTH"> = ["BOTH"]): Promise<{
+const ALL_METHODS: RetrievalMethod[] = ["sparse", "dense", "hybrid"]
+
+export async function runAllScenarios(
+  methods: RetrievalMethod[] = ALL_METHODS
+): Promise<{
   results: RunResult[]
   totalCost: number
   totalDurationMs: number
@@ -182,22 +192,12 @@ export async function runAllScenarios(modes: Array<"ON" | "OFF" | "BOTH"> = ["BO
   const results: RunResult[] = []
   const start = Date.now()
 
-  const runOn = modes.includes("BOTH") || modes.includes("ON")
-  const runOff = modes.includes("BOTH") || modes.includes("OFF")
-
   for (const s of scenarios) {
-    if (runOff) {
+    for (const method of methods) {
       try {
-        results.push(await runScenario(s.id, false))
+        results.push(await runScenario(s.id, method))
       } catch (e) {
-        console.error(`Scenario ${s.id} OFF failed:`, e)
-      }
-    }
-    if (runOn) {
-      try {
-        results.push(await runScenario(s.id, true))
-      } catch (e) {
-        console.error(`Scenario ${s.id} ON failed:`, e)
+        console.error(`Scenario ${s.id} ${method} failed:`, e)
       }
     }
   }
@@ -207,7 +207,7 @@ export async function runAllScenarios(modes: Array<"ON" | "OFF" | "BOTH"> = ["BO
 }
 
 export interface AggregateMetrics {
-  ragEnabled: boolean
+  retrievalMethod: RetrievalMethod
   count: number
   avgCorrectness: number
   avgPrecision: number
@@ -219,17 +219,16 @@ export interface AggregateMetrics {
 }
 
 export async function aggregateMetrics(): Promise<AggregateMetrics[]> {
-  const groups: Array<{ ragEnabled: boolean }> = [{ ragEnabled: false }, { ragEnabled: true }]
   const out: AggregateMetrics[] = []
 
-  for (const g of groups) {
+  for (const method of ALL_METHODS) {
     const logs = await prisma.aIInteractionLog.findMany({
-      where: { ragEnabled: g.ragEnabled, scenarioId: { not: null } },
+      where: { retrievalMethod: method, scenarioId: { not: null } },
     })
 
     if (logs.length === 0) {
       out.push({
-        ragEnabled: g.ragEnabled,
+        retrievalMethod: method,
         count: 0,
         avgCorrectness: 0,
         avgPrecision: 0,
@@ -246,7 +245,7 @@ export async function aggregateMetrics(): Promise<AggregateMetrics[]> {
       arr.reduce<number>((acc, v) => acc + (v ?? 0), 0)
 
     out.push({
-      ragEnabled: g.ragEnabled,
+      retrievalMethod: method,
       count: logs.length,
       avgCorrectness: sum(logs.map((l) => l.correctnessScore)) / logs.length,
       avgPrecision: sum(logs.map((l) => l.retrievalPrecision)) / logs.length,

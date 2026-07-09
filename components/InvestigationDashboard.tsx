@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import type { RetrievalMethod } from "@/lib/retrieval/types"
 
 interface Case {
   id: string
@@ -21,7 +22,7 @@ interface Case {
 interface InvestigationDashboardProps {
   caseData: Case
   sessionId: string
-  ragEnabled: boolean
+  retrievalMethod: RetrievalMethod
   onBack: () => void
 }
 
@@ -93,7 +94,7 @@ function buildTimeline(evidence: Case["evidence"]): TimelineEntry[] {
 export default function InvestigationDashboard({
   caseData,
   sessionId,
-  ragEnabled,
+  retrievalMethod,
   onBack,
 }: InvestigationDashboardProps) {
   const [selectedEvidence, setSelectedEvidence] = useState<string | null>(null)
@@ -134,7 +135,7 @@ export default function InvestigationDashboard({
           sessionId,
           caseId: caseData.id,
           prompt,
-          ragEnabled,
+          retrievalMethod,
         }),
       })
       const data = await res.json()
@@ -197,7 +198,7 @@ export default function InvestigationDashboard({
           <div>
             <h1 className="text-xl font-bold text-gray-900">{caseData.title}</h1>
             <p className="text-xs text-gray-500">
-              Mode: {ragEnabled ? "RAG Enabled" : "RAG Disabled"}
+              Mode: {retrievalMethod.charAt(0).toUpperCase() + retrievalMethod.slice(1)} Retrieval
             </p>
           </div>
           <div className="flex gap-2">

@@ -10,7 +10,7 @@ interface Scenario {
 }
 
 interface AggregateRow {
-  ragEnabled: boolean
+  retrievalMethod: string
   count: number
   avgCorrectness: number
   avgPrecision: number
@@ -23,7 +23,7 @@ interface AggregateRow {
 
 interface RecentLog {
   id: string
-  ragEnabled: boolean
+  retrievalMethod: string
   userPrompt: string
   correctnessScore: number | null
   retrievalPrecision: number | null
@@ -34,6 +34,18 @@ interface RecentLog {
   estimatedCost: number | null
   createdAt: string
   scenario: { difficulty: string; case: { title: string } } | null
+}
+
+const METHOD_COLORS: Record<string, string> = {
+  sparse: "bg-amber-100 text-amber-800",
+  dense: "bg-blue-100 text-blue-800",
+  hybrid: "bg-purple-100 text-purple-800",
+}
+
+const METHOD_LABELS: Record<string, string> = {
+  sparse: "Sparse",
+  dense: "Dense",
+  hybrid: "Hybrid",
 }
 
 export default function EvalPage() {
@@ -76,13 +88,14 @@ export default function EvalPage() {
     }
   }
 
-  const runAll = async (mode: "BOTH" | "ON" | "OFF") => {
-    setBusy(`Running all scenarios (${mode})... this may take minutes`)
+  const runMethods = async (methods: string[]) => {
+    const label = methods.length === 3 ? "All Methods" : methods.map((m) => METHOD_LABELS[m] ?? m).join(", ")
+    setBusy(`Running all scenarios (${label})... this may take minutes`)
     try {
       const res = await fetch("/api/eval/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode }),
+        body: JSON.stringify({ methods }),
       })
       const data = await res.json()
       if (data.error) {
@@ -101,12 +114,12 @@ export default function EvalPage() {
   }
 
   const runOne = async (scenarioId: string) => {
-    setBusy("Running scenario (both modes)...")
+    setBusy("Running scenario (all methods)...")
     try {
       await fetch("/api/eval/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scenarioId, mode: "BOTH" }),
+        body: JSON.stringify({ scenarioId, methods: ["sparse", "dense", "hybrid"] }),
       })
       setMessage("Scenario done.")
       await loadAll()
@@ -137,7 +150,7 @@ export default function EvalPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Evaluation Console</h1>
             <p className="text-sm text-gray-500">
-              Cheat page — run benchmarks, skip manual play
+              Sparse vs Dense vs Hybrid — Comparative Evaluation
             </p>
           </div>
           <a
@@ -157,25 +170,32 @@ export default function EvalPage() {
             Seed Scenarios from JSON
           </button>
           <button
-            onClick={() => runAll("BOTH")}
+            onClick={() => runMethods(["sparse", "dense", "hybrid"])}
             disabled={busy !== null || scenarios.length === 0}
             className="px-4 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition disabled:bg-gray-400"
           >
-            Run All (Both Modes)
+            Run All (3 Methods)
           </button>
           <button
-            onClick={() => runAll("OFF")}
+            onClick={() => runMethods(["sparse"])}
             disabled={busy !== null || scenarios.length === 0}
-            className="px-4 py-2 bg-gray-700 text-white rounded text-sm hover:bg-gray-800 transition disabled:bg-gray-400"
+            className="px-4 py-2 bg-amber-600 text-white rounded text-sm hover:bg-amber-700 transition disabled:bg-gray-400"
           >
-            Run All (RAG OFF only)
+            Sparse Only
           </button>
           <button
-            onClick={() => runAll("ON")}
+            onClick={() => runMethods(["dense"])}
+            disabled={busy !== null || scenarios.length === 0}
+            className="px-4 py-2 bg-blue-700 text-white rounded text-sm hover:bg-blue-800 transition disabled:bg-gray-400"
+          >
+            Dense Only
+          </button>
+          <button
+            onClick={() => runMethods(["hybrid"])}
             disabled={busy !== null || scenarios.length === 0}
             className="px-4 py-2 bg-purple-700 text-white rounded text-sm hover:bg-purple-800 transition disabled:bg-gray-400"
           >
-            Run All (RAG ON only)
+            Hybrid Only
           </button>
           <button
             onClick={clearResults}
@@ -198,7 +218,7 @@ export default function EvalPage() {
         )}
 
         <section className="bg-white rounded-lg shadow p-4 mb-6">
-          <h2 className="font-bold text-gray-900 mb-3">Aggregate Metrics</h2>
+          <h2 className="font-bold text-gray-900 mb-3">Aggregate Metrics — Sparse vs Dense vs Hybrid</h2>
           {aggregate.length === 0 || aggregate.every((a) => a.count === 0) ? (
             <p className="text-sm text-gray-500">No evaluation runs yet.</p>
           ) : (
@@ -206,7 +226,7 @@ export default function EvalPage() {
               <table className="min-w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs uppercase text-gray-500">
-                    <th className="py-2 pr-4">Mode</th>
+                    <th className="py-2 pr-4">Method</th>
                     <th className="py-2 pr-4">N</th>
                     <th className="py-2 pr-4">Correctness</th>
                     <th className="py-2 pr-4">Precision</th>
@@ -219,9 +239,11 @@ export default function EvalPage() {
                 </thead>
                 <tbody>
                   {aggregate.map((a) => (
-                    <tr key={String(a.ragEnabled)} className="border-b">
-                      <td className="py-2 pr-4 font-semibold">
-                        {a.ragEnabled ? "RAG ON" : "RAG OFF"}
+                    <tr key={a.retrievalMethod} className="border-b">
+                      <td className="py-2 pr-4">
+                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${METHOD_COLORS[a.retrievalMethod] ?? "bg-gray-100 text-gray-800"}`}>
+                          {METHOD_LABELS[a.retrievalMethod] ?? a.retrievalMethod}
+                        </span>
                       </td>
                       <td className="py-2 pr-4">{a.count}</td>
                       <td className="py-2 pr-4">{pct(a.avgCorrectness)}</td>
@@ -245,7 +267,7 @@ export default function EvalPage() {
           </h2>
           {scenarios.length === 0 ? (
             <p className="text-sm text-gray-500">
-              No scenarios. Click "Seed Scenarios from JSON" to load from{" "}
+              No scenarios. Click &quot;Seed Scenarios from JSON&quot; to load from{" "}
               <code>eval-scenarios/</code>.
             </p>
           ) : (
@@ -283,7 +305,7 @@ export default function EvalPage() {
                           disabled={busy !== null}
                           className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs hover:bg-blue-200 transition disabled:opacity-50"
                         >
-                          Run Both
+                          Run All Methods
                         </button>
                       </td>
                     </tr>
@@ -305,7 +327,7 @@ export default function EvalPage() {
                   <tr className="border-b text-left text-xs uppercase text-gray-500">
                     <th className="py-2 pr-4">When</th>
                     <th className="py-2 pr-4">Case</th>
-                    <th className="py-2 pr-4">Mode</th>
+                    <th className="py-2 pr-4">Method</th>
                     <th className="py-2 pr-4">Diff</th>
                     <th className="py-2 pr-4">Prompt</th>
                     <th className="py-2 pr-4">Correct</th>
@@ -329,12 +351,10 @@ export default function EvalPage() {
                       <td className="py-2 pr-4">
                         <span
                           className={`px-2 py-0.5 rounded text-xs ${
-                            r.ragEnabled
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-gray-100 text-gray-800"
+                            METHOD_COLORS[r.retrievalMethod] ?? "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {r.ragEnabled ? "ON" : "OFF"}
+                          {METHOD_LABELS[r.retrievalMethod] ?? r.retrievalMethod}
                         </span>
                       </td>
                       <td className="py-2 pr-4 text-xs">{r.scenario?.difficulty ?? "—"}</td>

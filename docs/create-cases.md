@@ -45,7 +45,7 @@ These are non-negotiable. A case that violates any of them must be regenerated.
 ```json
 "case": {
   "title": "<3-8 word evocative title>",
-  "description": "<2-4 sentences setting the scene without revealing the solution>"
+  "description": "complete description setting the scene without revealing the solution>"
 }
 ```
 

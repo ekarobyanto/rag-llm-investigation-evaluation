@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    # Using ankane/pgvector which is a pre-packaged PostgreSQL image with the pgvector extension installed.
+    # This is required for our Dense Retrieval (HNSW index) implementation.
+    image: ankane/pgvector:latest
+    container_name: investigation_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: thesis
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d thesis"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Optional: pgAdmin for visual database management
+  # Access at http://localhost:5050
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: investigation_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import type { RetrievalMethod } from "@/lib/retrieval/types"
 
 interface Case {
   id: string
@@ -12,18 +13,44 @@ interface Case {
 
 interface CaseSelectionProps {
   cases: Case[]
-  onSelectCase: (caseData: Case, rag: boolean) => void
+  onSelectCase: (caseData: Case, method: RetrievalMethod) => void
 }
+
+const RETRIEVAL_METHODS: Array<{
+  value: RetrievalMethod
+  label: string
+  description: string
+  color: string
+}> = [
+  {
+    value: "sparse",
+    label: "Sparse (BM25)",
+    description: "Keyword-based retrieval. Fast, no embedding API call.",
+    color: "text-amber-700",
+  },
+  {
+    value: "dense",
+    label: "Dense (Vector)",
+    description: "Semantic similarity via embeddings. Best for meaning.",
+    color: "text-blue-700",
+  },
+  {
+    value: "hybrid",
+    label: "Hybrid (RRF)",
+    description: "Combines Sparse + Dense with Reciprocal Rank Fusion.",
+    color: "text-purple-700",
+  },
+]
 
 export default function CaseSelection({ cases, onSelectCase }: CaseSelectionProps) {
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null)
-  const [ragMode, setRagMode] = useState(true)
+  const [retrievalMethod, setRetrievalMethod] = useState<RetrievalMethod>("dense")
 
   const handleStart = () => {
     if (selectedCaseId) {
       const caseData = cases.find((c) => c.id === selectedCaseId)
       if (caseData) {
-        onSelectCase(caseData, ragMode)
+        onSelectCase(caseData, retrievalMethod)
       }
     }
   }
@@ -60,30 +87,22 @@ export default function CaseSelection({ cases, onSelectCase }: CaseSelectionProp
           </div>
 
           <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-            <h3 className="font-semibold text-gray-800 mb-4">AI Mode</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Retrieval Method</h3>
             <div className="space-y-3">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  checked={ragMode}
-                  onChange={() => setRagMode(true)}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <span className="ml-3 text-gray-700">
-                  <strong>RAG Enabled</strong> - AI uses evidence retrieval
-                </span>
-              </label>
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  checked={!ragMode}
-                  onChange={() => setRagMode(false)}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <span className="ml-3 text-gray-700">
-                  <strong>RAG Disabled</strong> - Standard LLM without retrieval
-                </span>
-              </label>
+              {RETRIEVAL_METHODS.map((method) => (
+                <label key={method.value} className="flex items-start cursor-pointer">
+                  <input
+                    type="radio"
+                    checked={retrievalMethod === method.value}
+                    onChange={() => setRetrievalMethod(method.value)}
+                    className="w-4 h-4 mt-0.5 text-blue-600"
+                  />
+                  <span className="ml-3">
+                    <span className={`font-semibold ${method.color}`}>{method.label}</span>
+                    <span className="block text-sm text-gray-500">{method.description}</span>
+                  </span>
+                </label>
+              ))}
             </div>
           </div>
 

@@ -44,7 +44,8 @@ model Evidence {
   category        String   @default("general")
   content         String   @db.Text
   difficultyWeight Float   @default(1.0)
-  embedding       Unsupported("vector(1536)")?
+  embedding       Unsupported("vector(1536)")? @map("embedding")
+  searchVector    Unsupported("tsvector")? @map("search_vector")
   createdAt       DateTime @default(now())
 
   case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
@@ -68,11 +69,11 @@ model CaseGroundTruth {
 }
 
 model InvestigationSession {
-  id         String   @id @default(cuid())
-  caseId     String
-  ragEnabled Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id              String   @id @default(cuid())
+  caseId          String
+  retrievalMethod String   @default("dense") @map("retrieval_method")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   case              Case               @relation(fields: [caseId], references: [id], onDelete: Cascade)
   investigationLogs InvestigationLog[]
@@ -115,6 +116,7 @@ model AIInteractionLog {
   scenarioId              String?
   userPrompt              String   @db.Text
   retrievedContext        String?  @db.Text
+  retrievedContextsList   Json?
   retrievedEvidenceIds    Json?
   retrievalScores         Json?
   retrievalSuccess        Boolean  @default(false)
@@ -123,7 +125,12 @@ model AIInteractionLog {
   topKAccuracy            Boolean?
   aiResponse              String   @db.Text
   structuredRecommendation Json?
-  ragEnabled              Boolean
+  retrievalMethod         String   @default("dense") @map("retrieval_method")
+  sparseScores            Json?
+  denseScores             Json?
+  fusionScores            Json?
+  fusionMethod            String?  @map("fusion_method")
+  embeddingTimeMs         Int?     @map("embedding_time_ms")
   retrievalTimeMs         Int?
   llmResponseTimeMs       Int
   totalResponseTimeMs     Int
@@ -139,6 +146,7 @@ model AIInteractionLog {
 
   session  InvestigationSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   scenario EvaluationScenario?   @relation(fields: [scenarioId], references: [id], onDelete: SetNull)
+  ragasEvaluation         RagasEvaluation?
 
   @@map("ai_interaction_logs")
 }
@@ -152,10 +160,25 @@ model EvaluationScenario {
   expectedActions        Json     // Array<{ action_type, target }>
   expectedContradictions Json?    // Array<{ evidence_a, evidence_b }>
   notes                  String?  @db.Text
+  referenceAnswer        String?  @db.Text
   createdAt              DateTime @default(now())
 
   case        Case               @relation(fields: [caseId], references: [id], onDelete: Cascade)
   interactionLogs AIInteractionLog[]
 
   @@map("evaluation_scenarios")
+}
+
+model RagasEvaluation {
+  id                String   @id @default(cuid())
+  logId             String   @unique
+  faithfulness      Float?
+  answerRelevance   Float?
+  contextPrecision  Float?
+  contextRecall     Float?
+  evaluatedAt       DateTime @default(now())
+
+  log AIInteractionLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+
+  @@map("ragas_evaluations")
 }

@@ -1,6 +1,7 @@
 import { OpenAI } from "openai"
 import { prisma } from "./db"
-import { generateEmbedding } from "./embedding"
+import { retrieve } from "./retrieval"
+import type { RetrievalMethod } from "./retrieval"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -16,49 +17,6 @@ export interface StructuredRecommendation {
   action_type: "INTERROGATE" | "EXAMINE_EVIDENCE" | "REVIEW_TIMELINE" | "SUBMIT_DEDUCTION" | "INVESTIGATE_LOCATION"
   target: string
   reason: string
-}
-
-export interface RetrievedEvidenceItem {
-  id: string
-  type: string
-  category: string
-  content: string
-  similarity: number
-}
-
-export async function retrieveRelevantEvidence(
-  caseId: string,
-  query: string,
-  limit: number = 5
-) {
-  const startTime = Date.now()
-
-  try {
-    const queryEmbedding = await generateEmbedding(query)
-    const embeddingStr = JSON.stringify(queryEmbedding)
-
-    const results = await prisma.$queryRaw<RetrievedEvidenceItem[]>`
-      SELECT id, type, category,
-        LEFT(content, 500) as content,
-        1 - (embedding <=> ${embeddingStr}::vector) as similarity
-      FROM evidence
-      WHERE case_id = ${caseId}
-        AND embedding IS NOT NULL
-      ORDER BY embedding <=> ${embeddingStr}::vector
-      LIMIT ${limit}
-    `
-
-    return {
-      evidence: results ?? [],
-      retrievalTimeMs: Date.now() - startTime,
-    }
-  } catch (error) {
-    console.error("Evidence retrieval error:", error)
-    return {
-      evidence: [] as RetrievedEvidenceItem[],
-      retrievalTimeMs: Date.now() - startTime,
-    }
-  }
 }
 
 export async function getInvestigationHistory(
@@ -151,46 +109,40 @@ export async function generateAIResponse(
   prompt: string,
   caseId: string,
   sessionId: string,
-  ragEnabled: boolean,
+  retrievalMethod: RetrievalMethod,
   options?: {
     requiredEvidenceIds?: string[]
     expectedActions?: Array<{ action_type: string; target: string }>
     temperature?: number
   }
 ) {
-  let retrievalTimeMs = 0
-  let retrievedContext = ""
-  let retrievedEvidenceIds: string[] = []
-  let retrievalScores: number[] = []
-  let retrievalSuccess = false
-  let retrievalPrecision: number | null = null
-  let retrievalRecall: number | null = null
-  let topKAccuracy: boolean | null = null
+  // Always retrieve — the method determines how
+  const retrievalResult = await retrieve(retrievalMethod, caseId, prompt, { limit: 5 })
 
-  if (ragEnabled) {
-    const { evidence, retrievalTimeMs: rtMs } = await retrieveRelevantEvidence(caseId, prompt, 5)
-    retrievalTimeMs = rtMs
-    retrievedEvidenceIds = evidence.map((e) => e.id)
-    retrievalScores = evidence.map((e) => e.similarity)
+  const retrievedEvidenceIds = retrievalResult.evidence.map((e) => e.id)
+  const retrievalScores = retrievalResult.evidence.map((e) => e.score)
+  const retrievedContextsList = retrievalResult.evidence.map((e) => e.content)
 
-    const evalResult = await evaluateRetrieval(
-      caseId,
-      retrievedEvidenceIds,
-      options?.requiredEvidenceIds
-    )
-    retrievalSuccess = evalResult.retrievalSuccess
-    retrievalPrecision = evalResult.precision
-    retrievalRecall = evalResult.recall
-    topKAccuracy = evalResult.topKAccuracy
+  // Evaluate retrieval against ground truth
+  const evalResult = await evaluateRetrieval(
+    caseId,
+    retrievedEvidenceIds,
+    options?.requiredEvidenceIds
+  )
 
-    const history = await getInvestigationHistory(sessionId, 5)
+  // Always fetch investigation history for context
+  const history = await getInvestigationHistory(sessionId, 5)
 
-    retrievedContext = `RELEVANT EVIDENCE:
-${evidence.map((e) => `- [${e.type}/${e.category}] ${e.content}`).join("\n")}
+  // Build augmented prompt with retrieved evidence and history
+  const evidenceContext = retrievalResult.evidence.length > 0
+    ? `RELEVANT EVIDENCE:\n${retrievalResult.evidence.map((e) => `- [${e.type}/${e.category}] ${e.content}`).join("\n")}`
+    : "RELEVANT EVIDENCE:\n(No evidence retrieved)"
 
-INVESTIGATION HISTORY:
-${history.map((h) => `Q: ${h.prompt}\nA: ${h.response}`).join("\n\n")}`
-  }
+  const historyContext = history.length > 0
+    ? `INVESTIGATION HISTORY:\n${history.map((h) => `Q: ${h.prompt}\nA: ${h.response}`).join("\n\n")}`
+    : ""
+
+  const retrievedContext = `${evidenceContext}\n\n${historyContext}`.trim()
 
   const systemPrompt = `You are an expert criminal investigation assistant.
 
@@ -203,9 +155,7 @@ When responding, you MUST always end your response with a JSON block in this exa
 }
 </recommendation>`
 
-  const userPrompt = ragEnabled
-    ? `${retrievedContext}\n\nPlayer Question: ${prompt}`
-    : prompt
+  const userPrompt = `${retrievedContext}\n\nPlayer Question: ${prompt}`
 
   const startTime = Date.now()
 
@@ -220,7 +170,7 @@ When responding, you MUST always end your response with a JSON block in this exa
   })
 
   const llmResponseTimeMs = Date.now() - startTime
-  const totalResponseTimeMs = llmResponseTimeMs + retrievalTimeMs
+  const totalResponseTimeMs = llmResponseTimeMs + retrievalResult.retrievalTimeMs
 
   const rawResponse = response.choices[0].message.content ?? ""
   const structuredRecommendation = extractStructuredRecommendation(rawResponse)
@@ -245,16 +195,27 @@ When responding, you MUST always end your response with a JSON block in this exa
     structuredRecommendation,
     correctnessScore,
     tokens: { prompt: promptTokens, completion: completionTokens, total: totalTokens },
-    timings: { retrievalTimeMs, llmResponseTimeMs, totalResponseTimeMs },
+    timings: {
+      embeddingTimeMs: retrievalResult.embeddingTimeMs,
+      retrievalTimeMs: retrievalResult.retrievalTimeMs,
+      llmResponseTimeMs,
+      totalResponseTimeMs,
+    },
     context: retrievedContext,
     retrieval: {
       retrievedEvidenceIds,
+      retrievedContextsList,
       retrievalScores,
-      retrievalSuccess,
-      retrievalPrecision,
-      retrievalRecall,
-      topKAccuracy,
+      retrievalSuccess: evalResult.retrievalSuccess,
+      retrievalPrecision: evalResult.precision,
+      retrievalRecall: evalResult.recall,
+      topKAccuracy: evalResult.topKAccuracy,
+      sparseScores: retrievalResult.sparseScores ?? null,
+      denseScores: retrievalResult.denseScores ?? null,
+      fusionScores: retrievalResult.fusionScores ?? null,
+      fusionMethod: retrievalResult.fusionMethod ?? null,
     },
+    retrievalMethod,
     estimatedCost,
   }
 }

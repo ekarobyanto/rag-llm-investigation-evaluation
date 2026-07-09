@@ -3,12 +3,20 @@ import { prisma } from "@/lib/db"
 
 export async function POST(request: Request) {
   try {
-    const { caseId, ragEnabled } = await request.json()
+    const { caseId, retrievalMethod = "dense" } = await request.json()
+
+    const validMethods = ["sparse", "dense", "hybrid"]
+    if (!validMethods.includes(retrievalMethod)) {
+      return NextResponse.json(
+        { error: `Invalid retrieval method. Must be one of: ${validMethods.join(", ")}` },
+        { status: 400 }
+      )
+    }
 
     const session = await prisma.investigationSession.create({
       data: {
         caseId,
-        ragEnabled: ragEnabled || false,
+        retrievalMethod,
       },
     })
 

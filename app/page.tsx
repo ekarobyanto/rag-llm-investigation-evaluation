@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import InvestigationDashboard from "@/components/InvestigationDashboard"
 import CaseSelection from "@/components/CaseSelection"
+import type { RetrievalMethod } from "@/lib/retrieval/types"
 
 interface Case {
   id: string
@@ -16,7 +17,7 @@ export default function Home() {
   const [cases, setCases] = useState<Case[]>([])
   const [selectedCase, setSelectedCase] = useState<Case | null>(null)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const [ragEnabled, setRagEnabled] = useState(false)
+  const [retrievalMethod, setRetrievalMethod] = useState<RetrievalMethod>("dense")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -35,9 +36,9 @@ export default function Home() {
     }
   }
 
-  const handleCaseSelect = async (caseData: Case, rag: boolean) => {
+  const handleCaseSelect = async (caseData: Case, method: RetrievalMethod) => {
     setSelectedCase(caseData)
-    setRagEnabled(rag)
+    setRetrievalMethod(method)
 
     try {
       const res = await fetch("/api/sessions", {
@@ -45,7 +46,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           caseId: caseData.id,
-          ragEnabled: rag,
+          retrievalMethod: method,
         }),
       })
       const session = await res.json()
@@ -72,7 +73,7 @@ export default function Home() {
         <InvestigationDashboard
           caseData={selectedCase}
           sessionId={sessionId}
-          ragEnabled={ragEnabled}
+          retrievalMethod={retrievalMethod}
           onBack={handleBackToSelection}
         />
       ) : (
