@@ -51,7 +51,10 @@ def main():
     print("Aggregating metrics by retrieval strategy...")
     
     # Calculate means grouped by retrieval_method
-    summary_df = df.groupby('retrieval_method').mean().reset_index()
+    summary_df = df.groupby('retrieval_method').mean(numeric_only=True).reset_index()
+    
+    # Also compute per-difficulty breakdown
+    difficulty_df = df.groupby(['retrieval_method', 'difficulty']).mean(numeric_only=True).reset_index()
     
     # Ensure results directory exists
     results_dir = os.path.join(os.path.dirname(__file__), 'results')
@@ -65,6 +68,8 @@ def main():
     
     # Save detailed logs
     df.to_csv(csv_path.replace('experiment_results', 'detailed_logs'), index=False)
+    
+    difficulty_df.to_csv(csv_path.replace('experiment_results', 'difficulty_breakdown'), index=False)
     
     # Save summary
     summary_df.to_csv(csv_path, index=False)

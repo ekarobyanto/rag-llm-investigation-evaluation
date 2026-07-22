@@ -11,6 +11,7 @@ export interface ScenarioInputFile {
   requiredEvidenceIndices: number[]
   expectedActions: Array<{ action_type: string; target: string }>
   expectedContradictions?: Array<{ evidence_index_a: number; evidence_index_b: number }>
+  referenceAnswer?: string
   notes?: string
 }
 
@@ -68,6 +69,7 @@ export async function seedScenarios(): Promise<ScenarioSeedSummary> {
           requiredEvidenceIds,
           expectedActions: s.expectedActions as unknown as object[],
           expectedContradictions: expectedContradictions as unknown as object[],
+          referenceAnswer: s.referenceAnswer,
           notes: s.notes,
         },
       })
@@ -135,6 +137,7 @@ export async function runScenario(
       userPrompt: scenario.prompt,
       aiResponse: result.response,
       retrievedContext: result.context || null,
+      retrievedContextsList: result.retrieval.retrievedContextsList,
       retrievedEvidenceIds: result.retrieval.retrievedEvidenceIds,
       retrievalScores: result.retrieval.retrievalScores,
       retrievalSuccess: result.retrieval.retrievalSuccess,

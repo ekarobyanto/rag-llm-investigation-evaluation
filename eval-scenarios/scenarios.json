@@ -10,6 +10,7 @@
     "expectedContradictions": [
       { "evidence_index_a": 2, "evidence_index_b": 3 }
     ],
+    "referenceAnswer": "David Vance should be interrogated next. Transaction TXN-998211 was authorized using Marcus Brody's credentials at 14:45, but badge logs confirm Brody was in Boardroom B from 13:55 to 16:05. Digital forensics confirm Brody's terminal was used while he was away. Badge reader logs show David Vance scanned into the Executive Suite wing (which houses the CFO office) at 14:10 and scanned out at 15:20, contradicting his own statement that he was in his private office the entire time. Furthermore, an encrypted email draft in Vance's account contains the banking details for Vertex Supplies, the fraudulent vendor. His personal financial pressure from credit card debts provides motive.",
     "notes": "David Vance authorized transaction via Marcus terminal. Badge logs contradict his alibi."
   },
   {
@@ -21,6 +22,7 @@
       { "action_type": "EXAMINE_EVIDENCE", "target": "Marcus Brody" }
     ],
     "expectedContradictions": [],
+    "referenceAnswer": "Marcus Brody has the strongest alibi. Access control badge logs indicate he entered Boardroom B at 13:55 and did not exit until 16:05, covering the entire incident window of 14:00-16:00. Additionally, a calendar invite confirms he was scheduled for the Boardroom B meeting during that period. Sarah Jenkins also has a strong alibi, as her server room badge was used from 13:45 to 16:15, and CCTV camera 4 captures her performing physical maintenance on server racks from 14:00 to 15:45.",
     "notes": "Marcus Brody confirmed in boardroom; Sarah Jenkins confirmed in server room via CCTV."
   },
   {
@@ -35,6 +37,7 @@
       { "evidence_index_a": 2, "evidence_index_b": 3 },
       { "evidence_index_a": 5, "evidence_index_b": 14 }
     ],
+    "referenceAnswer": "There are two key contradictions in suspect statements. First, David Vance stated he was in his private office typing a quarterly procurement report from 14:00 to 16:00 and did not use any network systems. However, badge reader logs show he scanned into the Executive Suite wing at 14:10 and scanned out at 15:20, directly contradicting his claimed location. Second, Elena Rostova stated she was at her desk in the open-plan finance pool the entire afternoon processing invoices. However, CCTV corridor camera 2 shows her leaving her desk to go to the cafeteria at 14:30 and not returning until 15:00, contradicting her claim of being at her desk continuously.",
     "notes": "Two contradiction pairs to surface."
   },
   {
@@ -48,6 +51,7 @@
     "expectedContradictions": [
       { "evidence_index_a": 1, "evidence_index_b": 2 }
     ],
+    "referenceAnswer": "Dr. Clara Mendoza is the most likely thief. Multiple evidence streams converge on her: Vault Room access logs show her biometric badge was scanned at 20:42 and scanned out at 20:55, placing her inside the vault during the theft window. She claimed she lost her badge at 19:30 in the cafeteria, but CCTV footage from 19:15-19:45 shows the badge visibly clipped to her lab coat, directly contradicting her claim. An encrypted email sent from her personal address at 17:00 states 'The asset will be secured tonight before the late shift ends. Prepare the transfer.' A bank statement shows a $250,000 offshore wire transfer pending to her account. Finally, latent fingerprint analysis on the empty drive casing recovered a high-quality match belonging to Dr. Clara Mendoza.",
     "notes": "Clara: badge access + fingerprint + financial motive + email + contradicted alibi."
   },
   {
@@ -59,6 +63,7 @@
       { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Clara Mendoza" }
     ],
     "expectedContradictions": [],
+    "referenceAnswer": "The primary financial motive evidence is a bank statement linked to Dr. Clara Mendoza that reveals an anonymous offshore wire transfer deposit of $250,000 pending execution upon verification. This substantial payment suggests she was financially incentivized to steal the quantum blueprint. Her private research firm recently filed for bankruptcy protection, providing additional context for financial desperation.",
     "notes": "Offshore wire transfer to Clara."
   },
   {
@@ -70,6 +75,7 @@
       { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Aris Thorne" }
     ],
     "expectedContradictions": [],
+    "referenceAnswer": "No, Dr. Aris Thorne did not have opportunity to commit the theft. He stated he left the research facility at 19:00 to have dinner with his wife at Bistro West. This is corroborated by multiple sources: GPS vehicle tracking logs confirm his vehicle arrived at Bistro West parking lot at 19:25 and remained stationary until 22:15. Facility gate sensors recorded his vehicle exiting the perimeter parking structure at 19:02. The front desk receptionist confirmed he said goodnight when passing the lobby doors around 18:55. Since the theft occurred between 20:00 and 22:00, his continuous absence from the facility eliminates opportunity.",
     "notes": "Thorne left at 19:00 per gate logs + GPS confirms restaurant from 19:25-22:15. No opportunity."
   },
   {
@@ -84,6 +90,7 @@
       { "evidence_index_a": 1, "evidence_index_b": 2 },
       { "evidence_index_a": 6, "evidence_index_b": 7 }
     ],
+    "referenceAnswer": "Arthur Pendelton leaked the pricing spreadsheet. VPN firewall logs show a remote connection using his credentials from 01:15 to 03:45. He claimed he was asleep with his laptop turned off, but residential smart-meter data reveals a significant power surge matching a workstation boot sequence between 01:10 and 03:50, directly contradicting his statement. ISP metadata confirms the VPN connection originated precisely from his home IP address. An encrypted email from December 10 found in his laptop cache states 'The final pricing grid will be finalized on the 12th. Have the payment escrow ready.' Most damningly, a hidden cryptocurrency wallet linked to his private key received 5.5 Bitcoin at 04:15, immediately after the data leak window closed.",
     "notes": "Arthur: VPN from his home IP, smart meter contradicts asleep claim, crypto payment after leak."
   },
   {
@@ -98,6 +105,7 @@
       { "evidence_index_a": 1, "evidence_index_b": 2 },
       { "evidence_index_a": 6, "evidence_index_b": 7 }
     ],
+    "referenceAnswer": "There are two major timeline conflicts in suspect testimony. First, Arthur Pendelton stated he was sound asleep all night with his laptop turned off and locked in his briefcase. However, residential smart-meter electrical data reveals a significant power surge matching a high-performance workstation boot sequence between 01:10 and 03:50, proving a computer was actively running at his home during the leak window. Second, Nadia Volkov stated she was running automated database optimization scripts from her home system from 01:00 to 04:00 requiring her full attention. However, database transaction query logs show absolutely zero active query executions or script runs on her developer account between 00:30 and 05:00, completely contradicting her claimed activity.",
     "notes": "Arthur asleep claim vs smart meter; Nadia DB scripts claim vs zero query logs."
   },
   {
@@ -109,6 +117,7 @@
       { "action_type": "EXAMINE_EVIDENCE", "target": "Victor Sterling" }
     ],
     "expectedContradictions": [],
+    "referenceAnswer": "It is unlikely that Victor Sterling leaked the spreadsheet. He stated he was hosting a late-night dinner party at his downtown apartment until 02:30, with seven corporate clients who can verify his presence. Ride-share receipt data confirms he took an Uber from the downtown core back to his residence, arriving home at 02:55. His credit card statement also shows a charge at the Downtown Oyster Bar at 23:45 on December 11, supporting his social engagement timeline. Since the VPN connection used for the leak was active from 01:15 to 03:45, Sterling was demonstrably occupied at a dinner party during most of that window, and his arrival home at 02:55 leaves insufficient time for the operation.",
     "notes": "Dinner party witnesses + Uber receipt place him elsewhere during leak window."
   }
 ]

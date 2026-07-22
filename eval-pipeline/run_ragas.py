@@ -1,4 +1,5 @@
 import os
+import json
 import psycopg2
 import psycopg2.extras
 import pandas as pd
@@ -8,6 +9,8 @@ from dotenv import load_dotenv
 # RAGAS specific imports
 from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevance, context_precision, context_recall
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 # Load environment variables
@@ -31,7 +34,9 @@ def fetch_unevaluated_logs(conn):
         l."userPrompt" as question,
         l."aiResponse" as answer,
         l."retrievedContextsList" as contexts,
-        s."referenceAnswer" as ground_truth
+        s."referenceAnswer" as ground_truth,
+        s."expectedActions" as expected_actions,
+        s.notes as notes
     FROM ai_interaction_logs l
     JOIN evaluation_scenarios s ON l."scenarioId" = s.id
     LEFT JOIN ragas_evaluations r ON l.id = r."logId"
@@ -82,25 +87,36 @@ def main():
     # We parse the JSON if it's stringified
     for log in logs:
         if isinstance(log['contexts'], str):
-            import json
             try:
                 log['contexts'] = json.loads(log['contexts'])
-            except:
+            except (json.JSONDecodeError, TypeError):
                 log['contexts'] = [log['contexts']]
         elif not log['contexts']:
             log['contexts'] = [""]
             
         # Ensure ground truth is present
         if not log['ground_truth']:
-            log['ground_truth'] = "Unknown"
+            # Build from expected actions and notes
+            parts = []
+            if log.get('expected_actions'):
+                actions = json.loads(log['expected_actions']) if isinstance(log['expected_actions'], str) else log['expected_actions']
+                for a in actions:
+                    parts.append(f"The recommended action is {a['action_type']} targeting {a['target']}.")
+            if log.get('notes'):
+                parts.append(log['notes'])
+            log['ground_truth'] = ' '.join(parts) if parts else "No reference answer available."
+            
+        # Remove extra keys so RAGAS dataset doesn't complain
+        log.pop('expected_actions', None)
+        log.pop('notes', None)
     
     # Create HuggingFace Dataset
     dataset = Dataset.from_pandas(pd.DataFrame(logs))
     
     print("Initializing LLM Judges...")
     # Initialize LangChain wrappers for OpenAI
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o-mini", temperature=0))
+    embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings(model="text-embedding-3-small"))
     
     print("Running RAGAS evaluation (this may take a while)...")
     result = evaluate(
