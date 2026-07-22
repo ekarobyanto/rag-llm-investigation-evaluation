@@ -10,7 +10,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "experiment": "npx tsx scripts/run-experiment.ts",
+    "eval:ragas": "npx tsx scripts/run-ragas.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",

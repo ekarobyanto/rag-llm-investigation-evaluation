@@ -56,10 +56,10 @@ function loadCases(): InputCase[] {
   return cases
 }
 
-function normalizeContradiction(p: InputCase["ground_truth"]["contradiction_pairs"][number]) {
+function normalizeContradiction(p: any) {
   return {
-    evidence_index_1: p.evidence_index_1 ?? p.claim_evidence_index ?? -1,
-    evidence_index_2: p.evidence_index_2 ?? p.contradicting_evidence_index ?? -1,
+    evidence_index_1: p.evidence_index_1 ?? p.evidence_index_a ?? p.claim_evidence_index ?? -1,
+    evidence_index_2: p.evidence_index_2 ?? p.evidence_index_b ?? p.contradicting_evidence_index ?? -1,
     explanation: p.explanation,
   }
 }

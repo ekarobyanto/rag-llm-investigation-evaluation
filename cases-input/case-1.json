@@ -1,498 +1,964 @@
 {
-  "case_1_medium": {
+  "nexus_data_breach": {
     "case": {
-      "title": "The Procurement Ledger Discrepancy",
-      "description": "On October 14, 2026, an internal audit at Apex Logistics Corp revealed an unauthorized vendor payment of $45,000 processed between 14:00 and 16:00. The payment was routed to an unverified entity named 'Vertex Supplies'. The investigator must determine which financial officer authorized this fraudulent transaction."
+      "title": "The Nexus Data Breach",
+      "description": "On January 15, 2027, cybersecurity firm Nexus Dynamics discovered that their proprietary threat intelligence database \u2014 containing classified vulnerability assessments for Fortune 500 clients \u2014 was exfiltrated via an internal service account VPN tunnel between 02:00 and 05:00. Approximately 2.3 terabytes of data appeared on a dark web marketplace 72 hours later. The breach was executed using the service account svc-threatfeed with elevated database export privileges. The investigator must determine which employee orchestrated the exfiltration."
     },
     "suspects": [
       {
-        "name": "David Vance",
-        "profile": "Senior Procurement Manager who has administrative access to the vendor payment portal and was under investigation for a previous expense report anomaly."
+        "name": "Marcus Chen",
+        "profile": "Senior Security Engineer (CULPRIT)"
       },
       {
-        "name": "Elena Rostova",
-        "profile": "Junior Financial Analyst responsible for verifying new vendor accounts. She recently complained about excessive workload and lack of oversight."
+        "name": "Dr. Sarah Okonkwo",
+        "profile": "Chief Technology Officer (red herring)"
       },
       {
-        "name": "Marcus Brody",
-        "profile": "Chief Financial Officer who holds final approval authority for all transactions exceeding $10,000. He claims he was in a board meeting during the incident window."
+        "name": "Viktor Petrov",
+        "profile": "DevOps Engineer (suspicious red herring)"
       },
       {
-        "name": "Sarah Jenkins",
-        "profile": "IT Systems Administrator with access to all financial databases, who recently submitted her two-week resignation notice."
+        "name": "Aisha Rahman",
+        "profile": "Data Analyst (clearly innocent)"
+      },
+      {
+        "name": "James Whitfield",
+        "profile": "VP of Sales (motive but no skills)"
       }
     ],
     "evidence": [
       {
-        "type": "financial_record",
-        "category": "financial",
+        "type": "location_report",
+        "category": "location",
         "difficulty_weight": 0.9,
-        "content": "Transaction ID TXN-998211 at 14:45 shows a disbursement of $45,000 to Vertex Supplies, authorized using credentials assigned to Marcus Brody."
+        "content": "VPN firewall logs show service account svc-threatfeed established a remote connection at 02:00 on January 15, 2027, maintaining an active encrypted tunnel until 05:00. The connection originated from residential IP address 74.125.224.72."
       },
       {
-        "type": "location_report",
-        "category": "alibi",
-        "difficulty_weight": 0.8,
-        "content": "Access control badge logs indicate Marcus Brody entered Boardroom B at 13:55 and did not exit until 16:05."
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "Service account audit trail reveals svc-threatfeed was provisioned on October 3, 2026, by user marcus.chen@nexusdynamics.com with elevated database export and bulk read privileges."
       },
       {
         "type": "witness_statement",
         "category": "contradiction",
         "difficulty_weight": 0.9,
-        "content": "David Vance stated: 'I was in my private office typing up the quarterly procurement report from 14:00 to 16:00 and did not use any network systems.'"
+        "content": "Marcus Chen stated: 'I was at home sleeping from around 11 PM onward. My work laptop was powered down and in my backpack. I did not access any company systems that night.'"
+      },
+      {
+        "type": "location_report",
+        "category": "contradiction",
+        "difficulty_weight": 0.9,
+        "content": "Smart home telemetry data from Marcus Chen's residence shows the home office occupancy sensor registered continuous presence from 01:45 to 05:35, and the desk lamp circuit was active throughout this period."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "ISP deep packet inspection metadata for the residential fiber line assigned to Marcus Chen's address recorded a sustained upstream data transfer averaging 142 Mbps between 02:15 and 04:45 on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Digital forensic imaging of Marcus Chen's personal laptop recovered an installed Tor Browser bundle with cached HTML fragments matching the listing page of the dark web marketplace 'ShadowVault' where the stolen data later appeared."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.9,
+        "content": "An encrypted email recovered from Marcus Chen's ProtonMail account, dated January 12, reads: 'The package will be ready on the 15th as discussed. Ensure the escrow wallet is funded. Final delivery within 72 hours.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.9,
+        "content": "Blockchain analysis identified a cryptocurrency wallet controlled by Marcus Chen's private key that received a deposit of 15 ETH (approximately $48,000) on January 18, exactly 72 hours after the breach window."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.7,
+        "content": "Internal HR notification dated December 12, 2026: 'After careful consideration, the CISO position has been offered to an external candidate. Marcus Chen was considered but did not advance to the final round.'"
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "A colleague stated: 'After the CISO announcement, Marcus became visibly withdrawn. He told me during lunch that his years of dedication meant nothing and that the company would regret overlooking him.'"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Building access control logs show Marcus Chen's badge was used to exit the Nexus Dynamics office at 18:30 on January 14. No re-entry was recorded."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Home router traffic analysis for Marcus Chen's residence logged a total of 2.3 terabytes of outbound data transfer between 02:15 and 04:45 on January 15, routed through an encrypted VPN tunnel."
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.4,
+        "content": "Mobile device GPS tracking data shows Marcus Chen's personal phone remained stationary at his registered home address from 22:00 on January 14 to 07:00 on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Git commit history shows Marcus Chen's developer account accessed the internal credentials vault repository containing svc-threatfeed authentication tokens on January 13, two days before the breach."
+      },
+      {
+        "type": "cctv_log",
+        "category": "location",
+        "difficulty_weight": 0.3,
+        "content": "Parking lot security camera footage confirms Marcus Chen's vehicle departed the Nexus Dynamics campus at 18:35 on January 14."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.7,
+        "content": "Signal messaging app forensic extraction from Marcus Chen's personal phone contains a thread with an unregistered contact: 'Payment is pending. Will confirm once delivery is verified on the marketplace.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "Personal financial records show Marcus Chen has an outstanding personal loan of $45,000 with monthly payments of $1,200, taken out in September 2026."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Marcus Chen's company-issued work laptop shows zero VPN connections or network activity between 18:30 on January 14 and 08:15 on January 15."
+      },
+      {
+        "type": "witness_statement",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "Marcus Chen's neighbor stated: 'I remember seeing the lights on in Marcus's upstairs office very late that night, which was unusual. I noticed because I let my dog out around 3 AM.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Service account credential audit log indicates the password for svc-threatfeed was reset on January 13 at 14:22 by user marcus.chen@nexusdynamics.com. The previous scheduled rotation was not due until February 1."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "A forensic image of Marcus Chen's personal NAS (network-attached storage) device recovered a directory structure matching the exact folder hierarchy and file naming convention of the Nexus Dynamics threat intelligence database."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.7,
+        "content": "Browser history analysis on Marcus Chen's personal laptop reveals searches for 'secure large file transfer services', 'Monero vs Ethereum privacy', and 'cryptocurrency tumbling techniques' conducted between January 8 and January 13."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Marcus Chen's Netflix account activity log shows continuous streaming of 'Cyberpunk: Edgerunners' episodes from 20:30 to 23:25 on January 14."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "A food delivery receipt shows Marcus Chen ordered dinner from Golden Dragon Restaurant at 20:00 on January 14, delivered to his home address."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Marcus Chen's gym membership auto-charge of $49.99 was processed on January 14."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Marcus Chen received an automated dental appointment reminder for January 20 from Smile Dental Clinic."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Marcus Chen's monthly electricity bill auto-payment of $127.50 was processed on January 12."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Marcus Chen's Spotify account shows active listening from 19:00 to 20:15 on January 14 at his home address."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Marcus Chen participated in the company's annual internal hackathon on January 5-6, building a network monitoring prototype that won third place."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Marcus Chen's direct manager stated: 'Marcus is one of our most technically skilled engineers. He has always been reliable and professional in his work.'"
       },
       {
         "type": "location_report",
         "category": "location",
         "difficulty_weight": 0.7,
-        "content": "Badge reader logs show David Vance scanned into the Executive Suite wing at 14:10, which houses the CFO office, and scanned out at 15:20."
+        "content": "Building access logs show Dr. Sarah Okonkwo's badge remained active inside the Nexus Dynamics headquarters until 01:30 on January 15, 2027."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Dr. Sarah Okonkwo stated: 'I was working late completing the quarterly security audit report. I left the office around 1:30 AM and took an Uber home.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Dr. Okonkwo's company laptop activity logs show legitimate security audit database queries and report generation between 20:00 and 01:15 on January 14-15."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "VPN connection logs confirm Dr. Okonkwo's session was established from the Nexus Dynamics internal office network (10.0.1.x subnet), not from any remote location."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "An email thread from December 20 shows a heated exchange between Dr. Okonkwo and CEO Richard Hayes regarding proposed security budget cuts, in which she wrote: 'If you gut this department, the consequences will be on your head.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "Court filing records indicate Dr. Okonkwo's divorce proceedings have accumulated $30,000 in legal fees over the past four months."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Night security guard Robert Torres stated: 'I logged Dr. Okonkwo exiting through the main lobby at approximately 01:30. She was carrying her laptop bag and looked tired.'"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Uber ride receipt confirms Dr. Okonkwo was picked up at Nexus Dynamics headquarters at 01:35 and dropped off at her home address at 02:05."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Dr. Okonkwo's home security camera recorded her entering her front door at 02:08 on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Dr. Okonkwo's personal phone shows no network activity or app usage between 02:15 and 06:45, consistent with sleeping."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.6,
+        "content": "System access audit shows Dr. Okonkwo's last privileged administrative action was a routine audit query executed at 01:12 on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "IT infrastructure documentation confirms Dr. Okonkwo holds root-level administrative access to all production systems, including the ability to manage service accounts such as svc-threatfeed."
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Dr. Okonkwo sent an email to her security team at 00:45 on January 15: 'Wrapping up the Q4 audit section on access controls. Will share the draft by tomorrow morning.'"
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "A colleague stated: 'Sarah has been under a lot of personal stress lately with the divorce. She's been shorter tempered than usual but still dedicated to her work.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "Bank statements show Dr. Okonkwo's personal savings account balance dropped from $85,000 to $12,000 over three months due to legal costs and temporary dual-household expenses."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Complete forensic analysis of Dr. Okonkwo's company laptop found no evidence of unauthorized data copying, staging, or exfiltration tools."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo's draft presentation slides for the upcoming RSA security conference were last modified on January 13."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo's LinkedIn activity log shows she posted about emerging zero-trust security frameworks on January 11."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Gym entry logs show Dr. Okonkwo scanned into FitLife Gym at 07:00 on January 15 for her morning workout routine."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Auto service receipt: Dr. Okonkwo's vehicle had a scheduled oil change on January 10."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo's automated monthly payments for mortgage, insurance, and utilities were processed normally in January."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Dr. Okonkwo's work calendar had the quarterly security audit blocked for the week of January 13-17."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo is subscribed to three cybersecurity industry newsletters that were delivered to her inbox on January 14."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Phone records show Dr. Okonkwo called her divorce attorney at 18:00 on January 14 for a 12-minute conversation."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Dr. Okonkwo's executive assistant stated: 'Sarah mentioned she'd be staying late for the audit. She does this every quarter.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Network data loss prevention logs confirm that Dr. Okonkwo's account had no file transfers exceeding 1 GB during the entire week of January 13-17."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo booked a flight and hotel for the RSA Conference in San Francisco, scheduled for February 24-28."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Amazon delivery confirmation: Dr. Okonkwo received a copy of 'Security Engineering' by Ross Anderson on January 12."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Company security incident log shows Dr. Okonkwo proactively reported and patched an internal authentication vulnerability on December 15, demonstrating her commitment to security integrity."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dr. Okonkwo's automated calendar reminder for the Monday morning team standup was sent at 06:00 on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.6,
+        "content": "IT organizational records confirm Viktor Petrov serves as the primary DevOps Engineer responsible for managing VPN gateway infrastructure and provisioning all service accounts across the Nexus Dynamics production environment."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.7,
+        "content": "Viktor Petrov stated: 'I left the office right at 5 PM on January 14 and drove straight home. I spent the evening watching TV and went to bed early.'"
+      },
+      {
+        "type": "cctv_log",
+        "category": "contradiction",
+        "difficulty_weight": 0.8,
+        "content": "Office lobby security camera footage shows Viktor Petrov exiting the main entrance of Nexus Dynamics at 19:15 on January 14, over two hours later than his claimed departure time of 17:00."
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.7,
+        "content": "Building access control system recorded Viktor Petrov's badge exit scan at 19:17 on January 14."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Uber ride receipt shows Viktor Petrov was picked up from Nexus Dynamics at 19:20 and dropped off at The Rusty Nail bar in the downtown entertainment district at 19:40."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "The Rusty Nail bar's internal security camera footage confirms Viktor Petrov was present at the bar from approximately 19:45 until the establishment closed at 01:30 on January 15."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Mobile phone GPS location data shows Viktor Petrov's device at The Rusty Nail until 01:30 and arriving at his home apartment at 01:55."
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "Business registration records show Viktor Petrov established PetrovTech Consulting LLC six months ago as a registered sole proprietorship."
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "PetrovTech Consulting LLC bank account shows two deposits totaling $15,000 from legitimate infrastructure review contracts with small businesses."
       },
       {
         "type": "email_message",
         "category": "communication",
-        "difficulty_weight": 0.9,
-        "content": "An encrypted email draft saved in David Vance's corporate account at 11:15 contains the routing number and banking details for 'Vertex Supplies'."
+        "difficulty_weight": 0.4,
+        "content": "Viktor Petrov's personal email contains correspondence with two small business clients requesting cloud infrastructure security reviews, with clear scopes of work and deliverables."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "Access privilege documentation shows Viktor Petrov holds administrative rights to rotate, reset, and manage credentials for all service accounts, including svc-threatfeed."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.3,
+        "content": "Viktor Petrov's email confirms his attendance at the DEF CON security conference in Las Vegas from January 3-7, 2027."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "U.S. Customs and Border Protection records confirm Viktor Petrov re-entered the country on January 10 via McCarran International Airport."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Viktor Petrov's personal laptop contains standard penetration testing tools (Burp Suite, Metasploit, Nmap) consistent with his professional DevOps and security responsibilities."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Network monitoring logs confirm Viktor Petrov's home IP address had zero active VPN connections to the Nexus Dynamics network during the breach window of 02:00-05:00 on January 15."
       },
       {
         "type": "witness_statement",
         "category": "alibi",
-        "difficulty_weight": 0.3,
-        "content": "Elena Rostova stated: 'I was at my desk in the open-plan finance pool the entire afternoon processing invoices, which Marcus Brody can confirm.'"
-      },
-      {
-        "type": "location_report",
-        "category": "location",
-        "difficulty_weight": 0.2,
-        "content": "Network login logs show Elena Rostova's workstation was actively processing standard invoice batches continuously from 13:00 to 17:00."
+        "difficulty_weight": 0.6,
+        "content": "The Rusty Nail bartender Mike Schultz stated: 'Viktor is a regular. He was here from around 8 PM until we closed at 1:30 AM. He was watching the hockey game and had about four beers.'"
       },
       {
         "type": "email_message",
-        "category": "motive",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Text message records show Viktor Petrov sent a message to his girlfriend at 00:05 on January 15: 'Game went to OT. Heading home soon. Don't wait up.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
         "difficulty_weight": 0.5,
-        "content": "An internal HR email dated October 10 shows Sarah Jenkins expressing severe dissatisfaction regarding her denied bonus application."
+        "content": "Viktor Petrov's company work laptop shows the last active session ended at 19:10 on January 14, with a normal logout sequence."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Enterprise network activity monitoring confirms Viktor Petrov's administrative account had zero login events or system interactions after 19:15 on January 14."
       },
       {
         "type": "location_report",
-        "category": "alibi",
-        "difficulty_weight": 0.3,
-        "content": "Sarah Jenkins' server room access badge was used to enter Server Room 3 at 13:45 and exit at 16:15."
-      },
-      {
-        "type": "cctv_log",
-        "category": "location",
-        "difficulty_weight": 0.5,
-        "content": "CCTV camera 4 captures Sarah Jenkins inside Server Room 3 performing physical maintenance on server racks from 14:00 to 15:45."
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Viktor Petrov's Spotify account shows a listening session at The Rusty Nail bar from 20:00 to 01:15 on January 14-15."
       },
       {
         "type": "financial_record",
         "category": "noise",
         "difficulty_weight": 0.1,
-        "content": "A routine utility payment of $1,200 to City Power Corp was auto-executed by the system at 14:15."
+        "content": "A food delivery order of $35 was placed from Viktor Petrov's account at The Rusty Nail at 21:00 on January 14."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Viktor Petrov submitted a $2,400 DEF CON conference expense report on January 11 that was approved by his manager."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Parking garage automated payment of $180 was processed for Viktor Petrov's monthly office parking on January 1."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Viktor Petrov's phone received an automatic iOS system update at 03:00 on January 15 while on his home Wi-Fi."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.4,
+        "content": "Credential rotation logs show Viktor Petrov performed a scheduled password reset for svc-threatfeed on October 15, 2026, as part of the quarterly credential rotation cycle."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Viktor Petrov's code review history shows he audited and approved the service account permission matrix in November 2026 as part of routine security hygiene."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.3,
+        "content": "A colleague remarked: 'Viktor openly talks about his consulting side gig. He jokes that one day PetrovTech will replace his day job.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Viktor Petrov's bank statements show consistent, modest consulting deposits that align with invoiced amounts from his two declared clients."
       },
       {
         "type": "email_message",
         "category": "noise",
         "difficulty_weight": 0.1,
-        "content": "An all-hands email from HR regarding the upcoming company holiday party was distributed to all staff at 14:30."
+        "content": "Viktor Petrov received an automated email confirming his CompTIA Security+ certification renewal on January 8."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Viktor Petrov's apartment lease auto-payment of $1,850 was processed on January 1."
       },
       {
         "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Aisha Rahman stated: 'I was on a red-eye flight to Chicago for a client presentation the next morning. I boarded around 11:15 PM and landed at O'Hare at 5:45 AM Central Time.'"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.9,
+        "content": "Airline booking system records confirm Aisha Rahman was a ticketed passenger on United Flight NX-447 departing at 23:30 on January 14 from Washington Dulles."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.8,
+        "content": "Airport gate scanner records show Aisha Rahman's boarding pass was scanned at Gate B12 at 23:15 on January 14."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Official flight manifest for United NX-447 lists Aisha Rahman in seat 14C, with the aircraft landing at Chicago O'Hare at 05:45 CST on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Cellular carrier records show Aisha Rahman's phone entered airplane mode at 23:20 on January 14 and reconnected to the cellular network at 05:52 CST on January 15 in the Chicago area."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Hotel reservation system confirms Aisha Rahman checked into the Chicago Marriott Magnificent Mile at 06:30 CST on January 15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Aisha Rahman's company laptop power-on logs show the device was shut down at 22:00 on January 14 and not powered on again until 07:15 CST on January 15 at the hotel."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "IT access control matrix confirms Aisha Rahman's account has read-only database permissions. She cannot execute bulk exports, modify schemas, or access service account credentials."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Database query audit for Aisha Rahman's account shows only standard analytical SELECT queries over the past 30 days, with no unusual access patterns."
+      },
+      {
+        "type": "forensic_report",
+        "category": "location",
+        "difficulty_weight": 0.4,
+        "content": "Data transfer logs show Aisha Rahman downloaded a 500 MB analytical dataset on January 7 for a legitimate quarterly client risk assessment report."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "A United Airlines flight attendant confirmed: 'I specifically remember the passenger in 14C because she asked for a blanket and pillow right after boarding.'"
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Aisha Rahman's calendar shows 'Chicago Client Presentation - Meridian Group' scheduled for 09:00 CST on January 15."
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Aisha Rahman sent an email to her team at 21:00 on January 14: 'Final presentation deck attached. Heading to the airport now. Will dial in from Chicago tomorrow.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Background screening report confirms Aisha Rahman has no outstanding debts, no criminal record, and a clean financial history."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "HR records indicate Aisha Rahman joined Nexus Dynamics six months ago from a data science research position at Georgetown University."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Aisha Rahman's manager stated: 'Aisha is diligent, punctual, and has shown no suspicious behavior in her six months with us. She's been a great addition.'"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Uber ride receipt shows Aisha Rahman was picked up from her apartment at 21:30 on January 14 and dropped off at Washington Dulles International Airport at 22:05."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Airport lounge purchase receipt: $15.50 for coffee and a turkey sandwich at the United Club at 22:15 on January 14."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Netflix download log shows Aisha Rahman saved two episodes of a documentary series for offline viewing at 21:45 on January 14."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Aisha Rahman received routine industry newsletter emails from three cybersecurity publications on January 14."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Phone alarm was set for 06:00 CST on January 15 for the Chicago presentation."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Amazon order confirmation: Aisha Rahman purchased a travel power adapter shipped to the Chicago Marriott, ordered January 12."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "IT security logs show zero privilege escalation requests have ever been submitted from Aisha Rahman's account."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Enterprise network monitoring confirms Aisha Rahman's account had zero login events or API calls between 22:00 on January 14 and 07:15 CST on January 15."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Slack message history shows Aisha Rahman discussing presentation slide formatting with a colleague at 20:30 on January 14."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Calendar reminder: hotel checkout at Chicago Marriott scheduled for January 16."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "LinkedIn profile update: Aisha Rahman added 'Threat Intelligence Analysis' to her skills on January 11."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Weather app query from Aisha Rahman's phone at 21:00 on January 14 checked the Chicago forecast for January 15."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Aisha Rahman's biweekly salary direct deposit of $3,200 was processed on January 10."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Automated HR email congratulated Aisha Rahman on completing her 6-month onboarding milestone on January 8."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "James Whitfield stated: 'I had a business dinner with the Meridian Corp account team at Harbour Steak House. We finished around 10:45 PM and I was home by 11:30.'"
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Restaurant billing records confirm a party under the reservation name 'Whitfield' at Harbour Steak House concluded service at 22:45 on January 14."
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "James Whitfield's corporate credit card was charged $850 at Harbour Steak House at 22:50 on January 14 for a group dinner."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Uber ride receipt shows James Whitfield departed Harbour Steak House at 22:55 and arrived at his home address at 23:20 on January 14."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "James Whitfield's home security camera system recorded him entering his front door at 23:25 on January 14."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "James Whitfield's personal phone screen-time data shows casual news browsing (CNN, Bloomberg) until 00:15, after which the device was inactive until 07:00."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.7,
+        "content": "Internal sales memo dated November 15, 2026: 'Nexus Dynamics has lost the Meridian Corp managed security contract valued at $2.1 million annually. Account lead: James Whitfield.'"
+      },
+      {
+        "type": "email_message",
         "category": "motive",
         "difficulty_weight": 0.6,
-        "content": "A colleague stated: 'David Vance has been complaining about high personal credit card debts and mentioned needing a fast liquidity solution.'"
-      },
-      {
-        "type": "forensic_report",
-        "category": "forensic",
-        "difficulty_weight": 0.8,
-        "content": "Digital forensic analysis reveals Marcus Brody's terminal in his private office was utilized to approve TXN-998211 at 14:45 while he was away."
-      },
-      {
-        "type": "cctv_log",
-        "category": "contradiction",
-        "difficulty_weight": 0.4,
-        "content": "CCTV corridor camera 2 shows Elena Rostova leaving her desk to go to the cafeteria at 14:30 and returning at 15:00."
-      },
-      {
-        "type": "financial_record",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Petty cash log shows Elena Rostova withdrew $20 for office kitchen supplies at 11:00."
-      },
-      {
-        "type": "email_message",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "A calendar invite confirms Marcus Brody was scheduled for the Boardroom B meeting from 14:00 to 16:00."
-      },
-      {
-        "type": "forensic_report",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "A network vulnerability scan completed at 13:00 showed no external intrusions or malware active on the core financial servers."
-      },
-      {
-        "type": "witness_statement",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "The office receptionist stated: 'I saw Sarah Jenkins arrive at work at 08:45 carrying a laptop bag and a coffee.'"
-      },
-      {
-        "type": "email_message",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "Sarah Jenkins sent a system maintenance notification to the entire department at 13:30 regarding scheduled database indexing."
-      }
-    ],
-    "ground_truth": {
-      "correct_suspect_name": "David Vance",
-      "contradiction_pairs": [
-        {
-          "evidence_index_1": 2,
-          "evidence_index_2": 3,
-          "explanation": "David Vance claims he was in his private office typing a report from 14:00 to 16:00, but badge logs prove he left that area and entered the Executive Suite wing between 14:10 and 15:20."
-        },
-        {
-          "evidence_index_1": 5,
-          "evidence_index_2": 14,
-          "explanation": "Elena Rostova claims she was at her desk the entire afternoon, but CCTV shows she was away in the cafeteria from 14:30 to 15:00."
-        }
-      ],
-      "relevant_evidence_indices": [0, 1, 3, 4, 13],
-      "optimal_next_actions": [
-        "INTERROGATE_SUSPECT",
-        "EXAMINE_EVIDENCE",
-        "SUBMIT_DEDUCTION"
-      ]
-    }
-  },
-  "case_2_hard": {
-    "case": {
-      "title": "The Missing Quantum Blueprint",
-      "description": "On November 3, 2026, between 20:00 and 22:00, a physical high-security storage drive containing the proprietary blueprints for the NextGen Quantum Processor vanished from the Vault Room at Novatech Research Labs. The investigator must determine which researcher executed the theft."
-    },
-    "suspects": [
-      {
-        "name": "Dr. Aris Thorne",
-        "profile": "Lead Quantum Physicist who designed the architecture. He openly opposed the commercialization contract signed with a foreign defense contractor."
-      },
-      {
-        "name": "Dr. Clara Mendoza",
-        "profile": "Senior Materials Scientist who had authorized vault access privileges. Her private research firm recently filed for bankruptcy protection."
-      },
-      {
-        "name": "Julian Vance",
-        "profile": "Laboratory Security Officer on duty monitoring the main console during the evening shift who recently purchased an expensive sports car."
-      },
-      {
-        "name": "Dr. Raymond Finch",
-        "profile": "Junior Research Fellow whose contract was terminated earlier that day, scheduled to leave the facility permanently at midnight."
-      }
-    ],
-    "evidence": [
-      {
-        "type": "location_report",
-        "category": "location",
-        "difficulty_weight": 0.9,
-        "content": "Vault Room access logs show Dr. Clara Mendoza's biometric badge was scanned at the entrance door at 20:42 and scanned out at 20:55."
-      },
-      {
-        "type": "witness_statement",
-        "category": "contradiction",
-        "difficulty_weight": 0.8,
-        "content": "Dr. Clara Mendoza stated: 'I lost my physical proximity badge around 19:30 during dinner in the cafeteria, and I stayed in the Main Lab finishing my paperwork until 22:00.'"
-      },
-      {
-        "type": "cctv_log",
-        "category": "contradiction",
-        "difficulty_weight": 0.9,
-        "content": "Cafeteria CCTV footage from 19:15 to 19:45 shows Dr. Clara Mendoza keeping her physical badge visibly clipped to her white lab coat the entire time."
+        "content": "Email from CyberShield Inc. CEO Diana Walsh to James Whitfield dated December 28: 'James, it was great catching up. Let's discuss potential opportunities in the new year. Your experience would be valuable.'"
       },
       {
         "type": "email_message",
         "category": "communication",
+        "difficulty_weight": 0.5,
+        "content": "Email records show James Whitfield forwarded a non-classified Nexus Dynamics competitive pricing overview to his personal email on December 30, 2026. The document contained no proprietary data."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "A sales team colleague stated: 'James took the Meridian loss extremely hard. He kept saying the company was mismanaged and that leadership set him up to fail.'"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
         "difficulty_weight": 0.8,
-        "content": "An external email from Dr. Clara Mendoza's personal address sent to an encrypted contact at 17:00 reads: 'The asset will be secured tonight before the late shift ends. Prepare the transfer.'"
+        "content": "IT user profile audit confirms James Whitfield's account is classified as a standard business user with no administrative privileges, no VPN remote access capability, and no access to technical infrastructure."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Laptop software inventory audit shows James Whitfield's company laptop contains only standard business applications: Microsoft Office, Salesforce, Zoom, and Slack. No development tools, terminal emulators, or VPN clients are installed."
       },
       {
         "type": "witness_statement",
         "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "HR training records confirm James Whitfield has completed zero technical certifications and has never attended any security, programming, or systems administration training."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Enterprise database access logs confirm James Whitfield's account has never executed a direct database query. His data access is limited to pre-built Salesforce dashboards."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
         "difficulty_weight": 0.4,
-        "content": "Dr. Aris Thorne stated: 'I left the research facility entirely at 19:00 to have dinner with my wife at Bistro West; we did not return until the following morning.'"
+        "content": "Phone records show James Whitfield called CyberShield Inc. CEO Diana Walsh at 18:00 on January 14 for a 7-minute conversation."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "In an email to a colleague on January 10, James Whitfield wrote: 'I'm going to make them pay for what happened with Meridian. This company doesn't value its top performers.' Context suggests frustration about compensation, not criminal intent."
       },
       {
         "type": "financial_record",
         "category": "motive",
-        "difficulty_weight": 0.9,
-        "content": "A bank statement linked to Dr. Clara Mendoza reveals an anonymous offshore wire transfer deposit of $250,000 pending execution upon verification."
+        "difficulty_weight": 0.5,
+        "content": "James Whitfield's quarterly commission statement shows his variable compensation dropped by 40% in Q4 2026 following the Meridian contract loss."
       },
       {
-        "type": "location_report",
-        "category": "alibi",
-        "difficulty_weight": 0.5,
-        "content": "GPS vehicle tracking log indicates Dr. Aris Thorne's vehicle arrived at Bistro West parking lot at 19:25 and remained stationary until 22:15."
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "James Whitfield's Q1 2027 sales pipeline forecast shows optimistic projections with three new enterprise prospects."
       },
       {
         "type": "witness_statement",
         "category": "alibi",
         "difficulty_weight": 0.4,
-        "content": "Julian Vance stated: 'I remained locked inside the Central Security Command Room monitoring all primary video feeds from 18:00 to 00:00 without any breaks.'"
+        "content": "James Whitfield's executive assistant stated: 'James complains a lot about how the company is run, but he's all bark and no bite. He doesn't even know how to reset his own email password.'"
       },
       {
-        "type": "cctv_log",
-        "category": "location",
-        "difficulty_weight": 0.6,
-        "content": "Corridor CCTV at 20:38 shows Julian Vance walking toward the break room vending machines and returning with a beverage at 20:50."
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James Whitfield's country club monthly membership dues of $350 were charged on January 1."
       },
       {
-        "type": "witness_statement",
-        "category": "motive",
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James Whitfield wrote a LinkedIn recommendation for a former sales colleague on January 9."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James Whitfield's luxury vehicle lease payment of $780 was auto-debited on January 5."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dry cleaning receipt: $45 charged to James Whitfield on January 13."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James Whitfield received an email from his children's school about the upcoming parent-teacher conference on January 22."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Wall Street Journal digital subscription renewal of $39.99 was charged on January 2."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Travel booking confirmation: James Whitfield registered for the Sales Leadership Summit in Miami, February 10-12."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James Whitfield's fantasy football league sent an automated end-of-season standings notification on January 12."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "James Whitfield's monthly mortgage payment of $3,200 was auto-debited on January 1."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
         "difficulty_weight": 0.3,
-        "content": "Dr. Raymond Finch stated: 'I spent my final evening packing my personal textbooks and clean-up samples in Office 4B. I didn't even go near the vault corridor.'"
-      },
-      {
-        "type": "location_report",
-        "category": "location",
-        "difficulty_weight": 0.5,
-        "content": "Badge history for Office 4B registers Dr. Raymond Finch entering at 18:30 and exiting with a large cardboard box at 21:15."
-      },
-      {
-        "type": "forensic_report",
-        "category": "forensic",
-        "difficulty_weight": 0.9,
-        "content": "Latent fingerprint analysis performed on the empty protective drive casing inside the vault recovered a high-quality match belonging to Dr. Clara Mendoza."
-      },
-      {
-        "type": "cctv_log",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Main lobby camera shows a routine courier delivery driver dropping off specialized lab chemicals at the reception desk at 20:15."
-      },
-      {
-        "type": "location_report",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Automated HVAC system logs show a slight temperature variance in the Server Room at 20:30 due to routine backup cycles."
+        "content": "James Whitfield sent a meeting request to CEO Richard Hayes on January 13 with the subject line 'Discussion: Strategic Direction and Sales Team Support.'"
       },
       {
         "type": "email_message",
         "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "Dr. Raymond Finch received an automated exit interview questionnaire from HR at 19:00 with instructions for badge return."
-      },
-      {
-        "type": "financial_record",
-        "category": "noise",
         "difficulty_weight": 0.1,
-        "content": "Julian Vance's bank statement logs a routine monthly auto-debit transaction for his vehicle insurance premium at 21:00."
-      },
-      {
-        "type": "forensic_report",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "Dust fiber analysis from the Vault floor indicated standard industrial carpet cleaner residue applied during previous weekend maintenance."
-      },
-      {
-        "type": "witness_statement",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "The front desk receptionist stated: 'Dr. Aris Thorne said goodnight to me when he passed the lobby doors around 18:55.'"
-      },
-      {
-        "type": "email_message",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "A facility-wide broadcast email from IT scheduled database defragmentation for midnight on November 3."
-      },
-      {
-        "type": "location_report",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Facility gate sensors recorded Dr. Aris Thorne's registered vehicle tag exiting the perimeter parking structure at 19:02."
+        "content": "Automated HR email congratulated James Whitfield on his 5-year company anniversary on January 7."
       }
     ],
     "ground_truth": {
-      "correct_suspect_name": "Dr. Clara Mendoza",
+      "correct_suspect_name": "Marcus Chen",
       "contradiction_pairs": [
         {
-          "evidence_index_1": 1,
-          "evidence_index_2": 2,
-          "explanation": "Dr. Clara Mendoza claims she lost her physical badge during dinner at 19:30, but the cafeteria CCTV explicitly confirms the badge remained clipped to her coat during that entire window."
+          "evidence_index_a": 2,
+          "evidence_index_b": 3,
+          "explanation": "Marcus Chen claims he was asleep with his laptop off, but smart home telemetry shows his office was occupied with the desk lamp active until 05:30."
         },
         {
-          "evidence_index_1": 7,
-          "evidence_index_2": 8,
-          "explanation": "Julian Vance claims he remained locked inside the Central Security Command Room continuously, but CCTV shows him out in the corridor visiting vending machines between 20:38 and 20:50."
-        }
-      ],
-      "relevant_evidence_indices": [0, 2, 3, 5, 11],
-      "optimal_next_actions": [
-        "EXAMINE_EVIDENCE",
-        "REVIEW_TIMELINE",
-        "SUBMIT_DEDUCTION"
-      ]
-    }
-  },
-  "case_3_hard_plus": {
-    "case": {
-      "title": "Operation Midnight Leak",
-      "description": "On December 12, 2026, between 01:00 and 04:00, a highly confidential pricing spreadsheet detailing next year's government contract bids was downloaded via an authorized VPN connection and leaked to a prominent competitor. The investigator must isolate the specific operative responsible for the credential misuse."
-    },
-    "suspects": [
-      {
-        "name": "Victor Sterling",
-        "profile": "Director of Government Relations who negotiated the bidding parameters. He has full remote access privileges and was seen arguing with the CEO regarding equity distribution."
-      },
-      {
-        "name": "Nadia Volkov",
-        "profile": "Senior Database Engineer who designed the security access architecture. She routinely works unusual late-night hours from her home office."
-      },
-      {
-        "name": "Arthur Pendelton",
-        "profile": "VP of Strategy who compiled the final figures. He has an unblemished 15-year career record but holds a secret brokerage account suffering heavy market losses."
-      },
-      {
-        "name": "Elena Rostova",
-        "profile": "Compliance Officer who audited the spreadsheet safety protocols. She recently downloaded large data volumes for a legitimate quarterly review."
-      }
-    ],
-    "evidence": [
-      {
-        "type": "location_report",
-        "category": "location",
-        "difficulty_weight": 0.9,
-        "content": "VPN firewall connection logs show a successful remote connection using the account credentials of Arthur Pendelton initiated at 01:15 and terminated at 03:45."
-      },
-      {
-        "type": "witness_statement",
-        "category": "contradiction",
-        "difficulty_weight": 0.9,
-        "content": "Arthur Pendelton stated: 'I was sound asleep at home all night. My personal corporate laptop was turned off and stored safely inside my locked briefcase in the study.'"
-      },
-      {
-        "type": "location_report",
-        "category": "contradiction",
-        "difficulty_weight": 0.9,
-        "content": "Residential smart-meter electrical data for Arthur Pendelton's household reveals a significant power surge matching a high-performance workstation boot sequence occurring between 01:10 and 03:50."
-      },
-      {
-        "type": "forensic_report",
-        "category": "forensic",
-        "difficulty_weight": 0.9,
-        "content": "ISP metadata tracking reveals that the remote VPN connection at 01:15 originated precisely from the residential IP address assigned exclusively to Arthur Pendelton's home fiber line."
-      },
-      {
-        "type": "witness_statement",
-        "category": "alibi",
-        "difficulty_weight": 0.5,
-        "content": "Victor Sterling stated: 'I was hosting a late-night dinner party at my downtown apartment until 02:30. Seven different corporate clients can verify my presence.'"
-      },
-      {
-        "type": "location_report",
-        "category": "alibi",
-        "difficulty_weight": 0.6,
-        "content": "Ride-share receipt data confirms Victor Sterling took an Uber from the downtown core back to his residence, arriving home at 02:55."
-      },
-      {
-        "type": "witness_statement",
-        "category": "contradiction",
-        "difficulty_weight": 0.8,
-        "content": "Nadia Volkov stated: 'I was running automated database optimization scripts from my home system from 01:00 to 04:00, which required my full undivided attention.'"
-      },
-      {
-        "type": "location_report",
-        "category": "contradiction",
-        "difficulty_weight": 0.8,
-        "content": "Database transaction query logs show that Nadia Volkov's personal developer account credentials recorded absolutely zero active query executions or script runs between 00:30 and 05:00."
-      },
-      {
-        "type": "email_message",
-        "category": "motive",
-        "difficulty_weight": 0.8,
-        "content": "An encrypted outbound email recovered from Arthur Pendelton's personal laptop cache, dated December 10, states: 'The final pricing grid will be finalized on the 12th. Have the payment escrow ready.'"
-      },
-      {
-        "type": "witness_statement",
-        "category": "alibi",
-        "difficulty_weight": 0.4,
-        "content": "Elena Rostova stated: 'I finished my compliance extraction tasks before midnight and shut down my terminal completely by 23:30 to rest.'"
-      },
-      {
-        "type": "location_report",
-        "category": "location",
-        "difficulty_weight": 0.4,
-        "content": "Corporate internal perimeter security logs indicate Elena Rostova's active office badge did not pass any entrance gates after 18:00 on December 11."
-      },
-      {
-        "type": "financial_record",
-        "category": "motive",
-        "difficulty_weight": 0.9,
-        "content": "A hidden cryptocurrency wallet address linked to Arthur Pendelton's private cryptographic key received an inbound transaction of 5.5 Bitcoin at 04:15, immediately following the data leak window."
-      },
-      {
-        "type": "financial_record",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Victor Sterling's credit card statement shows a charge of $450 at the Downtown Oyster Bar timestamped at 23:45 on December 11."
-      },
-      {
-        "type": "email_message",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "Nadia Volkov received an automated system alert regarding low disk space on Backup Server B at 02:15."
-      },
-      {
-        "type": "forensic_report",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "Routine antivirus scanner logs indicate a successful clean definition update across all corporate workstations at 03:00."
-      },
-      {
-        "type": "witness_statement",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "An office security guard stated: 'The building was completely quiet after midnight. Only the cleaning crew was active on floors 2 and 3.'"
-      },
-      {
-        "type": "email_message",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "Elena Rostova sent an email to the HR department at 17:15 on December 11 requesting a vacation day extension for the holidays."
-      },
-      {
-        "type": "location_report",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "External weather station logs for the residential district report heavy snowfall and freezing temperatures between 01:00 and 05:00."
-      },
-      {
-        "type": "financial_record",
-        "category": "noise",
-        "difficulty_weight": 0.1,
-        "content": "An automated recurring monthly subscription payment for Arthur Pendelton's premium cloud storage account was processed at 02:00."
-      },
-      {
-        "type": "forensic_report",
-        "category": "noise",
-        "difficulty_weight": 0.2,
-        "content": "A standard firmware integrity check on the main corporate router at 01:00 indicated all security patches were fully up to date."
-      }
-    ],
-    "ground_truth": {
-      "correct_suspect_name": "Arthur Pendelton",
-      "contradiction_pairs": [
-        {
-          "evidence_index_1": 1,
-          "evidence_index_2": 2,
-          "explanation": "Arthur Pendelton claims his laptop was completely turned off and stored away all night, but residential smart-meter data reveals a substantial electricity spike matching a high-performance workstation operation during the exact window of the leak."
+          "evidence_index_a": 2,
+          "evidence_index_b": 4,
+          "explanation": "Marcus Chen claims he did not access any company systems, but ISP metadata shows a sustained high-bandwidth data upload from his home IP during the breach window."
         },
         {
-          "evidence_index_1": 6,
-          "evidence_index_2": 7,
-          "explanation": "Nadia Volkov claims she was actively executing database optimization scripts from 01:00 to 04:00, but official database logs demonstrate absolute zero execution activity occurred on her account."
+          "evidence_index_a": 61,
+          "evidence_index_b": 62,
+          "explanation": "Viktor Petrov claims he left the office at 17:00, but security camera footage shows he actually left at 19:15."
         }
       ],
-      "relevant_evidence_indices": [0, 2, 3, 8, 11],
+      "relevant_evidence_indices": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        11,
+        13,
+        19,
+        20
+      ],
       "optimal_next_actions": [
         "INTERROGATE_SUSPECT",
         "EXAMINE_EVIDENCE",

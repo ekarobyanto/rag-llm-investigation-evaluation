@@ -1,123 +1,753 @@
 [
   {
-    "caseTitle": "The Procurement Ledger Discrepancy",
-    "prompt": "Who should be interrogated next based on the evidence?",
-    "difficulty": "medium",
-    "requiredEvidenceIndices": [0, 2, 3, 4, 13],
-    "expectedActions": [
-      { "action_type": "INTERROGATE", "target": "David Vance" }
-    ],
-    "expectedContradictions": [
-      { "evidence_index_a": 2, "evidence_index_b": 3 }
-    ],
-    "referenceAnswer": "David Vance should be interrogated next. Transaction TXN-998211 was authorized using Marcus Brody's credentials at 14:45, but badge logs confirm Brody was in Boardroom B from 13:55 to 16:05. Digital forensics confirm Brody's terminal was used while he was away. Badge reader logs show David Vance scanned into the Executive Suite wing (which houses the CFO office) at 14:10 and scanned out at 15:20, contradicting his own statement that he was in his private office the entire time. Furthermore, an encrypted email draft in Vance's account contains the banking details for Vertex Supplies, the fraudulent vendor. His personal financial pressure from credit card debts provides motive.",
-    "notes": "David Vance authorized transaction via Marcus terminal. Badge logs contradict his alibi."
-  },
-  {
-    "caseTitle": "The Procurement Ledger Discrepancy",
-    "prompt": "Which suspect has the strongest alibi?",
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What flight was Aisha Rahman on during the breach?",
     "difficulty": "easy",
-    "requiredEvidenceIndices": [1, 9],
+    "requiredEvidenceIndices": [
+      91,
+      92,
+      93
+    ],
     "expectedActions": [
-      { "action_type": "EXAMINE_EVIDENCE", "target": "Marcus Brody" }
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Aisha Rahman"
+      }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus Brody has the strongest alibi. Access control badge logs indicate he entered Boardroom B at 13:55 and did not exit until 16:05, covering the entire incident window of 14:00-16:00. Additionally, a calendar invite confirms he was scheduled for the Boardroom B meeting during that period. Sarah Jenkins also has a strong alibi, as her server room badge was used from 13:45 to 16:15, and CCTV camera 4 captures her performing physical maintenance on server racks from 14:00 to 15:45.",
-    "notes": "Marcus Brody confirmed in boardroom; Sarah Jenkins confirmed in server room via CCTV."
+    "referenceAnswer": "Explain she was on United Flight NX-447 departing 23:30 Jan 14 from Dulles, boarding at 23:15 at Gate B12, seat 14C, landing Chicago O'Hare at 05:45 CST. She was physically in the air during the entire 02:00-05:00 breach window.",
+    "notes": ""
   },
   {
-    "caseTitle": "The Procurement Ledger Discrepancy",
-    "prompt": "Identify any contradictions in suspect statements.",
-    "difficulty": "hard",
-    "requiredEvidenceIndices": [2, 3, 5, 14],
-    "expectedActions": [
-      { "action_type": "REVIEW_TIMELINE", "target": "David Vance" }
-    ],
-    "expectedContradictions": [
-      { "evidence_index_a": 2, "evidence_index_b": 3 },
-      { "evidence_index_a": 5, "evidence_index_b": 14 }
-    ],
-    "referenceAnswer": "There are two key contradictions in suspect statements. First, David Vance stated he was in his private office typing a quarterly procurement report from 14:00 to 16:00 and did not use any network systems. However, badge reader logs show he scanned into the Executive Suite wing at 14:10 and scanned out at 15:20, directly contradicting his claimed location. Second, Elena Rostova stated she was at her desk in the open-plan finance pool the entire afternoon processing invoices. However, CCTV corridor camera 2 shows her leaving her desk to go to the cafeteria at 14:30 and not returning until 15:00, contradicting her claim of being at her desk continuously.",
-    "notes": "Two contradiction pairs to surface."
-  },
-  {
-    "caseTitle": "The Missing Quantum Blueprint",
-    "prompt": "Which suspect is the most likely thief?",
-    "difficulty": "medium",
-    "requiredEvidenceIndices": [0, 2, 3, 5, 11],
-    "expectedActions": [
-      { "action_type": "SUBMIT_DEDUCTION", "target": "Dr. Clara Mendoza" }
-    ],
-    "expectedContradictions": [
-      { "evidence_index_a": 1, "evidence_index_b": 2 }
-    ],
-    "referenceAnswer": "Dr. Clara Mendoza is the most likely thief. Multiple evidence streams converge on her: Vault Room access logs show her biometric badge was scanned at 20:42 and scanned out at 20:55, placing her inside the vault during the theft window. She claimed she lost her badge at 19:30 in the cafeteria, but CCTV footage from 19:15-19:45 shows the badge visibly clipped to her lab coat, directly contradicting her claim. An encrypted email sent from her personal address at 17:00 states 'The asset will be secured tonight before the late shift ends. Prepare the transfer.' A bank statement shows a $250,000 offshore wire transfer pending to her account. Finally, latent fingerprint analysis on the empty drive casing recovered a high-quality match belonging to Dr. Clara Mendoza.",
-    "notes": "Clara: badge access + fingerprint + financial motive + email + contradicted alibi."
-  },
-  {
-    "caseTitle": "The Missing Quantum Blueprint",
-    "prompt": "What financial motive evidence exists?",
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Does James Whitfield have the technical capability to execute this breach?",
     "difficulty": "easy",
-    "requiredEvidenceIndices": [5],
+    "requiredEvidenceIndices": [
+      130,
+      131,
+      132,
+      133
+    ],
     "expectedActions": [
-      { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Clara Mendoza" }
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "James Whitfield"
+      }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The primary financial motive evidence is a bank statement linked to Dr. Clara Mendoza that reveals an anonymous offshore wire transfer deposit of $250,000 pending execution upon verification. This substantial payment suggests she was financially incentivized to steal the quantum blueprint. Her private research firm recently filed for bankruptcy protection, providing additional context for financial desperation.",
-    "notes": "Offshore wire transfer to Clara."
+    "referenceAnswer": "No. His IT profile shows basic user with no admin privileges and no VPN access. His laptop only has sales tools. He has zero technical certifications. His account has never executed a direct database query.",
+    "notes": ""
   },
   {
-    "caseTitle": "The Missing Quantum Blueprint",
-    "prompt": "Did Dr. Aris Thorne have opportunity?",
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Which service account was used in the breach and who created it?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      0,
+      1
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "The service account svc-threatfeed was used. VPN logs show it connected 02:00-05:00 from residential IP 74.125.224.72. The account was created on October 3, 2026 by marcus.chen@nexusdynamics.com with elevated database export and bulk read privileges.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "When did Dr. Sarah Okonkwo leave the office on the night of the breach?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      30,
+      36,
+      37,
+      38
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Dr. Sarah Okonkwo"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Dr. Okonkwo left at approximately 01:30 AM. Badge logs show her active until 01:30, the security guard logged her exit around 01:30, Uber picked her up at 01:35 arriving home at 02:05, and home security camera recorded her entering at 02:08.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What is Viktor Petrov's role and what systems does he manage?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      60,
+      70,
+      84
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Viktor Petrov"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Viktor Petrov is the primary DevOps Engineer responsible for managing VPN gateway infrastructure and provisioning all service accounts. He has admin rights to rotate, reset, and manage all service account credentials including svc-threatfeed. He performed a scheduled password rotation for svc-threatfeed on October 15, 2026.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What financial motive evidence exists for Marcus Chen?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      7,
+      8,
+      16
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Three financial motive indicators: (1) Marcus was passed over for CISO promotion in December 2026, (2) he has an outstanding $45,000 personal loan with $1,200 monthly payments, (3) a cryptocurrency wallet linked to his private key received 15 ETH (~$48,000) exactly 72 hours after the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Can Aisha Rahman's database access permissions support a data exfiltration?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      97,
+      98,
+      112,
+      113
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Aisha Rahman"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "No. Aisha has read-only database permissions and cannot execute bulk exports, modify schemas, or access service account credentials. Her query audit shows only standard SELECT queries. She has zero privilege escalation requests. Her account had zero activity during the breach window.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Where was James Whitfield on the evening of January 14?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      120,
+      121,
+      123,
+      124,
+      125
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "James Whitfield"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "James was at a business dinner at Harbour Steak House until 22:45, charged $850 on corporate card at 22:50. Uber took him home arriving 23:20. Home security camera shows entry at 23:25. Phone was browsing news until 00:15, then inactive until 07:00. He was home and asleep well before the 02:00 breach start.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Which suspects had prior access to the svc-threatfeed service account?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      1,
+      41,
+      60,
+      70,
+      84
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Three suspects had access: Marcus Chen created the account on Oct 3 2026. Dr. Sarah Okonkwo has root-level access to all systems including service accounts. Viktor Petrov has admin rights to rotate and manage all service account credentials and performed a scheduled rotation on Oct 15 2026. Marcus created the account AND reset its password 2 days before the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What cryptocurrency evidence exists related to the breach?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      7
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Blockchain analysis identified a cryptocurrency wallet controlled by Marcus Chen's private key that received 15 ETH (approximately $48,000) on January 18, exactly 72 hours after the breach window. This timing matches the encrypted email from January 12 promising 'final delivery within 72 hours.'",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Evaluate Marcus Chen's alibi for the night of the breach.",
     "difficulty": "medium",
-    "requiredEvidenceIndices": [4, 6, 19],
-    "expectedActions": [
-      { "action_type": "EXAMINE_EVIDENCE", "target": "Dr. Aris Thorne" }
+    "requiredEvidenceIndices": [
+      2,
+      3,
+      10,
+      12,
+      14,
+      17,
+      18,
+      22,
+      23
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "No, Dr. Aris Thorne did not have opportunity to commit the theft. He stated he left the research facility at 19:00 to have dinner with his wife at Bistro West. This is corroborated by multiple sources: GPS vehicle tracking logs confirm his vehicle arrived at Bistro West parking lot at 19:25 and remained stationary until 22:15. Facility gate sensors recorded his vehicle exiting the perimeter parking structure at 19:02. The front desk receptionist confirmed he said goodnight when passing the lobby doors around 18:55. Since the theft occurred between 20:00 and 22:00, his continuous absence from the facility eliminates opportunity.",
-    "notes": "Thorne left at 19:00 per gate logs + GPS confirms restaurant from 19:25-22:15. No opportunity."
-  },
-  {
-    "caseTitle": "Operation Midnight Leak",
-    "prompt": "Which suspect leaked the pricing spreadsheet?",
-    "difficulty": "hard",
-    "requiredEvidenceIndices": [0, 2, 3, 8, 11],
     "expectedActions": [
-      { "action_type": "SUBMIT_DEDUCTION", "target": "Arthur Pendelton" }
+      {
+        "action_type": "INTERROGATE",
+        "target": "Marcus Chen"
+      }
     ],
     "expectedContradictions": [
-      { "evidence_index_a": 1, "evidence_index_b": 2 },
-      { "evidence_index_a": 6, "evidence_index_b": 7 }
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
     ],
-    "referenceAnswer": "Arthur Pendelton leaked the pricing spreadsheet. VPN firewall logs show a remote connection using his credentials from 01:15 to 03:45. He claimed he was asleep with his laptop turned off, but residential smart-meter data reveals a significant power surge matching a workstation boot sequence between 01:10 and 03:50, directly contradicting his statement. ISP metadata confirms the VPN connection originated precisely from his home IP address. An encrypted email from December 10 found in his laptop cache states 'The final pricing grid will be finalized on the 12th. Have the payment escrow ready.' Most damningly, a hidden cryptocurrency wallet linked to his private key received 5.5 Bitcoin at 04:15, immediately after the data leak window closed.",
-    "notes": "Arthur: VPN from his home IP, smart meter contradicts asleep claim, crypto payment after leak."
+    "referenceAnswer": "Marcus claims he was asleep from 23:00 with his laptop off. His badge exit at 18:30 and parking CCTV at 18:35 confirm he left office normally. Phone GPS shows him at home. Netflix streaming until 23:25 and food delivery at 20:00 suggest a normal evening. HOWEVER, his smart home data shows his office was occupied with desk lamp on until 05:30 \u2014 directly contradicting his sleep claim. His neighbor also noticed unusually late lights around 03:00. His work laptop was clean, but this doesn't rule out use of a personal device.",
+    "notes": ""
   },
   {
-    "caseTitle": "Operation Midnight Leak",
-    "prompt": "Find timeline conflicts in suspect testimony.",
-    "difficulty": "hard",
-    "requiredEvidenceIndices": [1, 2, 6, 7],
-    "expectedActions": [
-      { "action_type": "REVIEW_TIMELINE", "target": "Arthur Pendelton" }
-    ],
-    "expectedContradictions": [
-      { "evidence_index_a": 1, "evidence_index_b": 2 },
-      { "evidence_index_a": 6, "evidence_index_b": 7 }
-    ],
-    "referenceAnswer": "There are two major timeline conflicts in suspect testimony. First, Arthur Pendelton stated he was sound asleep all night with his laptop turned off and locked in his briefcase. However, residential smart-meter electrical data reveals a significant power surge matching a high-performance workstation boot sequence between 01:10 and 03:50, proving a computer was actively running at his home during the leak window. Second, Nadia Volkov stated she was running automated database optimization scripts from her home system from 01:00 to 04:00 requiring her full attention. However, database transaction query logs show absolutely zero active query executions or script runs on her developer account between 00:30 and 05:00, completely contradicting her claimed activity.",
-    "notes": "Arthur asleep claim vs smart meter; Nadia DB scripts claim vs zero query logs."
-  },
-  {
-    "caseTitle": "Operation Midnight Leak",
-    "prompt": "Could Victor Sterling have done it?",
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Could Dr. Sarah Okonkwo have executed the breach?",
     "difficulty": "medium",
-    "requiredEvidenceIndices": [4, 5],
+    "requiredEvidenceIndices": [
+      30,
+      31,
+      32,
+      37,
+      38,
+      40,
+      41,
+      45,
+      55
+    ],
     "expectedActions": [
-      { "action_type": "EXAMINE_EVIDENCE", "target": "Victor Sterling" }
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Dr. Sarah Okonkwo"
+      }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "It is unlikely that Victor Sterling leaked the spreadsheet. He stated he was hosting a late-night dinner party at his downtown apartment until 02:30, with seven corporate clients who can verify his presence. Ride-share receipt data confirms he took an Uber from the downtown core back to his residence, arriving home at 02:55. His credit card statement also shows a charge at the Downtown Oyster Bar at 23:45 on December 11, supporting his social engagement timeline. Since the VPN connection used for the leak was active from 01:15 to 03:45, Sterling was demonstrably occupied at a dinner party during most of that window, and his arrival home at 02:55 leaves insufficient time for the operation.",
-    "notes": "Dinner party witnesses + Uber receipt place him elsewhere during leak window."
+    "referenceAnswer": "Despite having root-level access to all systems (including svc-threatfeed), Dr. Okonkwo is unlikely to be the perpetrator. She was in the office until 01:30 running legitimate audit queries (confirmed by laptop logs). Her last privileged access was at 01:12. She took Uber home arriving 02:05, home camera shows 02:08 entry. Phone inactive after 02:15. Forensic analysis found no unauthorized exports. DLP logs show no large file transfers from her account. The breach VPN originated from a residential IP, not the office where she was working.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Analyze Viktor Petrov's movements and timeline on January 14-15.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      74,
+      77,
+      78
+    ],
+    "expectedActions": [
+      {
+        "action_type": "INTERROGATE",
+        "target": "Viktor Petrov"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 62
+      }
+    ],
+    "referenceAnswer": "Viktor lied about his departure time \u2014 he claimed 17:00 but CCTV shows 19:15, badge confirms 19:17. He Uber'd to The Rusty Nail bar at 19:20. Bar CCTV confirms his presence from 19:45 until closing at 01:30. Phone GPS corroborates. He arrived home at 01:55. His work laptop's last login was 19:10. His admin account had zero activity after 19:15. His home IP had zero VPN connections during the breach. Viktor lied about when he left work (likely embarrassed about going to a bar), but he has a solid alibi for the entire breach window.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Who had both motive AND technical opportunity for this breach?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      0,
+      1,
+      4,
+      7,
+      8,
+      16,
+      34,
+      35,
+      41,
+      67,
+      126,
+      130,
+      136
+    ],
+    "expectedActions": [
+      {
+        "action_type": "INTERROGATE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Marcus Chen had BOTH motive (CISO rejection, $45k debt, crypto payment received) AND technical opportunity (created svc-threatfeed, ISP shows upload from his home). Dr. Okonkwo has motive (budget dispute, divorce costs) and access (root level) but forensic evidence clears her. Viktor has access (manages service accounts) but motive is weak (legitimate consulting income). James has strong motive ($2M account loss, commission drop) but zero technical capability. Only Marcus has the intersection of motive, access, and incriminating digital forensics.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What communication evidence links suspects to outside parties?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      6,
+      15,
+      34,
+      69,
+      127,
+      128,
+      134,
+      148
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Marcus Chen: encrypted ProtonMail email about 'the package' being ready on the 15th, Signal messages about 'payment pending' \u2014 these link to an unknown buyer. James Whitfield: email from competitor CEO about 'opportunities', forwarded non-classified pricing, phone call to competitor \u2014 but no classified data exchange. Viktor Petrov: consulting client emails, all legitimate with clear scopes. Dr. Okonkwo: heated email to CEO about budget cuts \u2014 internal frustration, not external contact. Only Marcus's communications suggest criminal coordination with an outside party.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Which suspects can be definitively eliminated from the investigation?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      91,
+      92,
+      93,
+      94,
+      97,
+      113,
+      130,
+      131,
+      133
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Aisha Rahman"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Two suspects can be definitively eliminated. (1) Aisha Rahman \u2014 she was physically on United Flight NX-447 from 23:30 to 05:45, with boarding scan, manifest, airplane mode, and zero network activity confirming she was in the air during the entire breach. She also has read-only database access making exfiltration impossible from her account. (2) James Whitfield \u2014 he has no admin privileges, no VPN access, no technical tools, zero technical certifications, and has never executed a database query. He physically cannot perform the technical steps required for this breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Compare the financial profiles of all five suspects for suspicious activity.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      7,
+      16,
+      35,
+      44,
+      67,
+      68,
+      103,
+      126,
+      136
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Marcus Chen: $45K personal loan + received 15 ETH ($48K) post-breach \u2014 the crypto payment is the strongest financial indicator. Dr. Okonkwo: $30K divorce legal fees, savings dropped from $85K to $12K \u2014 financial stress but no suspicious income. Viktor: consulting LLC with $15K in legitimate, documented income \u2014 transparent and not suspicious. Aisha: clean financial record, no debts \u2014 no indicators. James: 40% commission drop, lost $2M account \u2014 financial pressure but no technical means and no suspicious payments. Only Marcus shows the combination of financial pressure AND unexplained incoming funds timed to the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Trace the service account svc-threatfeed: who created it, who managed it, and who last changed its credentials?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      1,
+      13,
+      19,
+      70,
+      84,
+      85
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "svc-threatfeed lifecycle: Created on October 3, 2026 by Marcus Chen with elevated database export privileges. Viktor Petrov performed a routine scheduled password rotation on October 15, 2026 as part of quarterly credential hygiene (he also audited service account permissions in November). Then on January 13 \u2014 just 2 days before the breach \u2014 Marcus Chen reset the password again, outside the normal rotation schedule (next rotation wasn't due until February 1). Marcus also accessed the credentials vault repository on January 13 via Git. Marcus both created the account AND performed the last unauthorized credential reset.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Was Viktor Petrov's consulting side business a cover for selling company data?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      67,
+      68,
+      69,
+      74,
+      78,
+      86,
+      87
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Viktor Petrov"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "No, the evidence does not support this theory. His consulting LLC has legitimate registered business structure. His income of $15K comes from two documented contracts with small businesses for infrastructure security reviews, with clear scopes of work. His bank deposits are consistent with invoiced amounts. His colleague confirms he talks openly about the consulting work. Most importantly, his home IP had zero VPN connections during the breach, and his admin account had zero activity after 19:15. He was verifiably at a bar during the breach window.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Was James Whitfield's contact with the competitor CEO related to the data breach?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      126,
+      127,
+      128,
+      129,
+      134,
+      135,
+      138,
+      148
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "James Whitfield"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "While suspicious on the surface, the evidence suggests James's competitor contact was about job opportunities, not data theft. He lost a $2M account and was angry. The competitor CEO's email discussed 'opportunities' (likely recruitment). James forwarded only non-classified competitive pricing \u2014 no proprietary data. His angry email about 'making them pay' appears to be about compensation frustration, not criminal intent. His assistant describes him as 'all bark and no bite' who can't even reset his own password. He requested a meeting with the CEO about 'strategic direction' \u2014 an employment concern, not espionage. He completely lacks the technical ability to execute the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Compare Dr. Okonkwo's and Marcus Chen's access levels and activity with svc-threatfeed.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      1,
+      13,
+      19,
+      32,
+      40,
+      41,
+      45,
+      55
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Both have access to svc-threatfeed, but their activity patterns differ significantly. Dr. Okonkwo has root-level access to all systems but her activity that night was legitimate audit queries (confirmed by laptop logs). Her last privileged access was at 01:12. She had no large file transfers and forensic analysis found no unauthorized exports. Marcus Chen created svc-threatfeed, accessed its credentials via Git on Jan 13, and reset its password on Jan 13 outside the normal rotation schedule. While both technically could manage the account, only Marcus actively manipulated its credentials in the days before the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "What digital forensic evidence exists from the night of the breach?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      0,
+      4,
+      5,
+      11,
+      17,
+      20,
+      21
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Key digital forensics from the breach night: (1) VPN logs show svc-threatfeed connection from residential IP 02:00-05:00, (2) ISP metadata shows sustained 142 Mbps upstream from Marcus's home IP 02:15-04:45, (3) Marcus's home router logged 2.3TB outbound data transfer 02:15-04:45, (4) Marcus's personal laptop has TOR browser with cached ShadowVault marketplace pages, (5) Marcus's personal NAS contains a directory matching the exfiltrated database structure, (6) Browser history shows research on secure file transfer and crypto tumbling. Notably, Marcus's WORK laptop was clean \u2014 he used personal devices exclusively.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Identify ALL contradictions in suspect statements across the entire case.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      2,
+      3,
+      4,
+      61,
+      62
+    ],
+    "expectedActions": [
+      {
+        "action_type": "REVIEW_TIMELINE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      },
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 4
+      },
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 62
+      }
+    ],
+    "referenceAnswer": "Three contradictions exist. (1) Marcus Chen claimed he was asleep from 23:00 with laptop off, but smart home data shows his office was occupied with desk lamp on until 05:30. (2) Marcus claimed he didn't access company systems, but ISP metadata proves a sustained high-bandwidth upload from his home IP during 02:15-04:45. (3) Viktor Petrov claimed he left the office at 17:00 and went straight home, but CCTV shows he actually left at 19:15 and went to a bar. The first two contradictions are critical \u2014 they directly link Marcus to the breach. Viktor's lie is about going to a bar, which is embarrassing but not criminal.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Trace the complete exfiltration chain from preparation through payment.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      1,
+      6,
+      13,
+      19,
+      0,
+      4,
+      11,
+      20,
+      5,
+      7,
+      15,
+      21
+    ],
+    "expectedActions": [
+      {
+        "action_type": "SUBMIT_DEDUCTION",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Complete chain: PREPARATION \u2014 Oct 3: Marcus created svc-threatfeed with export privileges. Jan 8-13: researched secure file transfer and crypto tumbling. Jan 12: sent encrypted email to buyer confirming 'package ready on the 15th.' Jan 13: accessed credentials vault via Git AND reset svc-threatfeed password outside schedule. EXECUTION \u2014 Jan 15 01:45: entered home office (smart home). 02:00: initiated VPN using svc-threatfeed from home IP. 02:15-04:45: transferred 2.3TB (ISP confirms 142 Mbps upstream, router confirms 2.3TB). 05:00: VPN terminated. Data staged on personal NAS. POST-BREACH \u2014 TOR browser used to list on ShadowVault marketplace. Jan 15: Signal message 'payment pending.' Jan 18: received 15 ETH (~$48K) in crypto wallet.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Who should be interrogated next as the primary suspect, and what questions should be asked?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      13,
+      19
+    ],
+    "expectedActions": [
+      {
+        "action_type": "INTERROGATE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Marcus Chen should be interrogated immediately. Key questions: (1) Why does your smart home show office occupancy until 05:30 when you claim you were asleep? (2) Why did you reset svc-threatfeed credentials on Jan 13, two weeks before the scheduled rotation? (3) Why did you access the credentials vault repository on Jan 13? (4) Can you explain the 2.3TB upload from your home IP during the breach? (5) Who is the contact in your encrypted ProtonMail discussion about 'the package'? (6) Explain the 15 ETH deposit 72 hours post-breach. (7) Why does your personal NAS contain a copy of the threat intelligence database directory structure?",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Reconstruct Marcus Chen's complete activity timeline for January 14-15.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      2,
+      3,
+      4,
+      10,
+      11,
+      12,
+      14,
+      18,
+      22,
+      23,
+      27
+    ],
+    "expectedActions": [
+      {
+        "action_type": "REVIEW_TIMELINE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Jan 14: Left office at 18:30 (badge), car departed 18:35 (CCTV). Spotify at home 19:00-20:15. Food delivery at 20:00. Netflix streaming 20:30-23:25. CLAIMED: fell asleep around 23:00. ACTUAL: Jan 15 01:45 \u2014 smart home office sensor activated, desk lamp on. 02:00 \u2014 VPN tunnel initiated via svc-threatfeed from home IP. 02:15-04:45 \u2014 sustained 142 Mbps upstream, 2.3TB total (ISP + router logs). Phone GPS stationary at home (used personal devices, not phone). ~03:00 \u2014 neighbor observed lights on. 05:00 \u2014 VPN terminated. 05:30 \u2014 office occupancy sensor cleared, lamp off. Work laptop remained powered off entire time (used personal laptop + NAS instead).",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Cross-reference digital forensics with physical evidence to identify the breach perpetrator.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      0,
+      3,
+      4,
+      5,
+      11,
+      17,
+      20,
+      33,
+      45,
+      55,
+      74,
+      78,
+      94,
+      96,
+      113,
+      125,
+      130,
+      131
+    ],
+    "expectedActions": [
+      {
+        "action_type": "SUBMIT_DEDUCTION",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Systematic elimination: The VPN originated from a residential IP (not office), eliminating Dr. Okonkwo (she was IN the office, VPN from office subnet). Viktor's home IP had zero VPN connections. Aisha's phone was in airplane mode and laptop powered off. James has no VPN access or technical tools. Only Marcus remains: his home IP matches the VPN source, his ISP confirms the upload bandwidth, his router confirms 2.3TB transfer, his smart home proves he was awake and active, his personal laptop has TOR/marketplace tools, and his NAS has the stolen data. His work laptop was intentionally kept clean as a false alibi. All digital and physical evidence converges on Marcus Chen.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Why did the stolen data appear on the dark web and which suspect is connected to the marketplace?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      5,
+      6,
+      7,
+      15,
+      20,
+      21
+    ],
+    "expectedActions": [
+      {
+        "action_type": "EXAMINE_EVIDENCE",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "The data appeared on the ShadowVault dark web marketplace 72 hours after the breach. Marcus Chen is directly connected: (1) his personal laptop has TOR browser with cached ShadowVault listing pages, (2) his browser history shows research on secure file transfer and cryptocurrency tumbling, (3) his personal NAS contains a backup matching the exfiltrated database structure, (4) his encrypted email from Jan 12 promised delivery 'within 72 hours,' exactly matching the timeline, (5) his Signal messages discuss 'payment pending' awaiting marketplace verification, (6) he received 15 ETH payment on Jan 18, precisely 72 hours after the breach.",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Build the complete prosecution case: present all incriminating evidence against the culprit.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      13,
+      15,
+      16,
+      18,
+      19,
+      20,
+      21
+    ],
+    "expectedActions": [
+      {
+        "action_type": "SUBMIT_DEDUCTION",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      },
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 4
+      }
+    ],
+    "referenceAnswer": "Prosecution case against Marcus Chen: MOTIVE \u2014 passed over for CISO (bitter, per colleague), $45K personal debt creating financial pressure. PREPARATION \u2014 created svc-threatfeed with export privileges (Oct 3), accessed credentials vault (Jan 13), reset account password outside schedule (Jan 13), sent encrypted email coordinating delivery timing (Jan 12), researched secure transfer and crypto tumbling (Jan 8-13). EXECUTION \u2014 smart home proves office occupancy 01:45-05:30, ISP confirms 142 Mbps upload from his home IP, router logs confirm 2.3TB transfer, VPN tunnel active 02:00-05:00 using svc-threatfeed. Used personal devices (work laptop deliberately kept clean). EVIDENCE OF GUILT \u2014 personal NAS contains stolen database structure, TOR browser has cached marketplace pages, Signal messages discuss pending payment. PROFIT \u2014 received 15 ETH ($48K) in crypto wallet 72 hours later, matching his email's promised timeline. CONSCIOUSNESS OF GUILT \u2014 lied about being asleep (contradicted by smart home + ISP + neighbor).",
+    "notes": ""
+  },
+  {
+    "caseTitle": "The Nexus Data Breach",
+    "prompt": "Submit your final deduction: who is the data thief and what is the complete reasoning?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      0,
+      1,
+      3,
+      4,
+      6,
+      7,
+      11,
+      19,
+      20
+    ],
+    "expectedActions": [
+      {
+        "action_type": "SUBMIT_DEDUCTION",
+        "target": "Marcus Chen"
+      }
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Marcus Chen is the data thief. He created the svc-threatfeed service account, reset its password two days before the breach, connected to the VPN from his home IP at 02:00, transferred 2.3TB of data (confirmed by ISP and home router), stored a copy on his personal NAS, listed it on the ShadowVault dark web marketplace using TOR, and received 15 ETH payment 72 hours later. His claim of being asleep is contradicted by smart home data showing office activity until 05:30. He used exclusively personal devices to avoid detection on his work laptop. His motive was financial pressure from personal debt combined with resentment over being denied the CISO promotion.",
+    "notes": ""
   }
 ]
