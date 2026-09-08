@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
+    "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
+    "lucide-react": "^1.42.0",
     "next": "^15.0.0",
     "openai": "^4.52.7",
     "pg": "^8.11.3",
@@ -27,6 +29,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20.10.6",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

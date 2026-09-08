@@ -58,6 +58,7 @@ export async function POST(request: Request) {
       logId: log.id,
       timings: result.timings,
       tokens: result.tokens,
+      context: result.context,
       estimatedCost: result.estimatedCost,
       correctnessScore: result.correctnessScore,
       retrievalMethod,

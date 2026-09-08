@@ -24,7 +24,7 @@ export async function sparseRetrieve(
         LEFT(content, 500) AS content,
         ts_rank_cd(search_vector, plainto_tsquery('english', ${query})) AS score
       FROM evidence
-      WHERE case_id = ${caseId}
+      WHERE "caseId" = ${caseId}
         AND search_vector IS NOT NULL
         AND search_vector @@ plainto_tsquery('english', ${query})
       ORDER BY score DESC
@@ -38,7 +38,7 @@ export async function sparseRetrieve(
           LEFT(content, 500) AS content,
           ts_rank_cd(search_vector, websearch_to_tsquery('english', ${query})) AS score
         FROM evidence
-        WHERE case_id = ${caseId}
+        WHERE "caseId" = ${caseId}
           AND search_vector IS NOT NULL
           AND search_vector @@ websearch_to_tsquery('english', ${query})
         ORDER BY score DESC

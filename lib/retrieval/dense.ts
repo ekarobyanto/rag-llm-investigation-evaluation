@@ -29,7 +29,7 @@ export async function denseRetrieve(
         LEFT(content, 500) AS content,
         1 - (embedding <=> ${embeddingStr}::vector) AS similarity
       FROM evidence
-      WHERE case_id = ${caseId}
+      WHERE "caseId" = ${caseId}
         AND embedding IS NOT NULL
       ORDER BY embedding <=> ${embeddingStr}::vector
       LIMIT ${limit}
