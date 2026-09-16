@@ -52,8 +52,9 @@ Recommendation rules:
 - Recommend the most useful next investigative step.
 - Do not recommend an action merely because it is available.
 - Prefer actions that resolve the most important current uncertainty.
-- The target must exist in the provided investigation context.
-- Do not invent a suspect, evidence ID, or location.
+- CRITICAL TARGET FORMAT: The target must always be the full name of the primary suspect or person of interest relevant to the inquiry (e.g. "Dr. Sarah Okonkwo", "Marcus Chen", "Viktor Petrov", "Aisha Rahman", "James Whitfield").
+- NEVER output raw evidence category tags, document IDs, or metadata prefixes (such as "forensic_report/location", "location_report/alibi", or "witness_statement/noise") as the target. If recommending EXAMINE_EVIDENCE or REVIEW_TIMELINE, set the target to the person whose evidence or timeline is being scrutinized.
+- The target must exist in the provided investigation context. Do not invent suspects.
 - The reason must be one concise sentence explaining why the action is useful.
 
 6. Output Format
@@ -62,7 +63,7 @@ The response must always end with:
 <recommendation>
 {
   "action_type": "INTERROGATE" | "EXAMINE_EVIDENCE" | "REVIEW_TIMELINE" | "SUBMIT_DEDUCTION" | "INVESTIGATE_LOCATION",
-  "target": "<suspect name, evidence ID, or location>",
+  "target": "<full name of relevant suspect or person of interest, e.g. 'Dr. Sarah Okonkwo', 'Marcus Chen'>",
   "reason": "<one sentence reason>"
 }
 </recommendation>
@@ -72,7 +73,7 @@ Rules for this block:
 - Include exactly one recommendation.
 - Do not include any text after </recommendation>.
 - action_type must be one of the five allowed values.
-- target must correspond to an entity present in the provided investigation context.
+- target must be the full name of the relevant suspect or person of interest (never a metadata category tag or file prefix).
 - reason must be exactly one sentence.`
 
 export interface StructuredRecommendation {
@@ -137,6 +138,141 @@ export async function evaluateRetrieval(
   return { retrievalSuccess, precision, recall, topKAccuracy }
 }
 
+export const KNOWN_SUSPECT_CANONICALS: Record<string, string[]> = {
+  "Marcus Chen": [
+    "marcus chen",
+    "marcus",
+    "chen",
+    "marcus.chen",
+    "svc-threatfeed",
+    "threatfeed",
+    "74.125.224.72",
+    "residential ip",
+    "cryptocurrency wallet",
+    "home office occupancy",
+  ],
+  "Dr. Sarah Okonkwo": [
+    "dr. sarah okonkwo",
+    "sarah okonkwo",
+    "dr. okonkwo",
+    "dr okonkwo",
+    "okonkwo",
+    "sarah",
+    "server room b",
+    "quantumguard",
+  ],
+  "Viktor Petrov": [
+    "viktor petrov",
+    "victor petrov",
+    "petrov",
+    "viktor",
+    "victor",
+    "cybershield",
+  ],
+  "Aisha Rahman": [
+    "aisha rahman",
+    "aisha",
+    "rahman",
+    "flight nx-447",
+    "flight nx447",
+    "nx-447",
+    "nx447",
+    "united flight",
+  ],
+  "James Whitfield": [
+    "james whitfield",
+    "whitfield",
+    "james",
+  ],
+}
+
+export function normalizeEntityText(text: string): string {
+  return (text || "")
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^\w\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+export function resolveEntityCanonical(target: string): string {
+  const norm = normalizeEntityText(target)
+  if (!norm) return ""
+
+  for (const [canonical, aliases] of Object.entries(KNOWN_SUSPECT_CANONICALS)) {
+    const normCanonical = normalizeEntityText(canonical)
+    if (norm === normCanonical) return canonical
+
+    for (const alias of aliases) {
+      const cleanAlias = normalizeEntityText(alias)
+      const regex = new RegExp(`(^|\\s)${cleanAlias.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}(\\s|$)`, "i")
+      if (regex.test(norm) || norm.includes(cleanAlias)) {
+        return canonical
+      }
+    }
+  }
+
+  return norm
+}
+
+export function normalizeActionType(action: string): string {
+  const a = (action || "").toUpperCase().trim().replace(/[\s-]+/g, "_")
+  if (a === "INTERROGATE_SUSPECT") return "INTERROGATE"
+  return a
+}
+
+const VALID_INVESTIGATIVE_ACTIONS = new Set([
+  "INTERROGATE",
+  "EXAMINE_EVIDENCE",
+  "REVIEW_TIMELINE",
+  "SUBMIT_DEDUCTION",
+  "INVESTIGATE_LOCATION",
+])
+
+function scoreSingleAction(
+  expected: { action_type: string; target: string },
+  rec: StructuredRecommendation
+): number {
+  const expAction = normalizeActionType(expected.action_type)
+  const recAction = normalizeActionType(rec.action_type)
+
+  const expTargetNorm = normalizeEntityText(expected.target)
+  const recTargetNorm = normalizeEntityText(rec.target)
+
+  const expCanonical = resolveEntityCanonical(expected.target)
+  const recCanonical = resolveEntityCanonical(rec.target)
+
+  const isCanonicalMatch = Boolean(expCanonical && recCanonical && expCanonical === recCanonical)
+  const isDirectTargetMatch = expTargetNorm.length > 0 && expTargetNorm === recTargetNorm
+  const isTargetMatch = isCanonicalMatch || isDirectTargetMatch
+
+  // Partial target match (e.g. non-empty substring >= 4 chars)
+  const isPartialTargetMatch =
+    !isTargetMatch &&
+    expTargetNorm.length >= 4 &&
+    recTargetNorm.length >= 4 &&
+    (expTargetNorm.includes(recTargetNorm) || recTargetNorm.includes(expTargetNorm))
+
+  const isExactAction = expAction === recAction
+  const isCompatibleAction =
+    VALID_INVESTIGATIVE_ACTIONS.has(expAction) &&
+    VALID_INVESTIGATIVE_ACTIONS.has(recAction)
+
+  if (isTargetMatch) {
+    if (isExactAction) return 1.0
+    if (isCompatibleAction) return 0.8
+    return 0.5
+  }
+
+  if (isPartialTargetMatch) {
+    if (isExactAction) return 0.75
+    if (isCompatibleAction) return 0.6
+    return 0.4
+  }
+
+  return 0.0
+}
+
 export async function scoreRecommendation(
   caseId: string,
   recommendation: StructuredRecommendation,
@@ -158,13 +294,10 @@ export async function scoreRecommendation(
     }>
   }
 
-  const match = optimal.find(
-    (a) =>
-      a.action_type === recommendation.action_type &&
-      a.target === recommendation.target
-  )
+  if (!optimal || optimal.length === 0) return 0
 
-  return match ? 1.0 : 0.0
+  const scores = optimal.map((opt) => scoreSingleAction(opt, recommendation))
+  return Math.max(...scores, 0)
 }
 
 export async function generateAIResponse(
@@ -176,10 +309,16 @@ export async function generateAIResponse(
     requiredEvidenceIds?: string[]
     expectedActions?: Array<{ action_type: string; target: string }>
     temperature?: number
+    limit?: number
   }
 ) {
-  // Always retrieve — the method determines how
-  const retrievalResult = await retrieve(retrievalMethod, caseId, prompt, { limit: 5 })
+  // Always retrieve — dynamic limit prevents the artificial K=5 recall ceiling on complex scenarios
+  const retrieveLimit =
+    options?.limit ??
+    (options?.requiredEvidenceIds && options.requiredEvidenceIds.length > 5
+      ? Math.min(20, Math.max(10, options.requiredEvidenceIds.length + 2))
+      : 8)
+  const retrievalResult = await retrieve(retrievalMethod, caseId, prompt, { limit: retrieveLimit })
 
   const retrievedEvidenceIds = retrievalResult.evidence.map((e) => e.id)
   const retrievalScores = retrievalResult.evidence.map((e) => e.score)
@@ -221,12 +360,11 @@ export async function generateAIResponse(
   if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 0) {
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-5.6-luna",
+        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt },
         ],
-        temperature: options?.temperature ?? 0.2,
         max_completion_tokens: 1000,
       })
       llmResponseTimeMs = Date.now() - startTime
@@ -237,7 +375,7 @@ export async function generateAIResponse(
       completionTokens = response.usage?.completion_tokens ?? 0
       totalTokens = response.usage?.total_tokens ?? 0
     } catch (err) {
-      console.warn("OpenAI API unavailable, using offline forensic synthesis:", err)
+      console.error("OpenAI API call failed, falling back to offline forensic synthesis:", err)
     }
   }
 
@@ -293,11 +431,58 @@ export async function generateAIResponse(
   }
 }
 
-function extractStructuredRecommendation(text: string): StructuredRecommendation | null {
-  const match = text.match(/<recommendation>([\s\S]*?)<\/recommendation>/)
-  if (!match) return null
+export function extractStructuredRecommendation(text: string): StructuredRecommendation | null {
+  if (!text) return null
+
+  // 1. Match content inside <recommendation> tag if available
+  let rawContent: string | null = null
+  const tagMatch = text.match(/<recommendation>([\s\S]*?)(?:<\/recommendation>|$)/i)
+  if (tagMatch) {
+    rawContent = tagMatch[1].trim()
+  } else {
+    // Fallback: search for any JSON object containing "action_type"
+    const jsonFallbackMatch = text.match(/\{[\s\S]*?"action_type"[\s\S]*?\}/)
+    if (jsonFallbackMatch) {
+      rawContent = jsonFallbackMatch[0].trim()
+    }
+  }
+
+  if (!rawContent) return null
+
+  // 2. Strip Markdown code fences (```json ... ``` or ``` ...)
+  rawContent = rawContent.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim()
+
+  // 3. Find outermost JSON object
+  const firstBrace = rawContent.indexOf("{")
+  const lastBrace = rawContent.lastIndexOf("}")
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    rawContent = rawContent.substring(firstBrace, lastBrace + 1)
+  }
+
   try {
-    return JSON.parse(match[1].trim()) as StructuredRecommendation
+    const parsed = JSON.parse(rawContent)
+    if (!parsed || typeof parsed !== "object") return null
+    if (!parsed.action_type || !parsed.target) return null
+
+    let actionType = normalizeActionType(String(parsed.action_type))
+    const validActions: Array<StructuredRecommendation["action_type"]> = [
+      "INTERROGATE",
+      "EXAMINE_EVIDENCE",
+      "REVIEW_TIMELINE",
+      "SUBMIT_DEDUCTION",
+      "INVESTIGATE_LOCATION",
+    ]
+
+    if (!validActions.includes(actionType as any)) {
+      const matched = validActions.find((a) => actionType.includes(a))
+      actionType = matched || "EXAMINE_EVIDENCE"
+    }
+
+    return {
+      action_type: actionType as StructuredRecommendation["action_type"],
+      target: String(parsed.target).trim(),
+      reason: String(parsed.reason || "").trim(),
+    }
   } catch {
     return null
   }

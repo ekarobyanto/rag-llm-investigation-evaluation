@@ -170,13 +170,18 @@ model EvaluationScenario {
 }
 
 model RagasEvaluation {
-  id                String   @id @default(cuid())
-  logId             String   @unique
-  faithfulness      Float?
-  answerRelevance   Float?
-  contextPrecision  Float?
-  contextRecall     Float?
-  evaluatedAt       DateTime @default(now())
+  id                        String   @id @default(cuid())
+  logId                     String   @unique
+  faithfulness              Float?
+  answerRelevance           Float?
+  contextPrecision          Float?
+  contextRecall             Float?
+  faithfulnessReasoning     String?  @db.Text
+  answerRelevanceReasoning  String?  @db.Text
+  contextPrecisionReasoning String?  @db.Text
+  contextRecallReasoning    String?  @db.Text
+  critique                  String?  @db.Text
+  evaluatedAt               DateTime @default(now())
 
   log AIInteractionLog @relation(fields: [logId], references: [id], onDelete: Cascade)
 

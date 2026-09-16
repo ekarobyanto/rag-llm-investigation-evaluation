@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { FolderKanban, ShieldAlert, Cpu, Sparkles, Database, Search, ArrowRight } from "lucide-react"
+import { FolderKanban, ShieldAlert, Cpu, Sparkles, Database, Search, ArrowRight, LogOut } from "lucide-react"
 import { soundFx } from "@/lib/audio"
 import type { RetrievalMethod } from "@/lib/retrieval/types"
 
@@ -72,12 +72,21 @@ export default function CaseSelection({ cases, onSelectCase }: CaseSelectionProp
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      window.location.href = "/login"
+    } catch {
+      window.location.href = "/login"
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#14110e] bg-corkboard p-4 sm:p-8 flex items-center justify-center select-none text-[#e6dfd5]">
       <div className="w-full max-w-4xl mx-auto space-y-6">
         {/* Title Header */}
         <div className="text-center space-y-2 relative">
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2e1d1d] border border-[#7f1d1d] text-[#f87171] text-xs font-mono uppercase tracking-widest">
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>Cyber Intelligence & Crime Division</span>
@@ -89,6 +98,14 @@ export default function CaseSelection({ cases, onSelectCase }: CaseSelectionProp
               <span>Evaluation Lab</span>
               <span>&rarr;</span>
             </a>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#221c15] hover:bg-[#332b22] border border-[#4d3d2e] text-[#a89984] hover:text-[#f87171] text-xs font-mono transition"
+              title="Lock terminal and logout"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Lock Terminal</span>
+            </button>
           </div>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#f5efe6] tracking-tight">
             The Detective&apos;s Case Files Archive

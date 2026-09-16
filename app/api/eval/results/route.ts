@@ -1,19 +1,30 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
-import { aggregateMetrics } from "@/lib/eval"
+import { aggregateMetrics, aggregateRagasMetrics, getActiveEvaluationStatus } from "@/lib/eval"
 
 export async function GET() {
   try {
     const aggregate = await aggregateMetrics()
+    const ragas = await aggregateRagasMetrics()
+    const status = getActiveEvaluationStatus()
     const recent = await prisma.aIInteractionLog.findMany({
       where: { scenarioId: { not: null } },
       include: {
-        scenario: { select: { prompt: true, difficulty: true, case: { select: { title: true } } } },
+        scenario: {
+          select: {
+            prompt: true,
+            difficulty: true,
+            referenceAnswer: true,
+            notes: true,
+            case: { select: { title: true } },
+          },
+        },
+        ragasEvaluation: true,
       },
       orderBy: { createdAt: "desc" },
-      take: 100,
+      take: 300,
     })
-    return NextResponse.json({ aggregate, recent })
+    return NextResponse.json({ aggregate, ragas, recent, status })
   } catch (error) {
     console.error("Failed to fetch results:", error)
     return NextResponse.json(
@@ -26,6 +37,8 @@ export async function GET() {
 export async function DELETE() {
   try {
     await prisma.aIInteractionLog.deleteMany({ where: { scenarioId: { not: null } } })
+    const { broadcastWSEvent } = await import("@/lib/ws")
+    broadcastWSEvent({ type: "LOGS_CLEARED" })
     return NextResponse.json({ deleted: true })
   } catch (error) {
     console.error("Failed to clear results:", error)

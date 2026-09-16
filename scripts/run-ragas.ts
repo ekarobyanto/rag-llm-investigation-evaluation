@@ -37,9 +37,10 @@ function main() {
     process.exit(1);
   }
 
-  // 2. Run eval-pipeline/run_ragas.py
-  console.log(`\n🚀 Running ${runRagasPath} ...`);
-  const runRes = spawnSync("python", [runRagasPath], { stdio: "inherit" });
+  // 2. Run eval-pipeline/run_ragas.py with forwarded CLI arguments
+  const args = process.argv.slice(2);
+  console.log(`\n🚀 Running ${runRagasPath} ${args.join(" ")}...`);
+  const runRes = spawnSync("python", [runRagasPath, ...args], { stdio: "inherit" });
   if (runRes.status !== 0) {
     console.error("❌ run_ragas.py failed with status", runRes.status);
     process.exit(1);

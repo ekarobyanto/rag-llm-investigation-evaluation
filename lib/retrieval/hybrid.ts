@@ -16,11 +16,11 @@ export async function hybridRetrieve(
   options?: RetrievalOptions
 ): Promise<RetrievalResult> {
   const limit = options?.limit ?? 5
-  const overFetch = limit * 2
+  const overFetch = Math.max(limit * 3, 20)
   const fusionMethod = options?.fusionMethod ?? "rrf"
   const rrf_k = options?.rrf_k ?? 60
-  const sparseWeight = options?.sparseWeight ?? 0.3
-  const denseWeight = options?.denseWeight ?? 0.7
+  const sparseWeight = options?.sparseWeight ?? 0.25
+  const denseWeight = options?.denseWeight ?? 0.75
   const startTime = Date.now()
 
   try {
@@ -34,14 +34,14 @@ export async function hybridRetrieve(
 
     // Build a map of all unique documents
     const candidateMap = new Map<string, FusionCandidate>()
-    const penaltyRank = overFetch + 1
+    const unretrievedRank = 9999
 
     // Index sparse results
     sparseResult.evidence.forEach((item, idx) => {
       candidateMap.set(item.id, {
         item: { ...item },
         sparseRank: idx + 1,
-        denseRank: penaltyRank,
+        denseRank: unretrievedRank,
         sparseScore: item.sparseScore ?? 0,
         denseScore: 0,
       })
@@ -57,7 +57,7 @@ export async function hybridRetrieve(
       } else {
         candidateMap.set(item.id, {
           item: { ...item, sparseScore: 0 },
-          sparseRank: penaltyRank,
+          sparseRank: unretrievedRank,
           denseRank: idx + 1,
           sparseScore: 0,
           denseScore: item.denseScore ?? 0,
@@ -69,9 +69,15 @@ export async function hybridRetrieve(
     const candidates = Array.from(candidateMap.values())
 
     if (fusionMethod === "rrf") {
-      // Reciprocal Rank Fusion: RRF(d) = 1/(k + rank_sparse) + 1/(k + rank_dense)
+      // Weighted Reciprocal Rank Fusion:
+      // Heavy weight (0.75) on Dense semantic embeddings to prevent noisy BM25 hits from displacing genuine clues.
+      // Unretrieved items in an arm get 0 points from that arm rather than artificial penalty points.
       for (const c of candidates) {
-        c.item.fusionScore = 1 / (rrf_k + c.sparseRank) + 1 / (rrf_k + c.denseRank)
+        const denseTerm = c.denseRank <= overFetch ? denseWeight / (rrf_k + c.denseRank) : 0
+        const sparseTerm = c.sparseRank <= overFetch ? sparseWeight / (rrf_k + c.sparseRank) : 0
+        const agreementBonus = c.denseRank <= overFetch && c.sparseRank <= overFetch ? 0.003 : 0
+
+        c.item.fusionScore = denseTerm + sparseTerm + agreementBonus
         c.item.score = c.item.fusionScore
         c.item.sparseScore = c.sparseScore
         c.item.denseScore = c.denseScore

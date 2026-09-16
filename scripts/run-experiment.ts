@@ -1,5 +1,14 @@
-import { seedScenarios, runAllScenarios, aggregateMetrics } from "../lib/eval";
+import { seedScenarios, runAllScenarios, aggregateMetrics, cancelEvaluation } from "../lib/eval";
 import type { RetrievalMethod } from "../lib/retrieval";
+
+process.on("SIGINT", () => {
+  console.log("\n⚠️ Stop signal received (Ctrl+C). Halting experiment loop gracefully...");
+  cancelEvaluation();
+});
+process.on("SIGTERM", () => {
+  console.log("\n⚠️ Termination signal received. Halting experiment loop gracefully...");
+  cancelEvaluation();
+});
 
 async function main() {
   const args = process.argv.slice(2);

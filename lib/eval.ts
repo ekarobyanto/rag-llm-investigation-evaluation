@@ -3,6 +3,7 @@ import { generateAIResponse } from "./rag"
 import type { RetrievalMethod } from "./retrieval"
 import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
+import { broadcastWSEvent } from "./ws"
 
 export interface ScenarioInputFile {
   caseTitle: string
@@ -99,13 +100,27 @@ export interface RunResult {
 
 export async function runScenario(
   scenarioId: string,
-  retrievalMethod: RetrievalMethod
+  retrievalMethod: RetrievalMethod,
+  signal?: AbortSignal
 ): Promise<RunResult> {
+  const isCancelled = () =>
+    isEvaluationCancelled() ||
+    Boolean(signal?.aborted) ||
+    Boolean(globalThis.__evalAbortController?.signal?.aborted)
+
+  if (isCancelled()) {
+    throw new Error("Evaluation cancelled by user")
+  }
+
   const scenario = await prisma.evaluationScenario.findUnique({
     where: { id: scenarioId },
     include: { case: true },
   })
   if (!scenario) throw new Error(`Scenario ${scenarioId} not found`)
+
+  if (isCancelled()) {
+    throw new Error("Evaluation cancelled by user")
+  }
 
   const session = await prisma.investigationSession.create({
     data: { caseId: scenario.caseId, retrievalMethod },
@@ -116,6 +131,10 @@ export async function runScenario(
     target: string
   }>
   const requiredEvidenceIds = scenario.requiredEvidenceIds as unknown as string[]
+
+  if (isCancelled()) {
+    throw new Error("Evaluation cancelled by user")
+  }
 
   const result = await generateAIResponse(
     scenario.prompt,
@@ -128,6 +147,10 @@ export async function runScenario(
       temperature: 0.2,
     }
   )
+
+  if (isCancelled()) {
+    throw new Error("Evaluation cancelled by user")
+  }
 
   const log = await prisma.aIInteractionLog.create({
     data: {
@@ -165,6 +188,22 @@ export async function runScenario(
     },
   })
 
+  // Broadcast live log event over WebSocket
+  broadcastWSEvent({
+    type: "LOG_CREATED",
+    log: {
+      ...log,
+      scenario: {
+        prompt: scenario.prompt,
+        difficulty: scenario.difficulty,
+        referenceAnswer: scenario.referenceAnswer,
+        notes: scenario.notes,
+        case: { title: scenario.case?.title || "Nexus Data Breach" },
+      },
+      ragasEvaluation: null,
+    },
+  })
+
   return {
     scenarioId: scenario.id,
     retrievalMethod,
@@ -180,33 +219,192 @@ export async function runScenario(
   }
 }
 
+export interface EvaluationStatus {
+  isRunning: boolean
+  label?: string
+  startedAt?: number
+  type?: "benchmark" | "ragas" | "single"
+  currentScenario?: number
+  totalScenarios?: number
+  completedRuns?: number
+  totalRuns?: number
+  activeMethods?: RetrievalMethod[]
+}
+
 const ALL_METHODS: RetrievalMethod[] = ["sparse", "dense", "hybrid"]
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __evalCancelRequested: boolean | undefined
+  // eslint-disable-next-line no-var
+  var __evalAbortController: AbortController | undefined
+  // eslint-disable-next-line no-var
+  var __evalActiveState: EvaluationStatus | undefined
+  // eslint-disable-next-line no-var
+  var __ragasChildProcess: any | undefined
+}
+
+export function setActiveEvaluationStatus(status: Partial<EvaluationStatus>): void {
+  globalThis.__evalActiveState = {
+    ...(globalThis.__evalActiveState ?? { isRunning: false }),
+    ...status,
+  }
+  broadcastWSEvent({ type: "STATUS_UPDATE", status: globalThis.__evalActiveState })
+}
+
+export function getActiveEvaluationStatus(): EvaluationStatus {
+  return globalThis.__evalActiveState ?? { isRunning: false }
+}
+
+export function cancelEvaluation(): void {
+  globalThis.__evalCancelRequested = true
+  if (globalThis.__evalAbortController) {
+    try {
+      globalThis.__evalAbortController.abort()
+    } catch {
+      // ignore
+    }
+  }
+  if (globalThis.__ragasChildProcess) {
+    try {
+      globalThis.__ragasChildProcess.kill("SIGTERM")
+      globalThis.__ragasChildProcess.kill("SIGINT")
+    } catch {
+      // ignore
+    }
+    globalThis.__ragasChildProcess = undefined
+  }
+  globalThis.__evalActiveState = { isRunning: false }
+}
+
+export function resetEvaluationCancel(): void {
+  globalThis.__evalCancelRequested = false
+  globalThis.__evalAbortController = new AbortController()
+}
+
+export function isEvaluationCancelled(): boolean {
+  return Boolean(globalThis.__evalCancelRequested)
+}
+
+export function getEvaluationSignal(): AbortSignal | undefined {
+  return globalThis.__evalAbortController?.signal
+}
+
 export async function runAllScenarios(
-  methods: RetrievalMethod[] = ALL_METHODS
+  methods: RetrievalMethod[] = ALL_METHODS,
+  signal?: AbortSignal,
+  options?: {
+    limit?: number
+    scenarioIds?: string[]
+    difficulty?: string
+    balanced?: boolean
+  }
 ): Promise<{
   results: RunResult[]
   totalCost: number
   totalDurationMs: number
+  cancelled?: boolean
 }> {
-  const scenarios = await prisma.evaluationScenario.findMany({
+  resetEvaluationCancel()
+  let scenarios = await prisma.evaluationScenario.findMany({
     orderBy: { createdAt: "asc" },
   })
-  const results: RunResult[] = []
-  const start = Date.now()
 
-  for (const s of scenarios) {
-    for (const method of methods) {
-      try {
-        results.push(await runScenario(s.id, method))
-      } catch (e) {
-        console.error(`Scenario ${s.id} ${method} failed:`, e)
+  // Apply batch filters if requested
+  if (options?.scenarioIds && options.scenarioIds.length > 0) {
+    const idSet = new Set(options.scenarioIds)
+    scenarios = scenarios.filter((s) => idSet.has(s.id))
+  } else if (options?.difficulty && options.difficulty !== "all") {
+    scenarios = scenarios.filter((s) => s.difficulty === options.difficulty)
+    if (options?.limit && options.limit > 0) {
+      scenarios = scenarios.slice(0, options.limit)
+    }
+  } else if (options?.balanced && options?.limit && options.limit > 0) {
+    // Pick an even distribution of easy, medium, hard
+    const easy = scenarios.filter((s) => s.difficulty === "easy")
+    const med = scenarios.filter((s) => s.difficulty === "medium")
+    const hard = scenarios.filter((s) => s.difficulty === "hard")
+    const perTier = Math.max(1, Math.floor(options.limit / 3))
+    const selected = [
+      ...easy.slice(0, perTier),
+      ...med.slice(0, perTier),
+      ...hard.slice(0, perTier),
+    ]
+    if (selected.length < options.limit) {
+      const selectedIds = new Set(selected.map((s) => s.id))
+      for (const s of scenarios) {
+        if (!selectedIds.has(s.id)) {
+          selected.push(s)
+          if (selected.length >= options.limit) break
+        }
       }
     }
+    scenarios = selected.slice(0, options.limit)
+  } else if (options?.limit && options.limit > 0) {
+    scenarios = scenarios.slice(0, options.limit)
   }
 
-  const totalCost = results.reduce((acc, r) => acc + (r.estimatedCost ?? 0), 0)
-  return { results, totalCost, totalDurationMs: Date.now() - start }
+  const results: RunResult[] = []
+  const start = Date.now()
+  let cancelled = false
+
+  const methodLabel = methods.length === 3 ? "All 3 Engines (Sparse, Dense, Hybrid)" : methods.join(", ")
+  const isBatch = Boolean(options?.limit || options?.scenarioIds || (options?.difficulty && options.difficulty !== "all"))
+  const runTypeLabel = isBatch ? `Batch Test (${scenarios.length} Scenarios)` : "Benchmark Pipeline"
+  const totalRuns = scenarios.length * methods.length
+
+  setActiveEvaluationStatus({
+    isRunning: true,
+    label: `Running ${runTypeLabel} (${methodLabel})...`,
+    startedAt: start,
+    type: "benchmark",
+    currentScenario: 0,
+    totalScenarios: scenarios.length,
+    completedRuns: 0,
+    totalRuns,
+    activeMethods: methods,
+  })
+
+  try {
+    const checkCancelled = () =>
+      isEvaluationCancelled() ||
+      Boolean(globalThis.__evalAbortController?.signal?.aborted)
+
+    let scenarioIndex = 0
+    for (const s of scenarios) {
+      if (checkCancelled()) {
+        cancelled = true
+        break
+      }
+      scenarioIndex++
+      for (const method of methods) {
+        if (checkCancelled()) {
+          cancelled = true
+          break
+        }
+        try {
+          const runRes = await runScenario(s.id, method)
+          results.push(runRes)
+          setActiveEvaluationStatus({
+            currentScenario: scenarioIndex,
+            completedRuns: results.length,
+            label: `Running ${runTypeLabel} (${results.length}/${totalRuns} runs)...`,
+          })
+        } catch (e) {
+          if (checkCancelled()) {
+            cancelled = true
+            break
+          }
+          console.error(`Scenario ${s.id} ${method} failed:`, e)
+        }
+      }
+    }
+
+    const totalCost = results.reduce((acc, r) => acc + (r.estimatedCost ?? 0), 0)
+    return { results, totalCost, totalDurationMs: Date.now() - start, cancelled }
+  } finally {
+    setActiveEvaluationStatus({ isRunning: false })
+  }
 }
 
 export interface AggregateMetrics {
@@ -263,3 +461,105 @@ export async function aggregateMetrics(): Promise<AggregateMetrics[]> {
 
   return out
 }
+
+export interface RagasAggregateMetrics {
+  retrievalMethod: RetrievalMethod
+  count: number
+  avgFaithfulness: number
+  avgAnswerRelevance: number
+  avgContextPrecision: number
+  avgContextRecall: number
+  compositeScore: number
+}
+
+export interface RagasDifficultyMetrics {
+  retrievalMethod: RetrievalMethod
+  difficulty: string
+  count: number
+  avgFaithfulness: number
+  avgAnswerRelevance: number
+  avgContextPrecision: number
+  avgContextRecall: number
+  compositeScore: number
+}
+
+export async function aggregateRagasMetrics(): Promise<{
+  overall: RagasAggregateMetrics[]
+  byDifficulty: RagasDifficultyMetrics[]
+}> {
+  const overall: RagasAggregateMetrics[] = []
+  const byDifficulty: RagasDifficultyMetrics[] = []
+
+  const sum = (arr: Array<number | null | undefined>) =>
+    arr.reduce<number>((acc, v) => acc + (v ?? 0), 0)
+
+  const diffs = ["easy", "medium", "hard"]
+
+  for (const method of ALL_METHODS) {
+    const logs = await prisma.aIInteractionLog.findMany({
+      where: {
+        retrievalMethod: method,
+        scenarioId: { not: null },
+        ragasEvaluation: { isNot: null },
+      },
+      include: {
+        ragasEvaluation: true,
+        scenario: { select: { difficulty: true } },
+      },
+    })
+
+    const count = logs.length
+    if (count === 0) {
+      overall.push({
+        retrievalMethod: method,
+        count: 0,
+        avgFaithfulness: 0,
+        avgAnswerRelevance: 0,
+        avgContextPrecision: 0,
+        avgContextRecall: 0,
+        compositeScore: 0,
+      })
+    } else {
+      const avgFaith = sum(logs.map((l) => l.ragasEvaluation?.faithfulness)) / count
+      const avgAnsRel = sum(logs.map((l) => l.ragasEvaluation?.answerRelevance)) / count
+      const avgCtxPrec = sum(logs.map((l) => l.ragasEvaluation?.contextPrecision)) / count
+      const avgCtxRec = sum(logs.map((l) => l.ragasEvaluation?.contextRecall)) / count
+      const composite = (avgFaith + avgAnsRel + avgCtxPrec + avgCtxRec) / 4
+
+      overall.push({
+        retrievalMethod: method,
+        count,
+        avgFaithfulness: avgFaith,
+        avgAnswerRelevance: avgAnsRel,
+        avgContextPrecision: avgCtxPrec,
+        avgContextRecall: avgCtxRec,
+        compositeScore: composite,
+      })
+    }
+
+    for (const diff of diffs) {
+      const diffLogs = logs.filter((l) => l.scenario?.difficulty === diff)
+      const dCount = diffLogs.length
+      if (dCount > 0) {
+        const avgFaith = sum(diffLogs.map((l) => l.ragasEvaluation?.faithfulness)) / dCount
+        const avgAnsRel = sum(diffLogs.map((l) => l.ragasEvaluation?.answerRelevance)) / dCount
+        const avgCtxPrec = sum(diffLogs.map((l) => l.ragasEvaluation?.contextPrecision)) / dCount
+        const avgCtxRec = sum(diffLogs.map((l) => l.ragasEvaluation?.contextRecall)) / dCount
+        const composite = (avgFaith + avgAnsRel + avgCtxPrec + avgCtxRec) / 4
+        byDifficulty.push({
+          retrievalMethod: method,
+          difficulty: diff,
+          count: dCount,
+          avgFaithfulness: avgFaith,
+          avgAnswerRelevance: avgAnsRel,
+          avgContextPrecision: avgCtxPrec,
+          avgContextRecall: avgCtxRec,
+          compositeScore: composite,
+        })
+      }
+    }
+  }
+
+  return { overall, byDifficulty }
+}
+

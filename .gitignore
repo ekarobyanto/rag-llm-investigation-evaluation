@@ -9,3 +9,7 @@ build
 .DS_Store
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+__pycache__/
+*.pyc
+.agents/
+mcp_config.json

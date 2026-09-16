@@ -9,6 +9,10 @@ load_dotenv(env_path)
 
 def get_db_connection():
     db_url = os.environ.get('DATABASE_URL')
+    if not db_url:
+        raise ValueError("DATABASE_URL is not set in environment.")
+    if '?' in db_url:
+        db_url = db_url.split('?')[0]
     return psycopg2.connect(db_url)
 
 def fetch_combined_metrics(conn):

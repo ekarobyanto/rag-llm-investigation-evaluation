@@ -6,8 +6,14 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: sessionId } = await params
-    const { suspectId, reasoning } = await request.json()
+    const resolvedParams = await Promise.resolve(params)
+    const sessionId = resolvedParams?.id
+    if (!sessionId) {
+      return NextResponse.json({ error: "sessionId required in route parameters" }, { status: 400 })
+    }
+
+    const body = await request.json().catch(() => ({}))
+    const { suspectId, reasoning } = body
 
     if (!suspectId || typeof suspectId !== "string") {
       return NextResponse.json({ error: "suspectId required" }, { status: 400 })
@@ -78,10 +84,10 @@ export async function POST(
       contradictionPairs: groundTruth.contradictionPairs,
       relevantEvidenceIds: groundTruth.relevantEvidenceIds,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error submitting deduction:", error)
     return NextResponse.json(
-      { error: "Failed to submit deduction" },
+      { error: error?.message || "Failed to submit deduction" },
       { status: 500 }
     )
   }
@@ -92,7 +98,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: sessionId } = await params
+    const resolvedParams = await Promise.resolve(params)
+    const sessionId = resolvedParams?.id
+    if (!sessionId) {
+      return NextResponse.json({ error: "sessionId required in route parameters" }, { status: 400 })
+    }
 
     const deduction = await prisma.deduction.findUnique({
       where: { sessionId },
@@ -103,10 +113,10 @@ export async function GET(
     }
 
     return NextResponse.json({ deduction })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching deduction:", error)
     return NextResponse.json(
-      { error: "Failed to fetch deduction" },
+      { error: error?.message || "Failed to fetch deduction" },
       { status: 500 }
     )
   }

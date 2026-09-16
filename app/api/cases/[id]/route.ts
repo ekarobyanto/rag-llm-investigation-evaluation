@@ -6,7 +6,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
+    const resolvedParams = await Promise.resolve(params)
+    const id = resolvedParams?.id
+    if (!id) {
+      return NextResponse.json({ error: "id required" }, { status: 400 })
+    }
     const caseData = await prisma.case.findUnique({
       where: { id },
       include: {

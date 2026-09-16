@@ -13,7 +13,7 @@ async function testRun() {
   
   console.log(`Running scenario: ${scenario.id}`);
   const start = Date.now();
-  const res = await runScenario(scenario.id, "sparse");
+  const res = await runScenario(scenario.id, "dense");
   console.log(`Completed in ${Date.now() - start}ms`);
   console.log(`Estimated cost: $${res.estimatedCost}`);
   console.log("Result:", JSON.stringify(res, null, 2));
