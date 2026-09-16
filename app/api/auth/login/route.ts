@@ -18,11 +18,15 @@ export async function POST(request: NextRequest) {
     const token = await createAuthToken()
     const response = NextResponse.json({ success: true, message: "Authentication successful" })
 
+    const isHttps =
+      request.nextUrl.protocol === "https:" ||
+      request.headers.get("x-forwarded-proto") === "https"
+
     response.cookies.set({
       name: AUTH_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps,
       sameSite: "lax",
       path: "/",
       maxAge: 30 * 24 * 60 * 60, // 30 days

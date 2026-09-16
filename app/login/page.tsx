@@ -34,8 +34,7 @@ function LoginForm() {
       const data = await res.json()
 
       if (res.ok && data.success) {
-        router.push(nextUrl)
-        router.refresh()
+        window.location.href = nextUrl
       } else {
         setError(data.error || "Access Denied: Invalid master access key.")
       }
