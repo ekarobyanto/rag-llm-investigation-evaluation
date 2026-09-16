@@ -108,6 +108,14 @@ async function seed() {
     console.warn("OPENAI_API_KEY missing — evidence will be seeded WITHOUT embeddings")
   }
 
+  const force = process.argv.includes("--force")
+  const existingCasesCount = await prisma.case.count()
+  if (existingCasesCount > 0 && !force) {
+    console.log(`Database already contains ${existingCasesCount} case(s). Skipping seed to preserve existing evaluation telemetry and OpenAI API credits. (Pass --force to overwrite)`)
+    return
+  }
+
+  console.log(force ? "Force flag detected. Clearing existing data..." : "Database is empty. Initializing initial case docket...")
   await clearDatabase()
 
   for (const caseData of cases) {
