@@ -113,7 +113,7 @@ export default function InvestigationDashboard({
   const allSuspectNames = caseData.suspects.map((s) => s.name)
 
   return (
-    <div className="h-screen flex flex-col bg-[#14110e] bg-corkboard overflow-hidden select-none">
+    <div className="min-h-screen md:h-screen flex flex-col bg-[#14110e] bg-corkboard overflow-x-hidden select-none">
       {/* Top Desk Header */}
       <DeskHeader
         caseTitle={caseData.title}
@@ -126,9 +126,9 @@ export default function InvestigationDashboard({
       />
 
       {/* Main 3-Column Desk Workspace */}
-      <div className="flex-1 flex overflow-hidden p-3 gap-3">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden p-2 sm:p-3 gap-2 sm:gap-3">
         {/* Left Column: Suspect Dossiers (w-80) */}
-        <aside className="w-80 flex flex-col min-h-0 flex-none">
+        <aside className="w-full lg:w-80 h-[32vh] min-h-[260px] lg:h-auto flex flex-col min-h-0 flex-none">
           <SuspectDossiers
             suspects={caseData.suspects}
             selectedSuspectId={selectedSuspectId}
@@ -138,7 +138,7 @@ export default function InvestigationDashboard({
         </aside>
 
         {/* Center Column: The Evidence Corkboard */}
-        <main className="flex-1 flex flex-col min-h-0 min-w-0">
+        <main className="w-full lg:flex-1 h-[45vh] min-h-[320px] lg:h-auto flex flex-col min-h-0 min-w-0">
           <EvidenceBoard
             evidenceList={caseData.evidence}
             pinnedEvidenceIds={pinnedEvidenceIds}
@@ -149,7 +149,7 @@ export default function InvestigationDashboard({
         </main>
 
         {/* Right Column: AI Forensic Consultant Terminal (w-96) */}
-        <aside className="w-96 flex flex-col min-h-0 flex-none">
+        <aside className="w-full lg:w-96 h-[40vh] min-h-[300px] lg:h-auto flex flex-col min-h-0 flex-none">
           <ConsultantTerminal
             responses={responses}
             loading={loading}
