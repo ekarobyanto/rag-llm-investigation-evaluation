@@ -4,7 +4,7 @@ import { retrieve } from "./retrieval"
 import type { RetrievalMethod } from "./retrieval"
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || "build-key-placeholder",
 })
 
 const PROMPT_TEMPLATE_VERSION = "v1"
