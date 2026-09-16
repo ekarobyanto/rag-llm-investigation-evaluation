@@ -103,9 +103,12 @@ jobs:
             docker compose run --rm app prisma migrate deploy
             docker compose run --rm app node prisma/seed.js
 
-            # 7. Ensure fallback certificate exists for Nginx startup
+            # 7. Ensure certificate exists for Nginx startup
             docker compose run --rm --entrypoint \
-              "sh -c 'if [ ! -f /etc/letsencrypt/live/investigation.robyantoeka.my.id/fullchain.pem ]; then \
+              "sh -c 'if [ -d /etc/letsencrypt/live/investigation.robyantoeka.my.id-0001 ]; then \
+                mkdir -p /etc/letsencrypt/live/investigation.robyantoeka.my.id && \
+                cp -rL /etc/letsencrypt/live/investigation.robyantoeka.my.id-0001/* /etc/letsencrypt/live/investigation.robyantoeka.my.id/; \
+              elif [ ! -f /etc/letsencrypt/live/investigation.robyantoeka.my.id/fullchain.pem ]; then \
                 mkdir -p /etc/letsencrypt/live/investigation.robyantoeka.my.id && \
                 openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
                   -keyout /etc/letsencrypt/live/investigation.robyantoeka.my.id/privkey.pem \
@@ -116,11 +119,18 @@ jobs:
             # 8. Start/reload application, nginx reverse proxy, and certbot
             docker compose up -d --remove-orphans app nginx certbot
 
-            # 9. Request / renew Let's Encrypt SSL certificate once domain is pointed
+            # 9. Request / renew Let's Encrypt SSL certificate and apply to Nginx
             docker compose run --rm --entrypoint \
               "certbot certonly --webroot -w /var/www/certbot \
+                --cert-name investigation.robyantoeka.my.id \
                 --register-unsafely-without-email --agree-tos \
                 -d investigation.robyantoeka.my.id --non-interactive --keep-until-expiring" certbot || true
+
+            docker compose run --rm --entrypoint \
+              "sh -c 'if [ -d /etc/letsencrypt/live/investigation.robyantoeka.my.id-0001 ]; then \
+                cp -rL /etc/letsencrypt/live/investigation.robyantoeka.my.id-0001/* /etc/letsencrypt/live/investigation.robyantoeka.my.id/; \
+              fi'" certbot || true
+
             docker compose exec -T nginx nginx -s reload || true
 
             # 10. Clean up unused images to preserve disk space

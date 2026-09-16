@@ -25,8 +25,14 @@ docker compose up -d nginx
 echo "=== 3. Requesting Let's Encrypt Certificate from ACME ==="
 docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
+    --cert-name $DOMAIN \
     --email $EMAIL --agree-tos --no-eff-email \
     -d $DOMAIN --non-interactive --keep-until-expiring" certbot
+
+docker compose run --rm --entrypoint "\
+  sh -c 'if [ -d /etc/letsencrypt/live/$DOMAIN-0001 ]; then \
+    cp -rL /etc/letsencrypt/live/$DOMAIN-0001/* /etc/letsencrypt/live/$DOMAIN/; \
+  fi'" certbot || true
 
 echo "=== 4. Reloading Nginx with Production Certificate ==="
 docker compose exec -T nginx nginx -s reload
