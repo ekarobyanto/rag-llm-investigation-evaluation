@@ -11,8 +11,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV OPENAI_API_KEY="build-dummy-key"
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+RUN mkdir -p /app/public
 RUN npx prisma generate
 RUN npm run build
 
