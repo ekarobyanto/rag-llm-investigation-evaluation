@@ -28,10 +28,16 @@ export default function Home() {
     try {
       const res = await fetch("/api/cases")
       const data = await res.json()
-      setCases(data)
+      if (res.ok && Array.isArray(data)) {
+        setCases(data)
+      } else {
+        console.error("Failed to fetch cases:", data)
+        setCases([])
+      }
       setLoading(false)
     } catch (error) {
       console.error("Failed to fetch cases:", error)
+      setCases([])
       setLoading(false)
     }
   }
