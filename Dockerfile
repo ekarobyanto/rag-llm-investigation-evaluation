@@ -37,6 +37,7 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/cases-input ./cases-input
+COPY --from=builder /app/eval-scenarios ./eval-scenarios
 COPY --from=builder /app/package.json ./package.json
 
 CMD ["node", "server.js"]

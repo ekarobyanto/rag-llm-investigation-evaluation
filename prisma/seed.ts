@@ -3,7 +3,7 @@ config()
 
 import { PrismaClient } from "@prisma/client"
 import { generateEmbedding } from "../lib/embedding"
-import { readdirSync, readFileSync } from "fs"
+import { existsSync, readdirSync, readFileSync } from "fs"
 import { join } from "path"
 
 const prisma = new PrismaClient()
@@ -93,6 +93,62 @@ async function clearDatabase() {
   console.log("Cleared existing data")
 }
 
+async function seedEvaluationScenarios() {
+  const existingScenarios = await prisma.evaluationScenario.count()
+  if (existingScenarios > 0) {
+    console.log(`Evaluation scenarios already exist (${existingScenarios} found). Skipping scenario seed.`)
+    return
+  }
+
+  const dir = join(process.cwd(), "eval-scenarios")
+  if (!existsSync(dir)) {
+    console.warn("eval-scenarios directory not found. Skipping scenario seed.")
+    return
+  }
+
+  const files = readdirSync(dir).filter((f) => f.endsWith(".json"))
+  console.log(`\nSeeding evaluation scenarios from ${files.length} file(s)...`)
+
+  for (const f of files) {
+    const raw = JSON.parse(readFileSync(join(dir, f), "utf8"))
+    const items = Array.isArray(raw) ? raw : [raw]
+    for (const s of items) {
+      const caseRow = await prisma.case.findFirst({
+        where: { title: s.caseTitle },
+        include: { evidence: { orderBy: { createdAt: "asc" } } },
+      })
+      if (!caseRow) {
+        console.warn(`Case not found for scenario: ${s.caseTitle}`)
+        continue
+      }
+
+      const requiredEvidenceIds = (s.requiredEvidenceIndices ?? [])
+        .map((i: number) => caseRow.evidence[i]?.id)
+        .filter(Boolean)
+
+      const expectedContradictions = (s.expectedContradictions ?? []).map((c: any) => ({
+        evidence_id_a: caseRow.evidence[c.evidence_index_a]?.id,
+        evidence_id_b: caseRow.evidence[c.evidence_index_b]?.id,
+      }))
+
+      await prisma.evaluationScenario.create({
+        data: {
+          caseId: caseRow.id,
+          prompt: s.prompt,
+          difficulty: s.difficulty,
+          requiredEvidenceIds,
+          expectedActions: s.expectedActions ?? [],
+          expectedContradictions,
+          referenceAnswer: s.referenceAnswer,
+          notes: s.notes,
+        },
+      })
+    }
+  }
+  const count = await prisma.evaluationScenario.count()
+  console.log(`Successfully seeded ${count} evaluation scenario(s).`)
+}
+
 async function seed() {
   console.log("Loading cases from cases-input/")
   const cases = loadCases()
@@ -111,7 +167,8 @@ async function seed() {
   const force = process.argv.includes("--force")
   const existingCasesCount = await prisma.case.count()
   if (existingCasesCount > 0 && !force) {
-    console.log(`Database already contains ${existingCasesCount} case(s). Skipping seed to preserve existing evaluation telemetry and OpenAI API credits. (Pass --force to overwrite)`)
+    console.log(`Database already contains ${existingCasesCount} case(s). Skipping case seed to preserve existing evaluation telemetry and OpenAI API credits.`)
+    await seedEvaluationScenarios()
     return
   }
 
@@ -203,6 +260,8 @@ async function seed() {
     })
     console.log(`  Created ground truth`)
   }
+
+  await seedEvaluationScenarios()
 
   console.log("\nSeed completed successfully")
 }
