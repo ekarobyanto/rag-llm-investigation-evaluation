@@ -54,10 +54,10 @@ export default function DeskHeader({
   }
 
   return (
-    <header className="bg-[#1c1814] border-b border-[#382f26] px-6 py-3 shadow-md flex-none select-none">
-      <div className="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-4">
+    <header className="bg-[#1c1814] border-b border-[#382f26] px-3 sm:px-6 py-2.5 sm:py-3 shadow-md flex-none select-none">
+      <div className="max-w-[1920px] mx-auto flex flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-4">
         {/* Left: Case Info */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <button
             onClick={() => {
               soundFx.playPaper()
@@ -70,22 +70,22 @@ export default function DeskHeader({
             <span>Case Files</span>
           </button>
 
-          <div className="h-6 w-px bg-[#3d3328]" />
+          <div className="h-6 w-px bg-[#3d3328] hidden sm:block" />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <div className="w-9 h-9 rounded bg-[#2e261f] border border-[#524436] flex items-center justify-center text-[#c99a5e]">
               <FolderKanban className="w-5 h-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] uppercase font-mono tracking-widest px-1.5 py-0.5 rounded bg-[#3b1717] text-[#f87171] border border-[#7f1d1d]">
                   Classified Docket
                 </span>
-                <span className="text-xs text-[#a89984] font-mono">
+                <span className="text-xs text-[#a89984] font-mono hidden sm:inline">
                   Method: <span className="text-[#e2d5c3] font-semibold">{methodLabel[retrievalMethod].name}</span>
                 </span>
               </div>
-              <h1 className="text-lg font-bold text-[#f5efe6] font-serif tracking-tight leading-tight">
+              <h1 className="text-base sm:text-lg font-bold text-[#f5efe6] font-serif tracking-tight leading-tight truncate">
                 {caseTitle}
               </h1>
             </div>
@@ -93,7 +93,7 @@ export default function DeskHeader({
         </div>
 
         {/* Center: Case Telemetry & Counters */}
-        <div className="flex items-center gap-6 bg-[#161310] border border-[#2e261f] px-4 py-1.5 rounded-lg text-xs font-mono">
+        <div className="flex items-center gap-4 sm:gap-6 bg-[#161310] border border-[#2e261f] px-3 sm:px-4 py-1.5 rounded-lg text-xs font-mono w-full sm:w-auto justify-center">
           <div className="flex items-center gap-2 text-[#b0a290]" title="Investigation Time">
             <Clock className="w-4 h-4 text-[#c99a5e]" />
             <span className="text-[#f5efe6] font-bold text-sm tracking-wider">{formatTimer(seconds)}</span>
@@ -110,7 +110,7 @@ export default function DeskHeader({
         </div>
 
         {/* Right: Sound Toggle & Action Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto sm:justify-end">
           <button
             onClick={handleToggleMute}
             className={`p-2 rounded border transition ${
@@ -128,7 +128,7 @@ export default function DeskHeader({
               soundFx.playPaper()
               onOpenBriefing()
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#2a221a] hover:bg-[#382d23] text-[#e2d5c3] font-mono text-xs border border-[#4a3d31] transition"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded bg-[#2a221a] hover:bg-[#382d23] text-[#e2d5c3] font-mono text-[11px] sm:text-xs border border-[#4a3d31] transition"
             title="View full incident briefing and crime timeline"
           >
             <FolderKanban className="w-4 h-4 text-[#c99a5e]" />
@@ -140,7 +140,7 @@ export default function DeskHeader({
               soundFx.playStamp()
               onOpenIndictment()
             }}
-            className={`flex items-center gap-2 px-5 py-2 rounded font-serif font-bold text-sm shadow-lg transition border ${
+            className={`flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded font-serif font-bold text-xs sm:text-sm shadow-lg transition border ${
               hasDeduction
                 ? "bg-[#1f3824] border-[#2e5e37] text-[#86efac] hover:bg-[#28492e]"
                 : "bg-[#8b1e1e] border-[#b91c1c] text-[#fef2f2] hover:bg-[#a52424] hover:shadow-red-950/50"
