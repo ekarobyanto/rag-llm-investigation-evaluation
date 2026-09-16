@@ -87,7 +87,7 @@ export async function verifyAuthTokenDetailed(token?: string | null): Promise<{ 
     const isValid = await crypto.subtle.verify(
       "HMAC",
       key,
-      sigBytes,
+      sigBytes as unknown as BufferSource,
       encoder.encode(payloadPart)
     )
     if (!isValid) {
