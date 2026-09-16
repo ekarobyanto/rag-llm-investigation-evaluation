@@ -116,5 +116,12 @@ jobs:
             # 8. Start/reload application, nginx reverse proxy, and certbot
             docker compose up -d --remove-orphans app nginx certbot
 
-            # 9. Clean up unused images to preserve disk space
+            # 9. Request / renew Let's Encrypt SSL certificate once domain is pointed
+            docker compose run --rm --entrypoint \
+              "certbot certonly --webroot -w /var/www/certbot \
+                --register-unsafely-without-email --agree-tos \
+                -d investigation.robyantoeka.my.id --non-interactive --keep-until-expiring" certbot || true
+            docker compose exec -T nginx nginx -s reload || true
+
+            # 10. Clean up unused images to preserve disk space
             docker image prune -f

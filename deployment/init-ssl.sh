@@ -26,9 +26,9 @@ echo "=== 3. Requesting Let's Encrypt Certificate from ACME ==="
 docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     --email $EMAIL --agree-tos --no-eff-email \
-    -d $DOMAIN --force-renewal" certbot
+    -d $DOMAIN --non-interactive --keep-until-expiring" certbot
 
 echo "=== 4. Reloading Nginx with Production Certificate ==="
-docker compose exec nginx nginx -s reload
+docker compose exec -T nginx nginx -s reload
 
 echo "=== SSL Setup Completed for https://$DOMAIN ==="
