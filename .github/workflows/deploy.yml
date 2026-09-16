@@ -3,6 +3,7 @@ name: Build & Deploy
 on:
   push:
     branches: [ "master", "main" ]
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -51,17 +52,57 @@ jobs:
   deploy-to-vps:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: ${{ vars.VPS_HOST != '' }} # Runs if VPS_HOST is configured in GitHub repository secrets/variables
+    if: ${{ secrets.VPS_HOST != '' || vars.VPS_HOST != '' }}
     steps:
       - name: Deploy container to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
         with:
-          host: ${{ vars.VPS_HOST }}
-          username: ${{ vars.VPS_USERNAME || 'root' }}
+          host: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME || vars.VPS_USERNAME || 'ubuntu' }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          envs: POSTGRES_PASSWORD,OPENAI_API_KEY,APP_PASSWORD,AUTH_SECRET,GITHUB_TOKEN,GITHUB_ACTOR
           script: |
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            mkdir -p /opt/rag-llm-investigation
             cd /opt/rag-llm-investigation
-            docker compose pull app
-            docker compose up -d --remove-orphans
+
+            # 1. Fetch latest production docker-compose file
+            curl -fsSL https://raw.githubusercontent.com/${GITHUB_ACTOR}/rag-llm-investigation-evaluation/master/docker-compose.prod.yml -o docker-compose.yml
+
+            # 2. Automatically generate .env on VPS from GitHub Secrets
+            cat << EOF > .env
+            POSTGRES_USER=admin
+            POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            POSTGRES_DB=thesis
+            OPENAI_API_KEY=${OPENAI_API_KEY}
+            OPENAI_MODEL=gpt-5.6-luna
+            APP_PASSWORD=${APP_PASSWORD}
+            AUTH_SECRET=${AUTH_SECRET}
+            WS_PORT=3001
+            EOF
+            chmod 600 .env
+
+            # 3. Log into GitHub Container Registry
+            echo "${GITHUB_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+
+            # 4. Pull newest images
+            docker compose pull
+
+            # 5. Start database container
+            docker compose up -d db
+
+            # 6. Run database migrations & seed case docket data
+            docker compose run --rm app npx prisma migrate deploy
+            docker compose run --rm app npm run seed
+
+            # 7. Start/reload the application container
+            docker compose up -d --remove-orphans app
+
+            # 8. Clean up unused images to preserve disk space
             docker image prune -f
