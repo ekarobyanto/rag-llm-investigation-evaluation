@@ -526,7 +526,16 @@ export default function EvalPage() {
     label?: string
     totalRuns?: number
     completedRuns?: number
+    type?: "benchmark" | "ragas" | "single"
   } | null>(null)
+
+  // RAGAS Small Batch State
+  const [isRagasBatchModalOpen, setIsRagasBatchModalOpen] = useState(false)
+  const [ragasBatchPreset, setRagasBatchPreset] = useState<"3" | "5" | "10" | "custom">("3")
+  const [ragasBatchCustomCount, setRagasBatchCustomCount] = useState<number>(3)
+  const [ragasBatchMethod, setRagasBatchMethod] = useState<string>("all")
+  const [ragasBatchDifficulty, setRagasBatchDifficulty] = useState<string>("all")
+  const [ragasBatchForce, setRagasBatchForce] = useState<boolean>(false)
 
   // WebSocket and Log Stream Pagination State
   const [wsStatus, setWsStatus] = useState<"connecting" | "connected" | "disconnected">("connecting")
@@ -581,6 +590,7 @@ export default function EvalPage() {
         setIsCopyModalOpen(false)
         setIsTelemetryCopyModalOpen(false)
         setIsBatchModalOpen(false)
+        setIsRagasBatchModalOpen(false)
       }
     }
     window.addEventListener("scroll", handleDismiss, true)
@@ -655,28 +665,69 @@ export default function EvalPage() {
 
   const [isRunningRagas, setIsRunningRagas] = useState(false)
 
-  const runRagasPipeline = async () => {
+  const runRagasPipeline = async (options?: {
+    force?: boolean
+    limit?: number
+    method?: string
+    difficulty?: string
+  }) => {
     setIsRunningRagas(true)
     setMessage("Running RAGAS evaluation pipeline with judge reasoning...")
     try {
       const res = await fetch("/api/eval/ragas/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ force: false }),
+        body: JSON.stringify({
+          force: options?.force ?? false,
+          limit: options?.limit,
+          method: options?.method,
+          difficulty: options?.difficulty,
+        }),
       })
       const data = await res.json()
       if (data.success) {
-        setMessage("RAGAS evaluation pipeline completed successfully.")
+        setMessage(
+          data.message ||
+            `RAGAS evaluation completed successfully (${data.evaluatedCount ?? 0} evaluated).`
+        )
         await loadAll()
       } else {
-        setMessage(`RAGAS Error: ${data.error || "Execution failed"}`)
+        setMessage(`RAGAS Notice: ${data.message || data.error || "Execution completed"}`)
       }
     } catch (err: any) {
       setMessage(`RAGAS Error: ${err.message || String(err)}`)
     } finally {
       setIsRunningRagas(false)
-      setTimeout(() => setMessage(null), 5000)
+      setTimeout(() => setMessage(null), 6000)
     }
+  }
+
+  const auditAllMissingReasonings = async () => {
+    const missing = ragasLogs
+      .filter((l) => !l.ragasEvaluation?.faithfulnessReasoning)
+      .slice(0, 20)
+      .map((l) => l.id)
+    if (missing.length === 0) {
+      setMessage("All evaluated logs already have complete forensic reasoning.")
+      setTimeout(() => setMessage(null), 3000)
+      return
+    }
+    await auditBatchLogs(missing)
+  }
+
+  const runRagasBatch = async () => {
+    setIsRagasBatchModalOpen(false)
+    const targetLimit =
+      ragasBatchPreset === "custom"
+        ? Math.max(1, ragasBatchCustomCount)
+        : parseInt(ragasBatchPreset, 10)
+
+    await runRagasPipeline({
+      limit: targetLimit,
+      method: ragasBatchMethod !== "all" ? ragasBatchMethod : undefined,
+      difficulty: ragasBatchDifficulty !== "all" ? ragasBatchDifficulty : undefined,
+      force: ragasBatchForce,
+    })
   }
 
   const loadSummary = async (forceGenerate = false) => {
@@ -1320,6 +1371,14 @@ export default function EvalPage() {
       return true
     })
   }, [ragasLogs, ragasMethodFilter, ragasDifficultyFilter, ragasSearchFilter])
+
+  const unevaluatedLogsCount = useMemo(() => {
+    return recent.filter((r) => r.ragasEvaluation == null).length
+  }, [recent])
+
+  const unauditedLogsCount = useMemo(() => {
+    return ragasLogs.filter((r) => !r.ragasEvaluation?.faithfulnessReasoning).length
+  }, [ragasLogs])
 
   // RAGAS: High-level KPI aggregates
   const ragasGlobalStats = useMemo(() => {
@@ -2953,28 +3012,95 @@ export default function EvalPage() {
         <>
           {/* RAGAS LLM Evaluation Tab Content */}
 
-          {/* RAGAS Header & Status Strip */}
+          {/* RAGAS Action Control Strip (Parity with Deterministic IR Strip) */}
           <div className="bg-[#141619] border border-[#22252b] rounded-lg p-3 flex flex-wrap items-center justify-between gap-3 shadow-md">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#b877d9]" />
-                <span className="font-mono font-bold text-xs uppercase text-white tracking-wider">
-                  RAGAS Framework Telemetry
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => runRagasPipeline({ force: false })}
+                disabled={isRunningRagas || isBatchAuditing || (recent.length === 0 && scenarios.length === 0)}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded bg-[#b877d9] hover:bg-[#c98be8] text-[#0b0c0e] text-xs font-mono font-bold transition disabled:opacity-50 shadow-sm shadow-[#b877d9]/20"
+                title="Execute RAGAS evaluation pipeline on un-evaluated interaction logs"
+              >
+                {isRunningRagas ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin fill-current" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5 fill-current" />
+                )}
+                <span>
+                  {isRunningRagas
+                    ? "Evaluating RAGAS..."
+                    : `Run RAGAS Pipeline (${unevaluatedLogsCount} Pending)`}
                 </span>
-              </div>
-              <div className="h-4 w-px bg-[#262930]" />
-              <div className="flex items-center gap-2 text-xs font-mono text-[#8e9297]">
-                <span>LLM Judge:</span>
-                <span className="text-[#d8d9da] font-semibold">gpt-4o-mini (temperature: 0)</span>
-              </div>
-              <div className="h-4 w-px bg-[#262930]" />
-              <div className="flex items-center gap-2 text-xs font-mono text-[#8e9297]">
-                <span>Embedding Model:</span>
-                <span className="text-[#d8d9da] font-semibold">text-embedding-3-small</span>
-              </div>
+              </button>
+
+              <button
+                onClick={() => setIsRagasBatchModalOpen(true)}
+                disabled={isRunningRagas || isBatchAuditing || recent.length === 0}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded bg-[#241330] hover:bg-[#371d4a] text-[#b877d9] hover:text-[#d69eff] text-xs font-mono font-bold border border-[#b877d9]/50 transition disabled:opacity-50 shadow-sm"
+                title="Configure and run a small batch test (3, 5, or 10 logs) to test RAGAS scoring quickly"
+              >
+                <FlaskConical className="w-3.5 h-3.5" />
+                <span>Run Small Batch...</span>
+              </button>
+
+              <button
+                onClick={() => runRagasPipeline({ force: true })}
+                disabled={isRunningRagas || isBatchAuditing || recent.length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#202328] hover:bg-[#2b3038] text-[#c7d0d9] hover:text-white text-xs font-mono font-semibold border border-[#333842] transition disabled:opacity-50"
+                title="Force re-evaluation of all benchmark logs even if already scored"
+              >
+                <RotateCw className={`w-3.5 h-3.5 text-[#b877d9] ${isRunningRagas ? "animate-spin" : ""}`} />
+                <span>Force Re-Evaluate All</span>
+              </button>
+
+              <div className="h-5 w-px bg-[#262930] mx-1" />
+
+              <button
+                onClick={auditAllMissingReasonings}
+                disabled={isRunningRagas || isBatchAuditing || unauditedLogsCount === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#271536] hover:bg-[#391d4e] text-[#d69eff] hover:text-white text-xs font-mono font-semibold border border-[#b877d9]/40 transition disabled:opacity-50"
+                title="Generate detailed forensic reasoning and critique for any evaluations missing judge reasoning"
+              >
+                {isBatchAuditing ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#b877d9]" />
+                ) : (
+                  <Scale className="w-3.5 h-3.5 text-[#b877d9]" />
+                )}
+                <span>
+                  {isBatchAuditing
+                    ? "Auditing..."
+                    : unauditedLogsCount === 0
+                    ? "All Audited"
+                    : `Audit Missing (${unauditedLogsCount})`}
+                </span>
+              </button>
+
+              {recent.length === 0 && (
+                <button
+                  onClick={() => {
+                    setActiveTab("system")
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#182338] hover:bg-[#223352] text-[#5794f2] text-xs font-mono font-semibold border border-[#5794f2]/40 transition"
+                  title="Switch to IR tab to run benchmarks first"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Run Benchmarks First</span>
+                </button>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
+              {(isRunningRagas || (activeEvalStatus?.isRunning && activeEvalStatus.type === "ragas")) && (
+                <button
+                  onClick={stopBenchmark}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded bg-[#e02f44] hover:bg-[#ff445a] text-white text-xs font-mono font-bold transition shadow-md animate-pulse"
+                  title="Halt active RAGAS evaluation immediately"
+                >
+                  <Square className="w-3.5 h-3.5 fill-current" />
+                  <span>Stop Evaluation</span>
+                </button>
+              )}
+
               <div className="text-[11px] font-mono px-2.5 py-1 rounded bg-[#1f1726] text-[#b877d9] border border-[#b877d9]/30">
                 {(() => {
                   const total =
@@ -3007,6 +3133,52 @@ export default function EvalPage() {
                 )}
                 <span>{copiedRagasCsv ? "Copied CSV!" : "Copy RAGAS CSV"}</span>
               </button>
+            </div>
+          </div>
+
+          {/* RAGAS Active Running Status Banner */}
+          {(isRunningRagas || (activeEvalStatus?.isRunning && activeEvalStatus.type === "ragas")) && (
+            <div className="bg-[#271536]/80 border border-[#b877d9]/40 rounded-lg p-3 flex items-center justify-between gap-3 text-xs font-mono text-[#e5d4f7] animate-pulse">
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin text-[#b877d9]" />
+                <span>
+                  {activeEvalStatus?.label || "Running RAGAS evaluation pipeline with judicial reasoning..."}
+                </span>
+              </div>
+              <button
+                onClick={stopBenchmark}
+                className="px-2.5 py-1 rounded bg-[#e02f44] hover:bg-[#ff445a] text-white text-xs font-bold transition flex items-center gap-1"
+              >
+                <Square className="w-3 h-3 fill-current" />
+                <span>Cancel</span>
+              </button>
+            </div>
+          )}
+
+          {/* RAGAS Framework Telemetry Header */}
+          <div className="bg-[#141619] border border-[#22252b] rounded-lg p-3 flex flex-wrap items-center justify-between gap-3 shadow-sm text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#b877d9]" />
+                <span className="font-mono font-bold text-xs uppercase text-white tracking-wider">
+                  RAGAS Framework Telemetry
+                </span>
+              </div>
+              <div className="h-4 w-px bg-[#262930]" />
+              <div className="flex items-center gap-2 text-xs font-mono text-[#8e9297]">
+                <span>LLM Judge:</span>
+                <span className="text-[#d8d9da] font-semibold">gpt-4o-mini (temperature: 0)</span>
+              </div>
+              <div className="h-4 w-px bg-[#262930]" />
+              <div className="flex items-center gap-2 text-xs font-mono text-[#8e9297]">
+                <span>Embedding Model:</span>
+                <span className="text-[#d8d9da] font-semibold">text-embedding-3-small</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 text-[#8e9297]">
+              <span>Engine:</span>
+              <span className="text-[#b877d9] font-semibold">Native TypeScript + OpenAI API</span>
             </div>
           </div>
 
@@ -3508,7 +3680,7 @@ export default function EvalPage() {
                 </button>
 
                 <button
-                  onClick={runRagasPipeline}
+                  onClick={() => runRagasPipeline()}
                   disabled={isRunningRagas}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono border transition shadow-sm ${
                     isRunningRagas
@@ -4741,6 +4913,186 @@ export default function EvalPage() {
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Execute Batch Test</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* RAGAS Small Batch Benchmark Modal */}
+    {isRagasBatchModalOpen && (
+      <div
+        className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setIsRagasBatchModalOpen(false)
+        }}
+      >
+        <div className="bg-[#14161a] border border-[#2e333d] rounded-xl shadow-2xl shadow-black/90 max-w-lg w-full p-5 space-y-5 font-sans animate-in zoom-in-95 duration-150">
+          {/* Modal Header */}
+          <div className="flex items-center justify-between border-b border-[#22252b] pb-3.5">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#271536] border border-[#b877d9]/40 flex items-center justify-center text-[#b877d9]">
+                <FlaskConical className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-mono font-bold text-sm text-white">
+                  Run RAGAS Small Batch Evaluation
+                </h3>
+                <p className="text-[11px] text-[#8e9297] font-mono">
+                  Evaluate interaction logs with GPT-4o-mini judicial scoring
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsRagasBatchModalOpen(false)}
+              className="p-1 rounded-md hover:bg-[#202328] text-[#8e9297] hover:text-white transition"
+              title="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Section 1: Sample Size Preset */}
+          <div className="space-y-2.5">
+            <label className="block text-xs font-mono font-semibold uppercase text-[#8e9297] tracking-wider">
+              1. Sample Size & Limit:
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: "3", label: "3 Logs", desc: "Fast smoke test (~10s)" },
+                { id: "5", label: "5 Logs", desc: "Quick check (~15s)" },
+                { id: "10", label: "10 Logs", desc: "Standard batch (~30s)" },
+              ].map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setRagasBatchPreset(p.id as any)}
+                  className={`p-2.5 rounded-lg border text-left transition flex flex-col justify-between ${
+                    ragasBatchPreset === p.id
+                      ? "bg-[#271536] border-[#b877d9] text-white"
+                      : "bg-[#181b1f] border-[#262930] hover:border-[#383e4a] text-[#8e9297]"
+                  }`}
+                >
+                  <span className="font-mono font-bold text-xs text-white">{p.label}</span>
+                  <span className="text-[10px] text-[#8e9297]">{p.desc}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 pt-1">
+              <div
+                onClick={() => setRagasBatchPreset("custom")}
+                className={`p-2.5 rounded-lg border cursor-pointer transition flex items-center justify-between gap-2 ${
+                  ragasBatchPreset === "custom"
+                    ? "bg-[#271536] border-[#b877d9] text-white"
+                    : "bg-[#181b1f] border-[#262930] hover:border-[#383e4a] text-[#8e9297]"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-xs text-white">Custom Count:</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={ragasBatchCustomCount}
+                    onChange={(e) => {
+                      setRagasBatchPreset("custom")
+                      setRagasBatchCustomCount(Math.max(1, parseInt(e.target.value) || 1))
+                    }}
+                    className="w-16 px-2 py-0.5 rounded bg-[#111215] border border-[#333842] font-mono text-xs text-white focus:outline-none focus:border-[#b877d9]"
+                  />
+                  <span className="text-[11px] text-[#8e9297]">logs</span>
+                </div>
+                <span className="text-[10px] text-[#8e9297]">Custom batch size</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Retrieval Method Filter */}
+          <div className="space-y-2">
+            <label className="block text-xs font-mono font-semibold uppercase text-[#8e9297] tracking-wider">
+              2. Target Retrieval Engine:
+            </label>
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { id: "all", label: "All Engines" },
+                { id: "sparse", label: "Sparse" },
+                { id: "dense", label: "Dense" },
+                { id: "hybrid", label: "Hybrid" },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setRagasBatchMethod(m.id)}
+                  className={`px-2.5 py-1.5 rounded-lg border text-xs font-mono transition text-center ${
+                    ragasBatchMethod === m.id
+                      ? "bg-[#271536] border-[#b877d9] text-[#d69eff] font-bold"
+                      : "bg-[#181b1f] border-[#262930] text-[#8e9297] hover:border-[#383e4a]"
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 3: Scenario Difficulty Filter */}
+          <div className="space-y-2">
+            <label className="block text-xs font-mono font-semibold uppercase text-[#8e9297] tracking-wider">
+              3. Scenario Difficulty:
+            </label>
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { id: "all", label: "All Tiers" },
+                { id: "easy", label: "Easy" },
+                { id: "medium", label: "Medium" },
+                { id: "hard", label: "Hard" },
+              ].map((d) => (
+                <button
+                  key={d.id}
+                  type="button"
+                  onClick={() => setRagasBatchDifficulty(d.id)}
+                  className={`px-2.5 py-1.5 rounded-lg border text-xs font-mono transition text-center ${
+                    ragasBatchDifficulty === d.id
+                      ? "bg-[#271536] border-[#b877d9] text-[#d69eff] font-bold"
+                      : "bg-[#181b1f] border-[#262930] text-[#8e9297] hover:border-[#383e4a]"
+                  }`}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 4: Force Option */}
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-[#181b1f] border border-[#262930]">
+            <input
+              type="checkbox"
+              id="ragasForceBatch"
+              checked={ragasBatchForce}
+              onChange={(e) => setRagasBatchForce(e.target.checked)}
+              className="w-4 h-4 accent-[#b877d9] rounded cursor-pointer"
+            />
+            <label htmlFor="ragasForceBatch" className="text-xs font-mono text-[#c7d0d9] cursor-pointer">
+              Force re-evaluate logs even if already scored in database
+            </label>
+          </div>
+
+          {/* Modal Actions */}
+          <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#22252b]">
+            <button
+              onClick={() => setIsRagasBatchModalOpen(false)}
+              className="px-4 py-2 rounded-lg bg-[#202328] hover:bg-[#2a2f38] text-[#c7d0d9] hover:text-white text-xs font-mono transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={runRagasBatch}
+              disabled={isRunningRagas}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#b877d9] hover:bg-[#c98be8] text-[#0b0c0e] text-xs font-mono font-bold transition disabled:opacity-50 shadow-md shadow-[#b877d9]/20"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>Execute RAGAS Batch</span>
             </button>
           </div>
         </div>
