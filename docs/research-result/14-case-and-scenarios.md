@@ -1,71 +1,88 @@
-# Experimental Case and Scenario Design
+# Experimental case and scenario design
 
-This document details the design of the primary investigation case and the evaluation scenarios used to test the LLM's reasoning and retrieval capabilities under different RAG configurations.
+The benchmark uses **The Nexus Data Breach**, one synthetic case with 150 evidence
+records and 30 questions (10 easy, 12 medium, 8 hard). These are 30 queries over
+one case, not 30 independently sampled cases. Difficulty labels are retained
+from the original dataset; they are not independently validated hop counts.
 
-## The Case: "The Nexus Data Breach"
+## Audited scenarios: nexus-ragas-v2
 
-To ensure a robust evaluation of Sparse, Dense, and Hybrid retrieval methods, the experimental design utilizes a single, large-scale synthetic investigation case. This approach provides a sufficient volume of evidence (150 items) to make the retrieval task challenging, directly addressing the limitations of smaller, context-window-fitting datasets.
+`eval-scenarios/scenarios.json` replaces the original reference answers following
+an AI-assisted internal evidence audit. Each row has a stable review identifier
+in `notes`, from `nexus-ragas-v2/Q01` through `Q30`. This is not independent human
+validation. The file retains the existing importer schema and zero-based evidence
+indices; it adds no fields that the database importer would silently ignore.
 
-### Case Summary
-On January 15, 2027, cybersecurity firm Nexus Dynamics discovered that their proprietary threat intelligence database was exfiltrated via an internal service account (`svc-threatfeed`) VPN tunnel between 02:00 and 05:00. Approximately 2.3 terabytes of data appeared on a dark web marketplace 72 hours later. The objective of the LLM investigator is to analyze the evidence and identify the culprit among five internal suspects.
+The case evidence is **unchanged** in this revision. The references now distinguish
+records, inferences, and unresolved questions. Marcus is the author-designated
+culprit, but references evaluate what the supplied records actually support:
 
-### Suspect Profiles
-The case is designed with five suspects, each serving a specific narrative purpose to test the LLM's deductive reasoning and ability to filter out red herrings:
+- Home occupancy and device/account activity do not independently identify a person.
+- A NAS directory structure does not prove file-content identity.
+- Cached marketplace pages do not prove who posted a listing.
+- A wallet deposit is not a verified payment for stolen data.
+- Viktor's bar visit ended before the breach began; it cannot cover the entire window.
+- Lack of activity on one account/device does not conclusively eliminate a suspect.
 
-1. **Marcus Chen (Senior Security Engineer)** - **The Culprit**. Has both the technical capability and a financial motive. His evidence trail contains deep forensic clues and contradictions regarding his whereabouts.
-2. **Dr. Sarah Okonkwo (Chief Technology Officer)** - **Strong Red Herring**. Has root-level access and a motive (budget disputes), and was in the office late during the night of the breach. However, digital forensics exonerate her.
-3. **Viktor Petrov (DevOps Engineer)** - **Suspicious Red Herring**. Manages the service accounts and lied about his departure time from the office. However, he has a solid alibi (at a bar) during the actual breach window.
-4. **James Whitfield (VP of Sales)** - **Motive but No Skills**. Extremely angry about a lost contract and in contact with a competitor, providing a strong motive. However, he completely lacks the technical skills or access required to execute the breach.
-5. **Aisha Rahman (Data Analyst)** - **Clearly Innocent**. Has read-only access and an ironclad alibi (on a commercial flight during the breach window).
+### Known corpus inconsistencies
 
-### Evidence Corpus (150 Items)
-The corpus consists of exactly 150 evidence items, distributed evenly (~30 items per suspect). This size ensures that poor retrieval strategies will fail to surface the necessary clues. 
+The ISP record (index 4) reports 142 Mbps for 2.5 hours, approximately 159.75 GB
+using decimal units. The router record (index 11) reports 2.3 TB for the same
+interval. References explicitly acknowledge this conflict instead of silently
+inventing a corrected corpus. The actual occupancy record (index 3) ends at
+05:35, not 05:30. Other corpus issues, including unspecified time zones, the
+calendar weekday, and interpretive text in evidence, remain documented in
+[the revision review](15-scenario-audit-v2.md).
 
-The evidence is categorized into various types to test multi-hop reasoning:
-- **Location & Alibi**: CCTV logs, badge scans, Uber receipts, smart home telemetry.
-- **Forensic**: Network logs, VPN connections, laptop audits, service account histories.
-- **Communication**: Emails, Signal messages, Slack logs.
-- **Financial**: Bank statements, crypto transactions, personal debts.
-- **Noise**: Routine daily activities (Netflix, food delivery, gym visits) designed to act as distractors during retrieval.
+## Scenario fields and scoring
 
-### Programmed Contradictions
-To evaluate the LLM's ability to detect deception, the ground truth contains specific programmed contradictions:
-1. **Marcus Chen's Alibi**: Marcus claims to have been asleep with his laptop off, but smart home telemetry shows his office was occupied with the desk lamp active until 05:30.
-2. **Marcus Chen's Technical Denial**: Marcus claims he didn't access company systems, but ISP metadata proves a sustained 142 Mbps upload from his home IP during the breach.
-3. **Viktor Petrov's Lie**: Viktor claims he left the office at 17:00, but CCTV and badge logs prove he left at 19:15 to go to a bar.
+- `requiredEvidenceIndices`: zero-based indices of relevant supporting records in
+  `cases-input/case-1.json`. Despite the legacy field name, these are relevance
+  labels, not a rule that every document is necessary for every valid answer.
+  They are not yet an exhaustive independent annotation of all relevance.
+- `referenceAnswer`: reviewed answer grounded in the current corpus. The Python
+  RAGAS runner supplies this as `ground_truth`; faithfulness is evaluated against
+  retrieved context, not by exact matching to this text. Recommendation correctness
+  is a separate score, not factual answer correctness.
+- `expectedActions`: accepted next-step targets/types for the existing recommendation
+  scorer. Uncertain deductions accept examination or clarification rather than
+  requiring a definitive submission.
+- `expectedContradictions`: directly conflicting statement/record pairs. Marcus's
+  occupancy and traffic are circumstantial challenges, so they are not labelled as
+  direct logical contradictions. Viktor's departure/destination conflicts remain.
+- `notes`: revision provenance and limitations. Audit notes and reference answers
+  are evaluation metadata, not generation context.
 
----
+`lib/rag.ts` currently uses a label-count-dependent retrieval budget: 8 for up to
+5 labelled records, otherwise `min(20, max(10, labelCount + 2))`, unless a caller
+supplies a limit. There is no fixed K=5 default in this path. Label changes can
+therefore change the retrieval budget; record that budget when comparing runs.
+Report results by dataset revision and query rather than mixing old/new runs.
 
-## Evaluation Scenarios (30 Tests)
+## Offline validation
 
-To systematically evaluate the RAG pipeline, 30 distinct scenarios were created. These scenarios vary in complexity and target different suspects, requiring the LLM to pull specific combinations of evidence.
+```sh
+npm run eval:validate
+npm run test:scenarios
+```
 
-The scenarios are stratified into three difficulty tiers:
+These commands require Node.js but no database, API keys, embeddings, or model
+calls. They check schema, references, contradiction endpoints, action targets,
+and selected factual regressions. They do not establish empirical validity or
+prove the completeness of semantic relevance labels.
 
-### 1. Easy Scenarios (10 Tests)
-- **Objective**: Test basic single-hop retrieval and direct fact-extraction.
-- **Characteristics**: Requires pulling 1-4 highly specific evidence items that directly answer a straightforward question.
-- **Examples**:
-  - *"What flight was Aisha Rahman on during the breach?"*
-  - *"Does James Whitfield have the technical capability to execute this breach?"*
+## Applying the scenarios to a benchmark database
 
-### 2. Medium Scenarios (12 Tests)
-- **Objective**: Test multi-hop retrieval and comparative analysis.
-- **Characteristics**: Requires synthesizing 7-10 pieces of evidence across different categories (e.g., comparing financial motives, or cross-referencing a suspect's claims with their digital footprint).
-- **Examples**:
-  - *"Evaluate Marcus Chen's alibi for the night of the breach."* (Requires finding the contradiction).
-  - *"Compare the financial profiles of all five suspects for suspicious activity."*
+Changing JSON in Git does not update existing database rows. Use a **separate
+benchmark database** containing the same 150 evidence records in source order
+for the new evaluation version. On that isolated database, the existing scenario
+seed/experiment flow can import these references, after offline validation.
 
-### 3. Hard Scenarios (8 Tests)
-- **Objective**: Test complex deduction, timeline reconstruction, and holistic case synthesis.
-- **Characteristics**: Requires retrieving 10-18 pieces of evidence, identifying hidden connections, filtering out strong red herrings, and formulating a definitive conclusion.
-- **Examples**:
-  - *"Trace the complete exfiltration chain from preparation through payment."*
-  - *"Cross-reference digital forensics with physical evidence to identify the breach perpetrator."*
-  - *"Submit your final deduction: who is the data thief and what is the complete reasoning?"*
-
-### Scenario Ground Truth
-Every scenario includes:
-- **`requiredEvidenceIndices`**: The exact evidence IDs the retriever *should* fetch. This is used to calculate **Retrieval Precision** and **Retrieval Recall**.
-- **`referenceAnswer`**: A human-authored ideal response. This is used by the RAGAS framework to evaluate the LLM's final response for **Answer Relevance**, **Faithfulness**, and **Context Accuracy**.
-- **`expectedActions`**: The ideal investigator actions the LLM should recommend based on the scenario context.
+Do not run `seed --force` against historical research data: it deletes case and
+interaction records. Also, `lib/eval.ts:seedScenarios()` deletes existing scenario
+rows; their old logs lose their scenario links (`onDelete: SetNull`). The normal
+Prisma seed skips scenario import when any scenarios exist. None of those paths
+is a version-preserving migration, so this PR does not execute them against the
+live application. Preserve the old database/results and rerun all three methods
+on the same revised benchmark rather than regrading old responses against new
+questions or mixing dataset versions.
