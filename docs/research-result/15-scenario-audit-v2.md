@@ -5,12 +5,14 @@
 The audit's central findings are supported by the JSON source, which matches the
 Drive files used for the report. Its proposed patch was **not ready to copy
 verbatim**. This revision rechecks the answers against the unchanged corpus and
-corrects remaining support gaps before replacing all 30 scenarios.
+corrects remaining support gaps in all 30 audited scenarios, stored separately in
+`eval-scenarios/scenario-v2.json`.
 
 The revision is scenario-only: it does not manufacture IP assignments, recovered
 file hashes, seller logs, or a source for the cryptocurrency deposit. It preserves
-150 evidence records and the 10/12/8 difficulty distribution. Existing Git history
-preserves the previous scenario definitions.
+150 evidence records and the 10/12/8 difficulty distribution. The original scenario
+definitions remain unchanged in `eval-scenarios/scenarios.json`. Offline validation
+and regression tests read the audited V2 file; seed paths continue to read V1.
 
 ## Corrections to the audit itself
 

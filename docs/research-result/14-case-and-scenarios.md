@@ -7,8 +7,9 @@ from the original dataset; they are not independently validated hop counts.
 
 ## Audited scenarios: nexus-ragas-v2
 
-`eval-scenarios/scenarios.json` replaces the original reference answers following
-an AI-assisted internal evidence audit. Each row has a stable review identifier
+`eval-scenarios/scenario-v2.json` contains the revised reference answers following
+an AI-assisted internal evidence audit. The original benchmark remains unchanged
+in `eval-scenarios/scenarios.json`. Each audited row has a stable review identifier
 in `notes`, from `nexus-ragas-v2/Q01` through `Q30`. This is not independent human
 validation. The file retains the existing importer schema and zero-based evidence
 indices; it adds no fields that the database importer would silently ignore.
@@ -71,12 +72,16 @@ calls. They check schema, references, contradiction endpoints, action targets,
 and selected factual regressions. They do not establish empirical validity or
 prove the completeness of semantic relevance labels.
 
-## Applying the scenarios to a benchmark database
+## Future import of the audited benchmark
 
-Changing JSON in Git does not update existing database rows. Use a **separate
-benchmark database** containing the same 150 evidence records in source order
-for the new evaluation version. On that isolated database, the existing scenario
-seed/experiment flow can import these references, after offline validation.
+Changing JSON in Git does not update existing database rows. The existing seed
+and experiment paths still read `eval-scenarios/scenarios.json`; they do not load
+`scenario-v2.json`. Version-aware import is deferred until additional verification
+of the audited benchmark. This PR changes neither seeding nor the evaluation UI.
+
+For a future V2 run, preserve historical scenario links and use a **separate
+benchmark database** containing the same 150 evidence records in source order,
+or implement version-preserving imports before loading the audited file.
 
 Do not run `seed --force` against historical research data: it deletes case and
 interaction records. Also, `lib/eval.ts:seedScenarios()` deletes existing scenario

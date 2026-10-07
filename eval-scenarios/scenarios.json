@@ -15,12 +15,12 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The booking record identifies United Flight NX-447, departing Washington Dulles at 23:30 on January 14. The boarding scan and manifest corroborate Aisha’s travel on that flight.",
-    "notes": "nexus-ragas-v2/Q01. AI-assisted internal review, 2026-10-07. Pertanyaan hanya meminta penerbangan, sedangkan jawaban acuan mewajibkan banyak rincian alibi. Zona waktu keberangkatan dan jendela pelanggaran belum dinyatakan. Manifest mencatat kedatangan, bukan log keberangkatan aktual. Klaim berada di udara sepanjang pelanggaran perlu dibatasi. Kehadiran dalam penerbangan juga tidak membuktikan tidak adanya akses jarak jauh. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Explain she was on United Flight NX-447 departing 23:30 Jan 14 from Dulles, boarding at 23:15 at Gate B12, seat 14C, landing Chicago O'Hare at 05:45 CST. She was physically in the air during the entire 02:00-05:00 breach window.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What technical access and tools are documented for James Whitfield?",
+    "prompt": "Does James Whitfield have the technical capability to execute this breach?",
     "difficulty": "easy",
     "requiredEvidenceIndices": [
       130,
@@ -35,8 +35,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "James has a standard business account with no administrative privileges, VPN access, or access to technical infrastructure. His company laptop contains Microsoft Office, Salesforce, Zoom, and Slack, with no development tools, terminal emulators, or VPN clients. HR records show no technical certifications or relevant training, and his account has no direct database-query history. These records describe his documented access and tools, not an absolute limit on everything he could know or do.",
-    "notes": "nexus-ragas-v2/Q02. AI-assisted internal review, 2026-10-07. Tidak memiliki sertifikasi, perangkat tertentu, atau riwayat kueri tidak membuktikan ketidakmampuan absolut. Bedakan kemampuan yang terdokumentasi dari kemungkinan penggunaan kredensial lain atau bantuan pihak lain. Usulan pertanyaan: What technical access and tools are documented for James Whitfield? References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "No. His IT profile shows basic user with no admin privileges and no VPN access. His laptop only has sales tools. He has zero technical certifications. His account has never executed a direct database query.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -53,8 +53,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The breach used the service account svc-threatfeed. The audit trail records that it was provisioned on October 3, 2026 by marcus.chen@nexusdynamics.com.",
-    "notes": "nexus-ragas-v2/Q03. AI-assisted internal review, 2026-10-07. Akun dan pembuatnya didukung langsung. Jangan menyamakan pembuatan akun dengan bukti bahwa pembuatnya menjalankan pelanggaran. IP dan hak ekspor adalah rincian tambahan, bukan syarat minimum pertanyaan. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "The service account svc-threatfeed was used. VPN logs show it connected 02:00-05:00 from residential IP 74.125.224.72. The account was created on October 3, 2026 by marcus.chen@nexusdynamics.com with elevated database export and bulk read privileges.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -62,7 +62,6 @@
     "difficulty": "easy",
     "requiredEvidenceIndices": [
       30,
-      31,
       36,
       37,
       38
@@ -74,8 +73,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Dr. Sarah Okonkwo left the office at approximately 01:30 on January 15, according to the badge record and security guard. Her own statement is consistent with this time. The Uber pickup at 01:35 and home entry at 02:08 corroborate the subsequent journey.",
-    "notes": "nexus-ragas-v2/Q04. AI-assisted internal review, 2026-10-07. E032 merupakan jawaban langsung tambahan yang tidak tercantum dalam label sumber. E038 dan E039 menguatkan urutan setelah keluar, tetapi tidak perlu diwajibkan untuk jawaban waktu keluar saja. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Dr. Okonkwo left at approximately 01:30 AM. Badge logs show her active until 01:30, the security guard logged her exit around 01:30, Uber picked her up at 01:35 arriving home at 02:05, and home security camera recorded her entering at 02:08.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -84,8 +83,7 @@
     "requiredEvidenceIndices": [
       60,
       70,
-      84,
-      85
+      84
     ],
     "expectedActions": [
       {
@@ -94,18 +92,16 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Viktor Petrov is the primary DevOps Engineer responsible for VPN gateway infrastructure and service-account provisioning. He has administrative rights to manage service-account credentials, including svc-threatfeed. The records document a scheduled password reset on October 15, 2026 and a service-account permission review in November.",
-    "notes": "nexus-ragas-v2/Q05. AI-assisted internal review, 2026-10-07. E085 menguatkan pengelolaan kredensial, tetapi tanggal rotasi bukan jawaban minimum untuk jabatan dan sistem. E086 adalah penguat tambahan terkait peninjauan matriks izin. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Viktor Petrov is the primary DevOps Engineer responsible for managing VPN gateway infrastructure and provisioning all service accounts. He has admin rights to rotate, reset, and manage all service account credentials including svc-threatfeed. He performed a scheduled password rotation for svc-threatfeed on October 15, 2026.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What potential financial or career-related motive indicators are documented for Marcus Chen?",
+    "prompt": "What financial motive evidence exists for Marcus Chen?",
     "difficulty": "easy",
     "requiredEvidenceIndices": [
       7,
       8,
-      9,
-      15,
       16
     ],
     "expectedActions": [
@@ -115,17 +111,16 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus has a $45,000 personal loan with $1,200 monthly payments and was passed over for the CISO role; a colleague described his resentment after that decision. A wallet linked to his private key received 15 ETH, valued in the record at approximately $48,000, on January 18. His Signal thread also discusses pending payment and marketplace verification. The debt and promotion rejection are potential motive indicators; the deposit and message suggest a transaction but do not establish that the funds came from stolen data.",
-    "notes": "nexus-ragas-v2/Q06. AI-assisted internal review, 2026-10-07. Pinjaman merupakan indikasi tekanan finansial. Kegagalan promosi lebih langsung terkait ketidakpuasan karier. Deposit setelah kejadian merupakan indikasi transaksi yang perlu ditelaah, bukan bukti otomatis bahwa dana berasal dari penjualan data. Klaim tepat 72 jam tidak dapat dihitung ulang dari tanggal tanpa waktu transaksi. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Three financial motive indicators: (1) Marcus was passed over for CISO promotion in December 2026, (2) he has an outstanding $45,000 personal loan with $1,200 monthly payments, (3) a cryptocurrency wallet linked to his private key received 15 ETH (~$48,000) exactly 72 hours after the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What do Aisha Rahman’s permissions and account logs show about her ability to use the documented breach method?",
+    "prompt": "Can Aisha Rahman's database access permissions support a data exfiltration?",
     "difficulty": "easy",
     "requiredEvidenceIndices": [
       97,
       98,
-      99,
       112,
       113
     ],
@@ -136,8 +131,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Aisha’s account is read-only and is not authorized for bulk exports, schema changes, or service-account credentials. Its audit shows ordinary analytical SELECT queries and no privilege-escalation requests, and monitoring records no login events or API calls in the stated interval spanning the breach. A separate record documents a legitimate 500 MB download on January 7, so restricted permissions must not be described as making every form of data extraction impossible. The records do not support use of her own authorized account for the documented service-account breach.",
-    "notes": "nexus-ragas-v2/Q07. AI-assisted internal review, 2026-10-07. Hak baca tidak sama dengan ketidakmampuan mengambil data melalui semua cara. E100 bahkan mencatat unduhan sah 500 MB. Kesimpulan harus dibatasi pada metode dan akun yang terdokumentasi. Usulan pertanyaan: What do Aisha Rahman’s permissions and account logs show about her ability to use the documented breach method? References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "No. Aisha has read-only database permissions and cannot execute bulk exports, modify schemas, or access service account credentials. Her query audit shows only standard SELECT queries. She has zero privilege escalation requests. Her account had zero activity during the breach window.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -146,7 +141,6 @@
     "requiredEvidenceIndices": [
       120,
       121,
-      122,
       123,
       124,
       125
@@ -158,17 +152,15 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "James attended a business dinner at Harbour Steak House until approximately 22:45 on January 14. The corporate card was charged $850 there at 22:50. His Uber left at 22:55 and arrived home at 23:20; the home camera recorded entry at 23:25. His phone was used until 00:15 and then inactive, which does not establish when he fell asleep.",
-    "notes": "nexus-ragas-v2/Q08. AI-assisted internal review, 2026-10-07. Jumlah $850 dan waktu 22:50 berada pada E123 (indeks 122), yang tidak tercantum dalam label sumber. Ketidakaktifan telepon tidak membuktikan tidur, terlebih tidur sebelum 02:00. Pertanyaan juga hanya menanyakan malam 14 Januari, bukan kepastian alibi seluruh jendela pelanggaran. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "James was at a business dinner at Harbour Steak House until 22:45, charged $850 on corporate card at 22:50. Uber took him home arriving 23:20. Home security camera shows entry at 23:25. Phone was browsing news until 00:15, then inactive until 07:00. He was home and asleep well before the 02:00 breach start.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Which suspects had documented account-related access or administrative control over svc-threatfeed?",
+    "prompt": "Which suspects had prior access to the svc-threatfeed service account?",
     "difficulty": "easy",
     "requiredEvidenceIndices": [
       1,
-      13,
-      19,
       41,
       60,
       70,
@@ -181,18 +173,15 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The records identify Marcus Chen, Dr. Sarah Okonkwo, and Viktor Petrov as having account-related access or administrative control. Marcus provisioned svc-threatfeed, Sarah could manage production service accounts, and Viktor could manage their credentials. A separate audit record shows that Marcus reset its password on January 13.",
-    "notes": "nexus-ragas-v2/Q09. AI-assisted internal review, 2026-10-07. Jawaban menyebut Marcus mereset kata sandi dua hari sebelum kejadian, tetapi E020 (indeks 19) tidak tercantum. E014 juga menguatkan akses Marcus ke repositori token. Hak administratif dan pembuatan akun tidak otomatis membuktikan penggunaan akun pada kejadian. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Three suspects had access: Marcus Chen created the account on Oct 3 2026. Dr. Sarah Okonkwo has root-level access to all systems including service accounts. Viktor Petrov has admin rights to rotate and manage all service account credentials and performed a scheduled rotation on Oct 15 2026. Marcus created the account AND reset its password 2 days before the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
     "prompt": "What cryptocurrency evidence exists related to the breach?",
     "difficulty": "easy",
     "requiredEvidenceIndices": [
-      6,
-      7,
-      15,
-      21
+      7
     ],
     "expectedActions": [
       {
@@ -201,8 +190,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The blockchain record identifies a 15 ETH deposit, valued at approximately $48,000, into a wallet controlled by Marcus’s private key on January 18. An email discusses escrow funding and delivery, a Signal message discusses pending payment after marketplace verification, and browser history records searches about cryptocurrency privacy and tumbling. These are potentially related indicators; they do not identify the source of the deposit as payment for stolen data. The record asserts a 72-hour interval but gives no transaction time with which to verify it.",
-    "notes": "nexus-ragas-v2/Q10. AI-assisted internal review, 2026-10-07. Email yang disebut dalam jawaban berada pada E007 (indeks 6), bukan pada label sumber yang hanya mencakup E008. Hubungan waktu dan tema mendukung dugaan, tetapi belum membuktikan deposit merupakan pembayaran data curian. Waktu transaksi diperlukan untuk memeriksa klaim tepat 72 jam. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Blockchain analysis identified a cryptocurrency wallet controlled by Marcus Chen's private key that received 15 ETH (approximately $48,000) on January 18, exactly 72 hours after the breach window. This timing matches the encrypted email from January 12 promising 'final delivery within 72 hours.'",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -225,24 +214,25 @@
         "target": "Marcus Chen"
       }
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "Marcus says he was asleep from around 23:00 and did not access company systems. Office-exit records and phone GPS are consistent with departure and his phone being at home. However, the home office registered occupancy and an active lamp from 01:45 to 05:35, and a neighbor saw late lights. These records raise doubts about the sleep account but do not identify the occupant. His work laptop had no recorded network activity, which does not exclude another device.",
-    "notes": "nexus-ragas-v2/Q11. AI-assisted internal review, 2026-10-07. Q11 menyebut 05:30, tetapi E004 berakhir 05:35. E024 mencatat pemesanan 20:00, bukan waktu pengantaran 20:00. Sensor dan lampu menunjukkan aktivitas ruang, bukan identitas penghuni atau kepastian Marcus terjaga. GPS menunjukkan posisi telepon. Streaming dapat berlangsung tanpa membuktikan siapa menonton. Tidak adanya aktivitas jaringan laptop kerja tidak sama dengan seluruh perangkat dinyatakan bersih. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Marcus claims he was asleep from 23:00 with his laptop off. His badge exit at 18:30 and parking CCTV at 18:35 confirm he left office normally. Phone GPS shows him at home. Netflix streaming until 23:25 and food delivery at 20:00 suggest a normal evening. HOWEVER, his smart home data shows his office was occupied with desk lamp on until 05:30 \u2014 directly contradicting his sleep claim. His neighbor also noticed unusually late lights around 03:00. His work laptop was clean, but this doesn't rule out use of a personal device.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What evidence supports or weakens the hypothesis that Dr. Sarah Okonkwo carried out the breach?",
+    "prompt": "Could Dr. Sarah Okonkwo have executed the breach?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
-      0,
       30,
       31,
       32,
-      33,
-      36,
       37,
       38,
-      39,
       40,
       41,
       45,
@@ -255,8 +245,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Sarah had root-level access, so technical opportunity cannot be dismissed. Her recorded activity was audit work; the last privileged action was at 01:12 and the office session used an internal subnet. She left around 01:30, took an Uber at 01:35, and entered home at 02:08. Her phone showed no activity after 02:15. Her company laptop had no evidence of unauthorized copying, staging, or exfiltration tools, and her account had no transfers exceeding 1 GB. The breach VPN used a residential address, but Sarah had already left the office before it began. These records do not directly link her to the breach and do not conclusively exclude other devices or credentials.",
-    "notes": "nexus-ragas-v2/Q12. AI-assisted internal review, 2026-10-07. Q12 menyebut telepon tidak aktif (E040) dan asal VPN residensial (E001), tetapi indeks 39 dan 0 tidak dicantumkan. E034 dapat membedakan sesi kantor Sarah dari sesi pelanggaran. Sarah keluar 01:30 sebelum jendela 02:00–05:00; lokasi kantor sebelumnya tidak menyingkirkan akses kemudian. Tidak ada transfer >1 GB per akun tidak menyingkirkan transfer berulang lebih kecil atau akun layanan. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Despite having root-level access to all systems (including svc-threatfeed), Dr. Okonkwo is unlikely to be the perpetrator. She was in the office until 01:30 running legitimate audit queries (confirmed by laptop logs). Her last privileged access was at 01:12. She took Uber home arriving 02:05, home camera shows 02:08 entry. Phone inactive after 02:15. Forensic analysis found no unauthorized exports. DLP logs show no large file transfers from her account. The breach VPN originated from a residential IP, not the office where she was working.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -283,22 +273,14 @@
       {
         "evidence_index_a": 61,
         "evidence_index_b": 62
-      },
-      {
-        "evidence_index_a": 61,
-        "evidence_index_b": 64
-      },
-      {
-        "evidence_index_a": 61,
-        "evidence_index_b": 65
       }
     ],
-    "referenceAnswer": "Viktor claimed to leave at 17:00 and go straight home. CCTV and badge records show departure around 19:15–19:17, followed by an Uber trip to The Rusty Nail. Bar CCTV places him there until 01:30, and phone GPS records arrival home at 01:55. His company-laptop session ended at 19:10, his administrative account had no recorded activity after 19:15, and monitoring found no VPN connection from his home IP during 02:00–05:00. His statement conflicts with the recorded evening, but the reason is unknown and the bar does not cover the breach window.",
-    "notes": "nexus-ragas-v2/Q13. AI-assisted internal review, 2026-10-07. Q13 mengubah last active session ended pada E078 menjadi last login. Viktor berada di rumah 01:55 sebelum kejadian 02:00, sehingga keberadaan di bar tidak memberikan alibi fisik seluruh jendela pelanggaran. Alasan malu tidak tersedia pada bukti. Bedakan kontradiksi nyata waktu keluar dari dugaan motif kebohongan. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Viktor lied about his departure time \u2014 he claimed 17:00 but CCTV shows 19:15, badge confirms 19:17. He Uber'd to The Rusty Nail bar at 19:20. Bar CCTV confirms his presence from 19:45 until closing at 01:30. Phone GPS corroborates. He arrived home at 01:55. His work laptop's last login was 19:10. His admin account had zero activity after 19:15. His home IP had zero VPN connections during the breach. Viktor lied about when he left work (likely embarrassed about going to a bar), but he has a solid alibi for the entire breach window.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Compare the suspects’ potential motives, documented technical access, and evidence linking them to the breach.",
+    "prompt": "Who had both motive AND technical opportunity for this breach?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
       0,
@@ -310,11 +292,7 @@
       34,
       35,
       41,
-      45,
-      55,
       67,
-      68,
-      70,
       126,
       130,
       136
@@ -326,20 +304,22 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus has the strongest combination of potential motive, account-related access, and suspicious activity in the supplied records: debt, rejection for promotion, creation of svc-threatfeed, and substantial traffic from his home connection during the breach. Sarah also has financial stress and administrative access, so motive plus access is not unique to Marcus. Viktor can manage credentials but his documented consulting deposits have legitimate explanations. James has financial pressure but no documented authorized technical access. These are comparative indicators, not a proof by elimination.",
-    "notes": "nexus-ragas-v2/Q14. AI-assisted internal review, 2026-10-07. Pertanyaan Q14 tentang motif dan kesempatan tidak mendukung hanya satu nama: Sarah juga memiliki tekanan finansial, konflik, dan hak administratif. Jawaban menyingkirkan Sarah lewat forensik yang tidak dilabelkan; akses Viktor dan pendapatan sahnya juga tidak dilabelkan. Pembayaran Marcus dan ketidakmampuan mutlak James berlebihan. Sebaiknya fokus pada perbandingan kekuatan dukungan, bukan syarat yang memaksa satu jawaban. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Marcus Chen had BOTH motive (CISO rejection, $45k debt, crypto payment received) AND technical opportunity (created svc-threatfeed, ISP shows upload from his home). Dr. Okonkwo has motive (budget dispute, divorce costs) and access (root level) but forensic evidence clears her. Viktor has access (manages service accounts) but motive is weak (legitimate consulting income). James has strong motive ($2M account loss, commission drop) but zero technical capability. Only Marcus has the intersection of motive, access, and incriminating digital forensics.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Compare the documented business or transaction-related communications with outside parties, separating them from internal messages.",
+    "prompt": "What communication evidence links suspects to outside parties?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
       6,
       15,
+      34,
       69,
       127,
       128,
-      134
+      134,
+      148
     ],
     "expectedActions": [
       {
@@ -348,12 +328,12 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus’s email refers to a package, escrow funding, and delivery, while his Signal thread with an unregistered contact refers to payment and marketplace verification. These suggest a possible transaction, but the counterpart’s identity and the package contents are not established. James exchanged an opportunities email and a call with a competitor CEO; forwarding a non-proprietary pricing document to his own personal email does not show that he sent it to the competitor. Viktor’s client emails describe infrastructure reviews. These records support distinguishing documented external contacts from assumptions about criminal coordination.",
-    "notes": "nexus-ragas-v2/Q15. AI-assisted internal review, 2026-10-07. Q15 memasukkan email internal Sarah dan permintaan rapat internal James ke pertanyaan kontak pihak luar. Penerima email E007 tidak teridentifikasi sebagai pembeli. Penerusan dokumen ke email pribadi bukan bukti dokumen dikirim ke kompetitor. E055/E054 memuat kontak pengacara Sarah jika seluruh pihak luar diminta. Lebih aman membatasi pada kontak terkait bisnis dan transaksi. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Marcus Chen: encrypted ProtonMail email about 'the package' being ready on the 15th, Signal messages about 'payment pending' \u2014 these link to an unknown buyer. James Whitfield: email from competitor CEO about 'opportunities', forwarded non-classified pricing, phone call to competitor \u2014 but no classified data exchange. Viktor Petrov: consulting client emails, all legitimate with clear scopes. Dr. Okonkwo: heated email to CEO about budget cuts \u2014 internal frustration, not external contact. Only Marcus's communications suggest criminal coordination with an outside party.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What evidence weakens the hypothesis that Aisha Rahman or James Whitfield directly executed the documented breach, and what limitations remain?",
+    "prompt": "Which suspects can be definitively eliminated from the investigation?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
       91,
@@ -373,8 +353,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Aisha’s travel records, restricted account permissions, and absence of recorded account activity weaken the hypothesis that she used her own account for the documented breach. James’s account has no VPN or administrative access, and his company laptop has only business tools. These records reduce support for their direct participation through documented accounts and devices, but do not conclusively exclude every form of involvement.",
-    "notes": "nexus-ragas-v2/Q16. AI-assisted internal review, 2026-10-07. Definitively eliminated pada Q16 tidak didukung. Penerbangan, mode pesawat, hak baca, dan tidak adanya aktivitas akun bukan pembuktian ketidakmungkinan keterlibatan. Klaim sertifikasi James memerlukan E133 (indeks 132). Sebaiknya tanyakan bukti yang melemahkan dugaan dengan batas eksplisit. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Two suspects can be definitively eliminated. (1) Aisha Rahman \u2014 she was physically on United Flight NX-447 from 23:30 to 05:45, with boarding scan, manifest, airplane mode, and zero network activity confirming she was in the air during the entire breach. She also has read-only database access making exfiltration impossible from her account. (2) James Whitfield \u2014 he has no admin privileges, no VPN access, no technical tools, zero technical certifications, and has never executed a database query. He physically cannot perform the technical steps required for this breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -398,12 +378,12 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus has a $45,000 loan and a 15 ETH deposit on January 18 whose source is not explained in these records. Sarah has $30,000 legal costs and a savings decline from $85,000 to $12,000. Viktor’s $15,000 consulting deposits have documented contract explanations. Aisha’s screening report lists no outstanding debts. James lost a $2.1 million annual contract and experienced a 40% commission decline. Marcus’s deposit merits further explanation, but it is not established as breach proceeds.",
-    "notes": "nexus-ragas-v2/Q17. AI-assisted internal review, 2026-10-07. Profil finansial Q17 secara umum didukung, tetapi payment mengasumsikan asal deposit. Tidak adanya pendapatan mencurigakan berarti tidak tercatat dalam korpus, bukan audit seluruh keuangan. Klaim James tidak punya sarana teknis bukan cakupan pertanyaan dan tidak didukung label. Nilai kontrak pada E127 adalah $2,1 juta, bukan angka $2 juta persis. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Marcus Chen: $45K personal loan + received 15 ETH ($48K) post-breach \u2014 the crypto payment is the strongest financial indicator. Dr. Okonkwo: $30K divorce legal fees, savings dropped from $85K to $12K \u2014 financial stress but no suspicious income. Viktor: consulting LLC with $15K in legitimate, documented income \u2014 transparent and not suspicious. Aisha: clean financial record, no debts \u2014 no indicators. James: 40% commission drop, lost $2M account \u2014 financial pressure but no technical means and no suspicious payments. Only Marcus shows the combination of financial pressure AND unexplained incoming funds timed to the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Trace the documented creation, credential management, and latest recorded reset of svc-threatfeed.",
+    "prompt": "Trace the service account svc-threatfeed: who created it, who managed it, and who last changed its credentials?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
       1,
@@ -420,16 +400,14 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus provisioned svc-threatfeed on October 3, 2026. Viktor had credential-management rights, performed a scheduled reset on October 15, and reviewed the permission matrix in November. The latest reset documented in this corpus was performed by Marcus on January 13 at 14:22, before the stated next scheduled rotation on February 1. His account also accessed the credentials repository on January 13. The reset is outside the stated schedule; the records do not establish whether it was authorized.",
-    "notes": "nexus-ragas-v2/Q18. AI-assisted internal review, 2026-10-07. Q18 menyebut unauthorized reset meskipun E020 hanya menjelaskan reset di luar jadwal. Tidak ada catatan penolakan persetujuan. Jadwal quarterly pada E085 dan tanggal berikut 1 Februari memerlukan kebijakan yang jelas, bukan dugaan otomatis bahwa reset tidak sah. Hak Sarah juga relevan jika who managed it dimaksudkan semua administrator. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "svc-threatfeed lifecycle: Created on October 3, 2026 by Marcus Chen with elevated database export privileges. Viktor Petrov performed a routine scheduled password rotation on October 15, 2026 as part of quarterly credential hygiene (he also audited service account permissions in November). Then on January 13 \u2014 just 2 days before the breach \u2014 Marcus Chen reset the password again, outside the normal rotation schedule (next rotation wasn't due until February 1). Marcus also accessed the credentials vault repository on January 13 via Git. Marcus both created the account AND performed the last unauthorized credential reset.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
     "prompt": "Was Viktor Petrov's consulting side business a cover for selling company data?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
-      65,
-      66,
       67,
       68,
       69,
@@ -445,8 +423,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The supplied records do not substantiate that PetrovTech was a cover for selling company data. Its deposits match documented infrastructure-review work and invoices, and Viktor discussed the business openly. Monitoring found no VPN connections from his home IP during the breach and no activity from his administrative account after 19:15. His bar visit ended before the breach window, so it must not be used as an alibi for 02:00–05:00.",
-    "notes": "nexus-ragas-v2/Q19. AI-assisted internal review, 2026-10-07. Q19 secara nyata salah menempatkan Viktor di bar selama jendela pelanggaran. E066/E067 menunjukkan pulang sebelum 02:00 dan tidak tercantum pada label. Struktur perusahaan sah tidak dengan sendirinya membuktikan seluruh kegiatan sah. Bukti mendukung tidak adanya dukungan terhadap teori, bukan penolakan mutlak. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "No, the evidence does not support this theory. His consulting LLC has legitimate registered business structure. His income of $15K comes from two documented contracts with small businesses for infrastructure security reviews, with clear scopes of work. His bank deposits are consistent with invoiced amounts. His colleague confirms he talks openly about the consulting work. Most importantly, his home IP had zero VPN connections during the breach, and his admin account had zero activity after 19:15. He was verifiably at a bar during the breach window.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -469,8 +447,8 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The email from the competitor CEO discusses opportunities, and James made a recorded call to that CEO, but the call’s contents are not provided. The only documented forwarded material was a non-proprietary pricing overview sent to his own personal email. His frustration and internal meeting request provide employment-related context. These records do not establish a connection between the competitor contact and the breach; recruitment is a possible interpretation, not a verified fact.",
-    "notes": "nexus-ragas-v2/Q20. AI-assisted internal review, 2026-10-07. Q20 menjadikan opportunities sebagai rekrutmen pasti dan pertemuan strategic direction sebagai bukan spionase pasti. E136 mengandung interpretasi penulis di dalam dokumen. Klaim kemampuan teknis absolut tidak didukung label dan sebaiknya dihapus. Tidak ada transkrip panggilan E135 untuk memastikan topik. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "While suspicious on the surface, the evidence suggests James's competitor contact was about job opportunities, not data theft. He lost a $2M account and was angry. The competitor CEO's email discussed 'opportunities' (likely recruitment). James forwarded only non-classified competitive pricing \u2014 no proprietary data. His angry email about 'making them pay' appears to be about compensation frustration, not criminal intent. His assistant describes him as 'all bark and no bite' who can't even reset his own password. He requested a meeting with the CEO about 'strategic direction' \u2014 an employment concern, not espionage. He completely lacks the technical ability to execute the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
@@ -493,12 +471,12 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Sarah had root-level service-account management access. Her recorded activity consisted of audit queries, with a last privileged action at 01:12, no unauthorized copying tools on her company laptop, and no transfers over 1 GB from her account. Marcus provisioned svc-threatfeed, accessed a repository containing its tokens on January 13, and reset its password that day before the next scheduled rotation. The supplied records show more recent credential-related activity for Marcus, without proving that all possible activity by others was observed.",
-    "notes": "nexus-ragas-v2/Q21. AI-assisted internal review, 2026-10-07. Q21 hampir seluruhnya didukung, tetapi akses repositori tidak membuktikan token dibaca; no large file transfers harus mengikuti ambang >1 GB. Pernyataan only Marcus dalam periode tertentu harus dibatasi pada catatan yang tersedia. Reset di luar jadwal belum berarti tindakan tidak sah. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Both have access to svc-threatfeed, but their activity patterns differ significantly. Dr. Okonkwo has root-level access to all systems but her activity that night was legitimate audit queries (confirmed by laptop logs). Her last privileged access was at 01:12. She had no large file transfers and forensic analysis found no unauthorized exports. Marcus Chen created svc-threatfeed, accessed its credentials via Git on Jan 13, and reset its password on Jan 13 outside the normal rotation schedule. While both technically could manage the account, only Marcus actively manipulated its credentials in the days before the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "What digital records and recovered artefacts are relevant to the breach, and what do they establish or leave uncertain?",
+    "prompt": "What digital forensic evidence exists from the night of the breach?",
     "difficulty": "medium",
     "requiredEvidenceIndices": [
       0,
@@ -516,91 +494,74 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "The records include a svc-threatfeed VPN connection from 02:00 to 05:00, concurrent outbound traffic from Marcus’s residence, marketplace-page cache fragments and Tor on his personal laptop, and a NAS directory structure matching the company database’s hierarchy. His browser searches about secure transfer and cryptocurrency privacy occurred on January 8–13, not necessarily on the breach night. His work laptop had no recorded network activity. The ISP rate of 142 Mbps over 2.5 hours implies about 160 GB, while the router reports 2.3 TB for that interval; these figures conflict. A matching directory structure and cached listing do not prove copied file contents or authorship of the listing.",
-    "notes": "nexus-ragas-v2/Q22. AI-assisted internal review, 2026-10-07. Q22 meminta bukti dari malam kejadian, tetapi E022 adalah pencarian 8–13 Januari dan artefak laptop/NAS tidak bertanggal malam itu. Eksklusif memakai perangkat pribadi tidak terbukti. E005/E012 konflik kuantitas dan E021 hanya struktur direktori, bukan salinan konten. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Key digital forensics from the breach night: (1) VPN logs show svc-threatfeed connection from residential IP 02:00-05:00, (2) ISP metadata shows sustained 142 Mbps upstream from Marcus's home IP 02:15-04:45, (3) Marcus's home router logged 2.3TB outbound data transfer 02:15-04:45, (4) Marcus's personal laptop has TOR browser with cached ShadowVault marketplace pages, (5) Marcus's personal NAS contains a directory matching the exfiltrated database structure, (6) Browser history shows research on secure file transfer and crypto tumbling. Notably, Marcus's WORK laptop was clean \u2014 he used personal devices exclusively.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Identify documented conflicts and circumstantial challenges to the suspects’ statements, and distinguish their evidential strength.",
+    "prompt": "Identify ALL contradictions in suspect statements across the entire case.",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       2,
       3,
       4,
-      18,
-      22,
       61,
-      62,
-      63,
-      64,
-      65
+      62
     ],
     "expectedActions": [
       {
         "action_type": "REVIEW_TIMELINE",
         "target": "Marcus Chen"
-      },
-      {
-        "action_type": "REVIEW_TIMELINE",
-        "target": "Viktor Petrov"
       }
     ],
     "expectedContradictions": [
       {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      },
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 4
+      },
+      {
         "evidence_index_a": 61,
         "evidence_index_b": 62
-      },
-      {
-        "evidence_index_a": 61,
-        "evidence_index_b": 63
-      },
-      {
-        "evidence_index_a": 61,
-        "evidence_index_b": 64
-      },
-      {
-        "evidence_index_a": 61,
-        "evidence_index_b": 65
       }
     ],
-    "referenceAnswer": "Viktor’s claimed 17:00 departure conflicts directly with CCTV at 19:15 and the badge exit at 19:17. His claim of going straight home and watching TV also conflicts with the Uber trip and bar CCTV. Marcus’s claim of sleeping is challenged by office occupancy, lights, and account streaming, but those do not identify the person using the room or account. His denial of company access is challenged by concurrent home traffic, although traffic alone does not establish its destination. Distinguish direct record conflicts from circumstantial challenges.",
-    "notes": "nexus-ragas-v2/Q23. AI-assisted internal review, 2026-10-07. Q23 ALL dan three contradictions memaksakan kelengkapan yang tidak dibuktikan. E063 hanya waktu keluar, bukan perjalanan ke bar; tambahkan E065/E066 untuk straight home. E004 tidak mengidentifikasi orang; upload tidak membuktikan akses sistem perusahaan. Streaming E023/neighbor E019 juga menantang cerita tidur sebagai indikator, bukan kontradiksi identitas pasti. Pasangan ekspektasi harus dipisahkan antara pertentangan langsung dan indikasi. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "referenceAnswer": "Three contradictions exist. (1) Marcus Chen claimed he was asleep from 23:00 with laptop off, but smart home data shows his office was occupied with desk lamp on until 05:30. (2) Marcus claimed he didn't access company systems, but ISP metadata proves a sustained high-bandwidth upload from his home IP during 02:15-04:45. (3) Viktor Petrov claimed he left the office at 17:00 and went straight home, but CCTV shows he actually left at 19:15 and went to a bar. The first two contradictions are critical \u2014 they directly link Marcus to the breach. Viktor's lie is about going to a bar, which is embarrassing but not criminal.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Construct the best-supported hypothesis linking preparation, the breach, and the later transaction records, identifying unresolved links.",
+    "prompt": "Trace the complete exfiltration chain from preparation through payment.",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
-      0,
       1,
-      4,
-      5,
       6,
-      7,
-      11,
       13,
-      15,
       19,
+      0,
+      4,
+      11,
       20,
+      5,
+      7,
+      15,
       21
     ],
     "expectedActions": [
       {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
+        "action_type": "SUBMIT_DEDUCTION",
         "target": "Marcus Chen"
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "A plausible sequence is credential preparation (repository access and the January 13 reset), transaction-related communications, the January 15 service-account VPN session and concurrent home traffic, followed by a January 18 wallet deposit. Marketplace cache fragments and a matching NAS directory structure provide additional links. The documents do not establish the identity of the VPN operator, prove that NAS contents match the stolen data, show that Marcus posted the listing, date the Signal message, or establish the source of the deposit. The transfer figures remain inconsistent.",
-    "notes": "nexus-ragas-v2/Q24. AI-assisted internal review, 2026-10-07. Q24 memberi tanggal 15 Januari pada pesan Signal tanpa waktu pada E016; menyebut masuk ruang 01:45 tanpa E004 dalam label; mengklaim pemasangan listing, staging NAS, pembeli, dan identitas pengguna sebagai fakta. Sensor, cache, dan struktur folder tidak mendukung semua tindakan itu. Kuantitas transfer salah konsisten. Rantai lengkap harus menjadi hipotesis dengan celah bukti. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Complete chain: PREPARATION \u2014 Oct 3: Marcus created svc-threatfeed with export privileges. Jan 8-13: researched secure file transfer and crypto tumbling. Jan 12: sent encrypted email to buyer confirming 'package ready on the 15th.' Jan 13: accessed credentials vault via Git AND reset svc-threatfeed password outside schedule. EXECUTION \u2014 Jan 15 01:45: entered home office (smart home). 02:00: initiated VPN using svc-threatfeed from home IP. 02:15-04:45: transferred 2.3TB (ISP confirms 142 Mbps upstream, router confirms 2.3TB). 05:00: VPN terminated. Data staged on personal NAS. POST-BREACH \u2014 TOR browser used to list on ShadowVault marketplace. Jan 15: Signal message 'payment pending.' Jan 18: received 15 ETH (~$48K) in crypto wallet.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Which suspect should be prioritized for clarification, and what evidence-grounded questions should be asked?",
+    "prompt": "Who should be interrogated next as the primary suspect, and what questions should be asked?",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       0,
@@ -619,16 +580,20 @@
         "target": "Marcus Chen"
       }
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "Marcus should be prioritized for clarification. Ask who was in the home office during 01:45–05:35; why he reset svc-threatfeed on January 13 before the February 1 scheduled rotation; what access his account made to the credentials repository; what explains the home traffic; what the package and escrow email refers to; and what explains the January 18 wallet deposit. These questions seek explanations and do not presume that every suspicious indicator proves guilt.",
-    "notes": "nexus-ragas-v2/Q25. AI-assisted internal review, 2026-10-07. Q25 memuat kuantitas E012 dan NAS E021 tanpa label indeks 11/20. Waktu sensor harus 05:35. Jan13 ke Feb1 adalah 19 hari, bukan tepat dua minggu. Pertanyaan interogasi perlu meminta penjelasan daripada menyatakan salinan dan pembayaran terbukti. Sesuaikan kata interogasi dengan rekomendasi diskusi/analisis yang dapat dilakukan aplikasi. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Marcus Chen should be interrogated immediately. Key questions: (1) Why does your smart home show office occupancy until 05:30 when you claim you were asleep? (2) Why did you reset svc-threatfeed credentials on Jan 13, two weeks before the scheduled rotation? (3) Why did you access the credentials vault repository on Jan 13? (4) Can you explain the 2.3TB upload from your home IP during the breach? (5) Who is the contact in your encrypted ProtonMail discussion about 'the package'? (6) Explain the 15 ETH deposit 72 hours post-breach. (7) Why does your personal NAS contain a copy of the threat intelligence database directory structure?",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Reconstruct the recorded timeline associated with Marcus Chen and his devices on January 14–15, separating statements from observations.",
+    "prompt": "Reconstruct Marcus Chen's complete activity timeline for January 14-15.",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
-      0,
       2,
       3,
       4,
@@ -636,7 +601,6 @@
       11,
       12,
       14,
-      17,
       18,
       22,
       23,
@@ -648,17 +612,21 @@
         "target": "Marcus Chen"
       }
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "On January 14, the badge exit was recorded at 18:30, vehicle departure at 18:35, Spotify activity at 19:00–20:15, a dinner order at 20:00, and Netflix streaming at 20:30–23:25. Marcus claimed to sleep from around 23:00. On January 15, office occupancy and lamp activity were recorded from 01:45 to 05:35, the VPN session ran 02:00–05:00, and home traffic was recorded at 02:15–04:45. A neighbor noticed lights around 03:00. The phone remained at home, and the work laptop had no recorded network activity. These are device and location records, not a complete observation of Marcus’s personal actions; transfer figures require correction.",
-    "notes": "nexus-ragas-v2/Q26. AI-assisted internal review, 2026-10-07. Q26 ACTUAL menyamakan telemetri dengan aktivitas orang; 05:30 salah, 05:35 benar tetapi clearing/lamp off tidak disebut eksplisit. E001 untuk VPN, E018 untuk laptop kerja, serta E006/E021 untuk perangkat pribadi tidak dilabelkan. 20:00 adalah waktu order. Tidak ada bukti perangkat mati sepanjang waktu atau personal devices used exclusively. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Jan 14: Left office at 18:30 (badge), car departed 18:35 (CCTV). Spotify at home 19:00-20:15. Food delivery at 20:00. Netflix streaming 20:30-23:25. CLAIMED: fell asleep around 23:00. ACTUAL: Jan 15 01:45 \u2014 smart home office sensor activated, desk lamp on. 02:00 \u2014 VPN tunnel initiated via svc-threatfeed from home IP. 02:15-04:45 \u2014 sustained 142 Mbps upstream, 2.3TB total (ISP + router logs). Phone GPS stationary at home (used personal devices, not phone). ~03:00 \u2014 neighbor observed lights on. 05:00 \u2014 VPN terminated. 05:30 \u2014 office occupancy sensor cleared, lamp off. Work laptop remained powered off entire time (used personal laptop + NAS instead).",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Cross-reference digital and location records to identify the most strongly implicated suspect and the remaining evidential gaps.",
+    "prompt": "Cross-reference digital forensics with physical evidence to identify the breach perpetrator.",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       0,
-      2,
       3,
       4,
       5,
@@ -679,21 +647,17 @@
     ],
     "expectedActions": [
       {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
+        "action_type": "SUBMIT_DEDUCTION",
         "target": "Marcus Chen"
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus is the most strongly implicated suspect in the supplied records: the service-account VPN overlaps substantial traffic from his home connection, his personal laptop has marketplace-related cache fragments, and his NAS has a directory structure matching the company database. Occupancy records challenge his sleep statement but do not identify the occupant. Other suspects’ account, device, and location records provide fewer direct links; they are not conclusively eliminated. The explicit IP-to-residence mapping, identity of the VPN operator, and NAS file contents are not established. The transfer rate and volume conflict.",
-    "notes": "nexus-ragas-v2/Q27. AI-assisted internal review, 2026-10-07. Q27 menyingkirkan Sarah karena berada di kantor, padahal keluar sebelum pelanggaran. E001 tidak menghubungkan IP eksplisit ke Marcus; E005/E012 hanya rumahnya. Sensor tidak membuktikan orang terjaga. Struktur NAS tidak membuktikan isi data curian. Cache tidak membuktikan memasang listing; laptop tanpa aktivitas tidak membuktikan sengaja dijaga bersih. Bentuk eliminasi mutlak tidak sah. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "Systematic elimination: The VPN originated from a residential IP (not office), eliminating Dr. Okonkwo (she was IN the office, VPN from office subnet). Viktor's home IP had zero VPN connections. Aisha's phone was in airplane mode and laptop powered off. James has no VPN access or technical tools. Only Marcus remains: his home IP matches the VPN source, his ISP confirms the upload bandwidth, his router confirms 2.3TB transfer, his smart home proves he was awake and active, his personal laptop has TOR/marketplace tools, and his NAS has the stolen data. His work laptop was intentionally kept clean as a false alibi. All digital and physical evidence converges on Marcus Chen.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Which records connect Marcus Chen to the marketplace and a possible transaction, and which parts of that explanation remain unverified?",
+    "prompt": "Why did the stolen data appear on the dark web and which suspect is connected to the marketplace?",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       5,
@@ -710,12 +674,12 @@
       }
     ],
     "expectedContradictions": [],
-    "referenceAnswer": "Marcus’s personal laptop contains Tor and cached fragments matching ShadowVault’s listing page, where the evidence record says the stolen data later appeared. His browser history includes secure-transfer and cryptocurrency-privacy searches. His email discusses a package, escrow and delivery, his Signal thread refers to marketplace verification and payment, and his wallet received 15 ETH on January 18. His NAS has a matching directory structure. Together these suggest a possible sale-related connection, but do not establish listing authorship, copied database contents or payment origin. The exact 72-hour relationship cannot be independently reconstructed from the timestamps supplied.",
-    "notes": "nexus-ragas-v2/Q28. AI-assisted internal review, 2026-10-07. Q28 menganggap penjualan sebagai fakta, padahal hubungan transaksi masih berupa inferensi. Sumber tidak membuktikan listing diposting Marcus, NAS berisi salinan, deposit merupakan hasil penjualan, atau waktu tepat 72 jam. Informasi marketplace 72 jam berasal dari deskripsi kasus dan harus dinyatakan sebagai konteks tetap jika bukan dokumen retrieval. Email 12 Januari tidak menyebut titik awal penghitungan 72 jam secara eksplisit. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented."
+    "referenceAnswer": "The data appeared on the ShadowVault dark web marketplace 72 hours after the breach. Marcus Chen is directly connected: (1) his personal laptop has TOR browser with cached ShadowVault listing pages, (2) his browser history shows research on secure file transfer and cryptocurrency tumbling, (3) his personal NAS contains a backup matching the exfiltrated database structure, (4) his encrypted email from Jan 12 promised delivery 'within 72 hours,' exactly matching the timeline, (5) his Signal messages discuss 'payment pending' awaiting marketplace verification, (6) he received 15 ETH payment on Jan 18, precisely 72 hours after the breach.",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "Present the strongest evidence-based case concerning the most implicated suspect, distinguishing facts, inferences, and unresolved gaps.",
+    "prompt": "Build the complete prosecution case: present all incriminating evidence against the culprit.",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       0,
@@ -739,49 +703,51 @@
     ],
     "expectedActions": [
       {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
+        "action_type": "SUBMIT_DEDUCTION",
         "target": "Marcus Chen"
       }
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "The strongest evidence-based case concerns Marcus: potential financial and career pressure; creation and later reset of svc-threatfeed; access to a repository containing its credentials; transaction-related messages; substantial concurrent traffic from his residence; marketplace cache fragments; a matching NAS directory structure; and a later wallet deposit. His sleep claim is challenged by room and device records. This supports prioritizing him, but the transfer measurements conflict and the operator identity, exact data contents, marketplace seller identity, and payment origin are not conclusively established. The account creator is not automatically the breach operator.",
-    "notes": "nexus-ragas-v2/Q29. AI-assisted internal review, 2026-10-07. Q29 all incriminating dan prosecution memaksakan narasi bersalah tanpa ketidakpastian. 05:30 salah; laptop sengaja bersih tidak terbukti dan E018 tidak dilabelkan. Struktur NAS bukan bukti konten, cache bukan bukti posting, deposit bukan payment terverifikasi. Jumlah 18 label menggabungkan penguat, asumsi, dan bukti inti tanpa kriteria. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      },
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 4
+      }
+    ],
+    "referenceAnswer": "Prosecution case against Marcus Chen: MOTIVE \u2014 passed over for CISO (bitter, per colleague), $45K personal debt creating financial pressure. PREPARATION \u2014 created svc-threatfeed with export privileges (Oct 3), accessed credentials vault (Jan 13), reset account password outside schedule (Jan 13), sent encrypted email coordinating delivery timing (Jan 12), researched secure transfer and crypto tumbling (Jan 8-13). EXECUTION \u2014 smart home proves office occupancy 01:45-05:30, ISP confirms 142 Mbps upload from his home IP, router logs confirm 2.3TB transfer, VPN tunnel active 02:00-05:00 using svc-threatfeed. Used personal devices (work laptop deliberately kept clean). EVIDENCE OF GUILT \u2014 personal NAS contains stolen database structure, TOR browser has cached marketplace pages, Signal messages discuss pending payment. PROFIT \u2014 received 15 ETH ($48K) in crypto wallet 72 hours later, matching his email's promised timeline. CONSCIOUSNESS OF GUILT \u2014 lied about being asleep (contradicted by smart home + ISP + neighbor).",
+    "notes": ""
   },
   {
     "caseTitle": "The Nexus Data Breach",
-    "prompt": "State the most strongly supported deduction about the breach and explain its evidence and remaining uncertainty.",
+    "prompt": "Submit your final deduction: who is the data thief and what is the complete reasoning?",
     "difficulty": "hard",
     "requiredEvidenceIndices": [
       0,
       1,
-      2,
       3,
       4,
-      5,
       6,
       7,
-      8,
       11,
-      16,
       19,
       20
     ],
     "expectedActions": [
       {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
+        "action_type": "SUBMIT_DEDUCTION",
         "target": "Marcus Chen"
       }
     ],
-    "expectedContradictions": [],
-    "referenceAnswer": "Marcus Chen is the most strongly implicated suspect under the supplied evidence. He provisioned svc-threatfeed and reset its password before the breach, and substantial traffic from his residence overlaps the recorded VPN session. His communications, marketplace cache fragments, NAS directory structure, and later wallet deposit strengthen the hypothesis. Debt and promotion rejection provide potential motive. However, the records do not conclusively establish the VPN operator, copied file contents, listing author, payment source, or exclusive use of personal devices, and the transfer measurements conflict. His sleep statement is challenged by occupancy and lamp activity until 05:35.",
-    "notes": "nexus-ragas-v2/Q30. AI-assisted internal review, 2026-10-07. Q30 pasangan kontradiksi membutuhkan E003, tetapi indeks 2 tidak dilabelkan. Motif utang/promosi perlu E017/E009; Tor/marketplace perlu E006; laptop perlu E018 jika tetap disebut. Jawaban mengklaim identitas operator, NAS salinan, listing, eksklusivitas perangkat, payment, dan waktu05:30 tanpa dukungan memadai. Pertanyaan final deduction tetap dapat digunakan dengan jawaban bersyarat. References distinguish observations from inference; requiredEvidenceIndices denotes relevant supporting records, not an all-documents sufficiency requirement. Existing corpus inconsistencies remain explicit; no new case facts were invented. Marcus occupancy/traffic is circumstantial; only directly conflicting Viktor statement/record pairs are retained in expectedContradictions."
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 2,
+        "evidence_index_b": 3
+      }
+    ],
+    "referenceAnswer": "Marcus Chen is the data thief. He created the svc-threatfeed service account, reset its password two days before the breach, connected to the VPN from his home IP at 02:00, transferred 2.3TB of data (confirmed by ISP and home router), stored a copy on his personal NAS, listed it on the ShadowVault dark web marketplace using TOR, and received 15 ETH payment 72 hours later. His claim of being asleep is contradicted by smart home data showing office activity until 05:30. He used exclusively personal devices to avoid detection on his work laptop. His motive was financial pressure from personal debt combined with resentment over being denied the CISO promotion.",
+    "notes": ""
   }
 ]

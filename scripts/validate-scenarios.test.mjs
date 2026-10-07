@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { validateScenarios } from './validate-scenarios.mjs';
 
-const scenarios = JSON.parse(readFileSync(new URL('../eval-scenarios/scenarios.json', import.meta.url), 'utf8'));
+const scenarios = JSON.parse(readFileSync(new URL('../eval-scenarios/scenario-v2.json', import.meta.url), 'utf8'));
 const cases = JSON.parse(readFileSync(new URL('../cases-input/case-1.json', import.meta.url), 'utf8'));
 
 test('all 30 scenarios resolve against the source corpus with the original difficulty distribution', () => {
