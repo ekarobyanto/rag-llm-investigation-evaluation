@@ -74,10 +74,11 @@ prove the completeness of semantic relevance labels.
 
 ## Future import of the audited benchmark
 
-Changing JSON in Git does not update existing database rows. The existing seed
-and experiment paths still read `eval-scenarios/scenarios.json`; they do not load
-`scenario-v2.json`. Version-aware import is deferred until additional verification
-of the audited benchmark. This PR changes neither seeding nor the evaluation UI.
+Changing JSON in Git does not update existing database rows. The seed
+(`prisma/seed.ts`) and experiment path (`lib/eval.ts`) import exactly one file,
+`eval-scenarios/$EVAL_SCENARIO_FILE`, defaulting to `scenarios.json`; they never
+merge every JSON file in the directory, so v1 and v2 cannot be mixed. Version-aware
+import is deferred until additional verification of the audited benchmark.
 
 For a future V2 run, preserve historical scenario links and use a **separate
 benchmark database** containing the same 150 evidence records in source order,
