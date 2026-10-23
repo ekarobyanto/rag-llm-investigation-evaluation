@@ -19,8 +19,8 @@ export async function hybridRetrieve(
   const overFetch = Math.max(limit * 3, 20)
   const fusionMethod = options?.fusionMethod ?? "rrf"
   const rrf_k = options?.rrf_k ?? 60
-  const sparseWeight = options?.sparseWeight ?? 0.25
-  const denseWeight = options?.denseWeight ?? 0.75
+  const sparseWeight = options?.sparseWeight ?? 0.5
+  const denseWeight = options?.denseWeight ?? 0.5
   const startTime = Date.now()
 
   try {
@@ -69,15 +69,13 @@ export async function hybridRetrieve(
     const candidates = Array.from(candidateMap.values())
 
     if (fusionMethod === "rrf") {
-      // Weighted Reciprocal Rank Fusion:
-      // Heavy weight (0.75) on Dense semantic embeddings to prevent noisy BM25 hits from displacing genuine clues.
-      // Unretrieved items in an arm get 0 points from that arm rather than artificial penalty points.
+      // Standard, equal-weight Reciprocal Rank Fusion (RRF).
+      // An item absent from one retrieval arm contributes zero from that arm.
       for (const c of candidates) {
-        const denseTerm = c.denseRank <= overFetch ? denseWeight / (rrf_k + c.denseRank) : 0
-        const sparseTerm = c.sparseRank <= overFetch ? sparseWeight / (rrf_k + c.sparseRank) : 0
-        const agreementBonus = c.denseRank <= overFetch && c.sparseRank <= overFetch ? 0.003 : 0
+        const denseTerm = c.denseRank <= overFetch ? 1 / (rrf_k + c.denseRank) : 0
+        const sparseTerm = c.sparseRank <= overFetch ? 1 / (rrf_k + c.sparseRank) : 0
 
-        c.item.fusionScore = denseTerm + sparseTerm + agreementBonus
+        c.item.fusionScore = denseTerm + sparseTerm
         c.item.score = c.item.fusionScore
         c.item.sparseScore = c.sparseScore
         c.item.denseScore = c.denseScore
