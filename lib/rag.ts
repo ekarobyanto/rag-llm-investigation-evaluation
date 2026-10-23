@@ -312,12 +312,9 @@ export async function generateAIResponse(
     limit?: number
   }
 ) {
-  // Always retrieve — dynamic limit prevents the artificial K=5 recall ceiling on complex scenarios
-  const retrieveLimit =
-    options?.limit ??
-    (options?.requiredEvidenceIds && options.requiredEvidenceIds.length > 5
-      ? Math.min(20, Math.max(10, options.requiredEvidenceIds.length + 2))
-      : 8)
+  // Fixed retrieval budget for the final thesis comparison.
+  // Gold relevance labels must never influence how many documents are retrieved.
+  const retrieveLimit = options?.limit ?? 10
   const retrievalResult = await retrieve(retrievalMethod, caseId, prompt, { limit: retrieveLimit })
 
   const retrievedEvidenceIds = retrievalResult.evidence.map((e) => e.id)
