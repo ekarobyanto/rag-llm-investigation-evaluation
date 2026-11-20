@@ -1,7 +1,7 @@
 import { prisma } from "./db"
 import { generateAIResponse } from "./rag"
 import type { RetrievalMethod } from "./retrieval"
-import { readdirSync, readFileSync } from "fs"
+import { readFileSync } from "fs"
 import { join } from "path"
 import { broadcastWSEvent } from "./ws"
 
@@ -23,16 +23,15 @@ export interface ScenarioSeedSummary {
   errors: string[]
 }
 
+// Load exactly one benchmark revision so dataset versions are never mixed.
+// Override with EVAL_SCENARIO_FILE (e.g. "scenario-v2.json") for a separate benchmark run.
+export const EVAL_SCENARIO_FILE = process.env.EVAL_SCENARIO_FILE || "scenarios.json"
+
 export async function loadScenarioFiles(): Promise<ScenarioInputFile[]> {
-  const dir = join(process.cwd(), "eval-scenarios")
-  const files = readdirSync(dir).filter((f) => f.endsWith(".json"))
-  const out: ScenarioInputFile[] = []
-  for (const f of files) {
-    const raw = JSON.parse(readFileSync(join(dir, f), "utf8"))
-    if (Array.isArray(raw)) out.push(...raw)
-    else out.push(raw)
-  }
-  return out
+  const raw = JSON.parse(
+    readFileSync(join(process.cwd(), "eval-scenarios", EVAL_SCENARIO_FILE), "utf8")
+  )
+  return Array.isArray(raw) ? raw : [raw]
 }
 
 export async function seedScenarios(): Promise<ScenarioSeedSummary> {

@@ -12,7 +12,9 @@
     "prisma:studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
     "experiment": "npx tsx scripts/run-experiment.ts",
-    "eval:ragas": "npx tsx scripts/run-ragas.ts"
+    "eval:ragas": "npx tsx scripts/run-ragas.ts",
+    "eval:validate": "node scripts/validate-scenarios.mjs",
+    "test:scenarios": "node --test scripts/validate-scenarios.test.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",

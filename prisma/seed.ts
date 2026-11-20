@@ -106,8 +106,14 @@ async function seedEvaluationScenarios() {
     return
   }
 
-  const files = readdirSync(dir).filter((f) => f.endsWith(".json"))
-  console.log(`\nSeeding evaluation scenarios from ${files.length} file(s)...`)
+  // Import exactly one benchmark revision so dataset versions are never mixed.
+  const scenarioFile = process.env.EVAL_SCENARIO_FILE || "scenarios.json"
+  if (!existsSync(join(dir, scenarioFile))) {
+    console.warn(`eval-scenarios/${scenarioFile} not found. Skipping scenario seed.`)
+    return
+  }
+  const files = [scenarioFile]
+  console.log(`\nSeeding evaluation scenarios from eval-scenarios/${scenarioFile}...`)
 
   for (const f of files) {
     const raw = JSON.parse(readFileSync(join(dir, f), "utf8"))
