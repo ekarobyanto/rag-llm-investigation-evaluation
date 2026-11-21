@@ -36,7 +36,9 @@ interface InputCase {
 
 function loadCases(): InputCase[] {
   const dir = join(process.cwd(), "cases-input")
-  const files = readdirSync(dir).filter((f) => f.endsWith(".json"))
+  const files = process.env.EVAL_SCENARIO_FILE === "scenario-v3.id.json"
+    ? ["id-ID/case-1.v3.json"]
+    : readdirSync(dir).filter((f) => f.endsWith(".json"))
   const cases: InputCase[] = []
 
   for (const file of files) {
@@ -173,6 +175,12 @@ async function seed() {
   const force = process.argv.includes("--force")
   const existingCasesCount = await prisma.case.count()
   if (existingCasesCount > 0 && !force) {
+    if (process.env.EVAL_SCENARIO_FILE === "scenario-v3.id.json") {
+      const selected = await prisma.case.findFirst({ where: { title: cases[0].case.title } })
+      if (!selected || existingCasesCount !== 1) {
+        throw new Error("Use an empty, separate database for the ID v3 benchmark.")
+      }
+    }
     console.log(`Database already contains ${existingCasesCount} case(s). Skipping case seed to preserve existing evaluation telemetry and OpenAI API credits.`)
     await seedEvaluationScenarios()
     return
@@ -204,6 +212,7 @@ async function seed() {
     console.log(`  Created ${caseData.suspects.length} suspects`)
 
     const evidenceIds: string[] = []
+    const importStart = Date.now()
     for (const [idx, evidence] of caseData.evidence.entries()) {
       const created = await prisma.evidence.create({
         data: {
@@ -212,6 +221,10 @@ async function seed() {
           category: evidence.category,
           difficultyWeight: evidence.difficulty_weight,
           content: evidence.content,
+          // Scenario reloads resolve zero-based labels by ascending creation time.
+          ...(process.env.EVAL_SCENARIO_FILE === "scenario-v3.id.json"
+            ? { createdAt: new Date(importStart + idx) }
+            : {}),
         },
       })
       evidenceIds.push(created.id)
