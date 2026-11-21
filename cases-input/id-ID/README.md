@@ -1,5 +1,19 @@
 # Kebocoran Data Perusahaan dalam Bahasa Indonesia
 
+## Dataset revisi ID v3
+
+Gunakan pasangan `cases-input/id-ID/case-1.v3.json` dan `eval-scenarios/scenario-v3.id.json`. Kasus *Kebocoran Data Perusahaan (ID v3)* memuat 150 dokumen dalam lima batch. Indeks bukti berbasis nol dan urutannya mengikuti kelima batch. Setiap skenario mencantumkan pertanyaan, jawaban acuan, dan indeks dokumen yang mendukung rincian yang ditanyakan. Daftar ini menjadi label untuk evaluasi retrieval. Dua pasangan kontradiksi langsung adalah [61, 62] dan [61, 64]. Label tingkat kesulitan mengikuti pembagian v2 dan belum dikalibrasi ulang.
+
+Validasi berkas secara luring dari direktori utama repo:
+
+```sh
+node scripts/validate-scenarios.mjs eval-scenarios/scenario-v3.id.json cases-input/id-ID/case-1.v3.json
+```
+
+Saat menjalankan eksperimen, arahkan `DATABASE_URL` ke database eksperimen kosong yang telah dimigrasi, set `EVAL_SCENARIO_FILE=scenario-v3.id.json` pada proses seed dan aplikasi, lalu jalankan `npm run seed`. Seed memerlukan kunci API untuk membuat embedding. Simpan hasil dengan penanda ID v3. Konfigurasi indeks dan kueri full-text pada cabang ini menggunakan kamus PostgreSQL `english`, termasuk untuk teks Indonesia. Catat pilihan kamus dalam konfigurasi eksperimen.
+
+## Adaptasi awal
+
 `case-1.json` merupakan adaptasi Bahasa Indonesia dari kasus dalam `../case-1.json`, bukan kasus dengan alur cerita baru. Nama perusahaan utama dan beberapa nama tempat atau layanan diganti dengan sebutan umum. Nama tersangka, mata uang, tanggal, serta zona waktu yang disebutkan tetap mengikuti sumber.
 
 - Judul adaptasi: **Kebocoran Data Perusahaan**.

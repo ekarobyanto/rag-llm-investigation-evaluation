@@ -6,6 +6,24 @@ import { validateScenarios } from './validate-scenarios.mjs';
 const scenarios = JSON.parse(readFileSync(new URL('../eval-scenarios/scenario-v2.json', import.meta.url), 'utf8'));
 const cases = JSON.parse(readFileSync(new URL('../cases-input/case-1.json', import.meta.url), 'utf8'));
 
+test('ID v3 scenarios resolve against the revised corpus and use its contradiction pairs', () => {
+  const revised = JSON.parse(readFileSync(new URL('../eval-scenarios/scenario-v3.id.json', import.meta.url), 'utf8'));
+  const source = JSON.parse(readFileSync(new URL('../cases-input/id-ID/case-1.v3.json', import.meta.url), 'utf8')).nexus_data_breach;
+  assert.equal(validateScenarios(revised, source), 30);
+  assert.equal(source.evidence.length, 150);
+  assert.equal(new Set(source.evidence.map(doc => doc.content)).size, 150);
+  assert.deepEqual(revised.map(s => s.difficulty), scenarios.map(s => s.difficulty));
+  const pairs = source.ground_truth.contradiction_pairs.map(({ evidence_index_a, evidence_index_b }) => ({ evidence_index_a, evidence_index_b }));
+  assert.deepEqual(revised[12].expectedContradictions, pairs);
+  assert.deepEqual(revised[22].expectedContradictions, pairs);
+  for (const [item, indices, key] of [[6, [99, 109], 'RK-Q4-17'], [18, [68, 87], 'PT-017'], [19, [128, 140], 'ringkasan-harga-Q4.pdf'], [27, [5, 28], 'SV-184']]) {
+    for (const i of indices) {
+      assert(revised[item].requiredEvidenceIndices.includes(i));
+      assert(source.evidence[i].content.includes(key));
+    }
+  }
+});
+
 test('all 30 scenarios resolve against the source corpus with the original difficulty distribution', () => {
   assert.equal(validateScenarios(scenarios, cases), 30);
   assert.equal(cases.nexus_data_breach.evidence.length, 150);
