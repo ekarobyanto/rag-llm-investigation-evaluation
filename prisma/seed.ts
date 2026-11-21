@@ -27,7 +27,7 @@ interface InputCase {
       explanation: string
     }>
     relevant_evidence_indices: number[]
-    optimal_next_actions: Array<
+    optimal_next_actions?: Array<
       | string
       | { action_type: string; target?: string; reason?: string }
     >
@@ -36,7 +36,9 @@ interface InputCase {
 
 function loadCases(): InputCase[] {
   const dir = join(process.cwd(), "cases-input")
-  const files = readdirSync(dir).filter((f) => f.endsWith(".json"))
+  const files = (process.env.EVAL_SCENARIO_FILE || "scenario-v3.id.json") === "scenario-v3.id.json"
+    ? ["id-ID/case-1.v3.json"]
+    : readdirSync(dir).filter((f) => f.endsWith(".json"))
   const cases: InputCase[] = []
 
   for (const file of files) {
@@ -82,77 +84,11 @@ function normalizeAction(
   }
 }
 
-async function clearDatabase() {
-  await prisma.aIInteractionLog.deleteMany()
-  await prisma.investigationLog.deleteMany()
-  await prisma.investigationSession.deleteMany()
-  await prisma.caseGroundTruth.deleteMany()
-  await prisma.evidence.deleteMany()
-  await prisma.suspect.deleteMany()
-  await prisma.case.deleteMany()
-  console.log("Cleared existing data")
-}
-
 async function seedEvaluationScenarios() {
-  const existingScenarios = await prisma.evaluationScenario.count()
-  if (existingScenarios > 0) {
-    console.log(`Evaluation scenarios already exist (${existingScenarios} found). Skipping scenario seed.`)
-    return
-  }
-
-  const dir = join(process.cwd(), "eval-scenarios")
-  if (!existsSync(dir)) {
-    console.warn("eval-scenarios directory not found. Skipping scenario seed.")
-    return
-  }
-
-  // Import exactly one benchmark revision so dataset versions are never mixed.
-  const scenarioFile = process.env.EVAL_SCENARIO_FILE || "scenarios.json"
-  if (!existsSync(join(dir, scenarioFile))) {
-    console.warn(`eval-scenarios/${scenarioFile} not found. Skipping scenario seed.`)
-    return
-  }
-  const files = [scenarioFile]
-  console.log(`\nSeeding evaluation scenarios from eval-scenarios/${scenarioFile}...`)
-
-  for (const f of files) {
-    const raw = JSON.parse(readFileSync(join(dir, f), "utf8"))
-    const items = Array.isArray(raw) ? raw : [raw]
-    for (const s of items) {
-      const caseRow = await prisma.case.findFirst({
-        where: { title: s.caseTitle },
-        include: { evidence: { orderBy: { createdAt: "asc" } } },
-      })
-      if (!caseRow) {
-        console.warn(`Case not found for scenario: ${s.caseTitle}`)
-        continue
-      }
-
-      const requiredEvidenceIds = (s.requiredEvidenceIndices ?? [])
-        .map((i: number) => caseRow.evidence[i]?.id)
-        .filter(Boolean)
-
-      const expectedContradictions = (s.expectedContradictions ?? []).map((c: any) => ({
-        evidence_id_a: caseRow.evidence[c.evidence_index_a]?.id,
-        evidence_id_b: caseRow.evidence[c.evidence_index_b]?.id,
-      }))
-
-      await prisma.evaluationScenario.create({
-        data: {
-          caseId: caseRow.id,
-          prompt: s.prompt,
-          difficulty: s.difficulty,
-          requiredEvidenceIds,
-          expectedActions: s.expectedActions ?? [],
-          expectedContradictions,
-          referenceAnswer: s.referenceAnswer,
-          notes: s.notes,
-        },
-      })
-    }
-  }
-  const count = await prisma.evaluationScenario.count()
-  console.log(`Successfully seeded ${count} evaluation scenario(s).`)
+  const { seedScenarios } = await import("../lib/eval")
+  const summary = await seedScenarios()
+  if (summary.errors.length) throw new Error(summary.errors.join("; "))
+  console.log(summary)
 }
 
 async function seed() {
@@ -165,21 +101,28 @@ async function seed() {
     process.exit(1)
   }
 
-  const hasOpenAIKey = Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 0)
+  const hasOpenAIKey = process.argv.includes("--embed") && Boolean(process.env.OPENAI_API_KEY?.trim())
   if (!hasOpenAIKey) {
     console.warn("OPENAI_API_KEY missing — evidence will be seeded WITHOUT embeddings")
   }
 
   const force = process.argv.includes("--force")
+  if (force) throw new Error("Destructive seed is disabled. Use an empty, isolated experiment database.")
   const existingCasesCount = await prisma.case.count()
   if (existingCasesCount > 0 && !force) {
+    if ((process.env.EVAL_SCENARIO_FILE || "scenario-v3.id.json") === "scenario-v3.id.json") {
+      const selected = await prisma.case.findFirst({ where: { title: cases[0].case.title } })
+      if (!selected || existingCasesCount !== 1) {
+        throw new Error("Use an empty, separate database for the ID v3 benchmark.")
+      }
+    }
     console.log(`Database already contains ${existingCasesCount} case(s). Skipping case seed to preserve existing evaluation telemetry and OpenAI API credits.`)
     await seedEvaluationScenarios()
     return
   }
 
-  console.log(force ? "Force flag detected. Clearing existing data..." : "Database is empty. Initializing initial case docket...")
-  await clearDatabase()
+  console.log("Database is empty. Initializing case docket...")
+  // Existing databases are never cleared by research setup.
 
   for (const caseData of cases) {
     const createdCase = await prisma.case.create({
@@ -204,6 +147,7 @@ async function seed() {
     console.log(`  Created ${caseData.suspects.length} suspects`)
 
     const evidenceIds: string[] = []
+    const importStart = Date.now()
     for (const [idx, evidence] of caseData.evidence.entries()) {
       const created = await prisma.evidence.create({
         data: {
@@ -212,6 +156,10 @@ async function seed() {
           category: evidence.category,
           difficultyWeight: evidence.difficulty_weight,
           content: evidence.content,
+          // Scenario reloads resolve zero-based labels by ascending creation time.
+          ...((process.env.EVAL_SCENARIO_FILE || "scenario-v3.id.json") === "scenario-v3.id.json"
+            ? { createdAt: new Date(importStart + idx) }
+            : {}),
         },
       })
       evidenceIds.push(created.id)
@@ -251,7 +199,7 @@ async function seed() {
       .map((i) => evidenceIds[i])
       .filter(Boolean)
 
-    const optimalNextActions = gt.optimal_next_actions.map((a) =>
+    const optimalNextActions = (gt.optimal_next_actions ?? []).map((a) =>
       normalizeAction(a, gt.correct_suspect_name)
     )
 
@@ -261,7 +209,7 @@ async function seed() {
         correctSuspectId,
         contradictionPairs: contradictionPairsMapped,
         relevantEvidenceIds,
-        optimalNextActions,
+        ...(gt.optimal_next_actions ? { optimalNextActions } : {}),
       },
     })
     console.log(`  Created ground truth`)

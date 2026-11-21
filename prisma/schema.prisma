@@ -60,7 +60,7 @@ model CaseGroundTruth {
   correctSuspectId     String
   contradictionPairs   Json
   relevantEvidenceIds  Json
-  optimalNextActions   Json
+  optimalNextActions   Json?
   createdAt            DateTime @default(now())
 
   case             Case    @relation(fields: [caseId], references: [id], onDelete: Cascade)
@@ -111,6 +111,20 @@ model InvestigationLog {
 }
 
 model AIInteractionLog {
+  datasetVersion          String?
+  runId                   String?
+  repetition              Int?
+  attempt                 Int?
+  retryOf                 String?
+  status                  String?  // started | succeeded | failed; null = historical
+  failureReason           String?  @db.Text
+  observationKey          String?  @unique
+  referenceAnswerSnapshot String?  @db.Text
+  retrievalMetrics        Json?
+  modelSettings           Json?
+  runManifest             Json?
+  finishedAt              DateTime?
+
   id                      String   @id @default(cuid())
   sessionId               String
   caseId                  String
@@ -149,16 +163,20 @@ model AIInteractionLog {
   scenario EvaluationScenario?   @relation(fields: [scenarioId], references: [id], onDelete: SetNull)
   ragasEvaluation         RagasEvaluation?
 
+  @@index([runId, datasetVersion, status], map: "ai_interaction_logs_run_dataset_idx")
   @@map("ai_interaction_logs")
 }
 
 model EvaluationScenario {
+  datasetVersion         String?
+  questionId             String?
+
   id                     String   @id @default(cuid())
   caseId                 String
   prompt                 String   @db.Text
   difficulty             String   // "easy" | "medium" | "hard"
   requiredEvidenceIds    Json     // string[]
-  expectedActions        Json     // Array<{ action_type, target }>
+  expectedActions        Json?    // Array<{ action_type, target }>
   expectedContradictions Json?    // Array<{ evidence_a, evidence_b }>
   notes                  String?  @db.Text
   referenceAnswer        String?  @db.Text
@@ -167,10 +185,16 @@ model EvaluationScenario {
   case        Case               @relation(fields: [caseId], references: [id], onDelete: Cascade)
   interactionLogs AIInteractionLog[]
 
+  @@unique([datasetVersion, questionId], map: "evaluation_scenarios_dataset_question_idx")
   @@map("evaluation_scenarios")
 }
 
 model RagasEvaluation {
+  evaluatorVersion          String?
+  judgeModel                String?
+  status                    String?
+  metricStatus              Json?
+
   id                        String   @id @default(cuid())
   logId                     String   @unique
   faithfulness              Float?

@@ -1,223 +1,137 @@
 import { prisma } from "./db"
+import { Prisma } from "@prisma/client"
 import { generateAIResponse } from "./rag"
 import type { RetrievalMethod } from "./retrieval"
 import { readFileSync } from "fs"
 import { join } from "path"
+import { randomUUID, createHash } from "crypto"
 import { broadcastWSEvent } from "./ws"
+import { datasetManifest, SCENARIO_FILE, requireReference, finiteMean, PROMPT_VERSION, PRIMARY_EVALUATOR, CONTEXT_LIMIT, CANDIDATE_DEPTH, EMBEDDING_MODEL, FTS_CONFIG, frozenRunConfig, generationSettings } from "./research"
+import { validateScenarios } from "../scripts/validate-scenarios.mjs"
 
 export interface ScenarioInputFile {
   caseTitle: string
   prompt: string
   difficulty: "easy" | "medium" | "hard"
   requiredEvidenceIndices: number[]
-  expectedActions: Array<{ action_type: string; target: string }>
+  expectedActions?: Array<{ action_type: string; target: string }>
   expectedContradictions?: Array<{ evidence_index_a: number; evidence_index_b: number }>
   referenceAnswer?: string
   notes?: string
 }
-
-export interface ScenarioSeedSummary {
-  total: number
-  created: number
-  skipped: number
-  errors: string[]
-}
-
-// Load exactly one benchmark revision so dataset versions are never mixed.
-// Override with EVAL_SCENARIO_FILE (e.g. "scenario-v2.json") for a separate benchmark run.
-export const EVAL_SCENARIO_FILE = process.env.EVAL_SCENARIO_FILE || "scenarios.json"
-
+export interface ScenarioSeedSummary { total: number; created: number; skipped: number; errors: string[] }
+export const EVAL_SCENARIO_FILE = SCENARIO_FILE
 export async function loadScenarioFiles(): Promise<ScenarioInputFile[]> {
-  const raw = JSON.parse(
-    readFileSync(join(process.cwd(), "eval-scenarios", EVAL_SCENARIO_FILE), "utf8")
-  )
-  return Array.isArray(raw) ? raw : [raw]
+  return JSON.parse(readFileSync(join(process.cwd(), "eval-scenarios", SCENARIO_FILE), "utf8"))
 }
-
 export async function seedScenarios(): Promise<ScenarioSeedSummary> {
+  const manifest = datasetManifest()
   const files = await loadScenarioFiles()
+  const source = JSON.parse(readFileSync(join(process.cwd(), "cases-input", manifest.caseFile), "utf8"))
+  validateScenarios(files, source)
   const summary: ScenarioSeedSummary = { total: files.length, created: 0, skipped: 0, errors: [] }
-
-  await prisma.evaluationScenario.deleteMany()
-
-  for (const s of files) {
-    try {
-      const caseRow = await prisma.case.findFirst({
-        where: { title: s.caseTitle },
-        include: { evidence: { orderBy: { createdAt: "asc" } } },
-      })
-      if (!caseRow) {
-        summary.skipped++
-        summary.errors.push(`Case not found: ${s.caseTitle}`)
-        continue
-      }
-
-      const requiredEvidenceIds = s.requiredEvidenceIndices
-        .map((i) => caseRow.evidence[i]?.id)
-        .filter(Boolean) as string[]
-
-      const expectedContradictions = (s.expectedContradictions ?? []).map((c) => ({
-        evidence_id_a: caseRow.evidence[c.evidence_index_a]?.id,
-        evidence_id_b: caseRow.evidence[c.evidence_index_b]?.id,
-      }))
-
-      await prisma.evaluationScenario.create({
-        data: {
-          caseId: caseRow.id,
-          prompt: s.prompt,
-          difficulty: s.difficulty,
-          requiredEvidenceIds,
-          expectedActions: s.expectedActions as unknown as object[],
-          expectedContradictions: expectedContradictions as unknown as object[],
-          referenceAnswer: s.referenceAnswer,
-          notes: s.notes,
-        },
-      })
-      summary.created++
-    } catch (e) {
-      summary.skipped++
-      summary.errors.push(`${s.caseTitle}: ${(e as Error).message}`)
+  for (const [index, s] of files.entries()) {
+    const questionId = `Q${String(index + 1).padStart(2, "0")}`
+    const id = createHash("sha256").update(`${manifest.datasetVersion}:${questionId}`).digest("hex")
+    const cases = await prisma.case.findMany({ where: { title: s.caseTitle }, include: { evidence: { orderBy: [{ createdAt: "asc" }, { id: "asc" }] } } })
+    if (cases.length !== 1) throw new Error(`${questionId}: case title must resolve uniquely in database`)
+    const caseRow = cases[0]
+    const corpus = source.case ? source : Object.values(source).find((c: any) => c.case?.title === s.caseTitle) as any
+    if (caseRow.evidence.length !== corpus.evidence.length || caseRow.evidence.some((e, i) => e.content !== corpus.evidence[i].content)) {
+      throw new Error(`${questionId}: database corpus/order differs from the frozen dataset; use an isolated database`)
     }
+    const existing = await prisma.evaluationScenario.findUnique({ where: { id } })
+    if (existing) {
+      const expectedIds = s.requiredEvidenceIndices.map(i => caseRow.evidence[i].id)
+      const expectedPairs = (s.expectedContradictions ?? []).map(c => ({ evidence_id_a: caseRow.evidence[c.evidence_index_a].id, evidence_id_b: caseRow.evidence[c.evidence_index_b].id }))
+      if (existing.prompt !== s.prompt || existing.referenceAnswer !== s.referenceAnswer ||
+          JSON.stringify(existing.requiredEvidenceIds) !== JSON.stringify(expectedIds) ||
+          JSON.stringify(existing.expectedContradictions) !== JSON.stringify(expectedPairs)) {
+        throw new Error(`${questionId}: stored scenario differs from frozen labels/reference; use a new dataset identity`)
+      }
+      summary.skipped++; continue
+    }
+    await prisma.evaluationScenario.create({ data: {
+      id, datasetVersion: manifest.datasetVersion, questionId, caseId: caseRow.id, prompt: s.prompt, difficulty: s.difficulty,
+      requiredEvidenceIds: s.requiredEvidenceIndices.map(i => caseRow.evidence[i].id),
+      expectedContradictions: (s.expectedContradictions ?? []).map(c => ({ evidence_id_a: caseRow.evidence[c.evidence_index_a].id, evidence_id_b: caseRow.evidence[c.evidence_index_b].id })),
+      referenceAnswer: requireReference(s.referenceAnswer, questionId), notes: s.notes,
+    } })
+    summary.created++
   }
-
   return summary
 }
-
 export interface RunResult {
-  scenarioId: string
-  retrievalMethod: RetrievalMethod
-  logId: string
-  correctnessScore: number | null
-  retrievalPrecision: number | null
-  retrievalRecall: number | null
-  topKAccuracy: boolean | null
-  retrievalSuccess: boolean
-  totalResponseTimeMs: number
-  totalTokens: number
-  estimatedCost: number
+  scenarioId: string; retrievalMethod: RetrievalMethod; logId: string; runId: string
+  retrievalMetrics: unknown; totalResponseTimeMs: number; totalTokens: number
 }
-
-export async function runScenario(
-  scenarioId: string,
-  retrievalMethod: RetrievalMethod,
-  signal?: AbortSignal
-): Promise<RunResult> {
-  const isCancelled = () =>
-    isEvaluationCancelled() ||
-    Boolean(signal?.aborted) ||
-    Boolean(globalThis.__evalAbortController?.signal?.aborted)
-
-  if (isCancelled()) {
-    throw new Error("Evaluation cancelled by user")
-  }
-
-  const scenario = await prisma.evaluationScenario.findUnique({
-    where: { id: scenarioId },
-    include: { case: true },
-  })
-  if (!scenario) throw new Error(`Scenario ${scenarioId} not found`)
-
-  if (isCancelled()) {
-    throw new Error("Evaluation cancelled by user")
-  }
-
-  const session = await prisma.investigationSession.create({
-    data: { caseId: scenario.caseId, retrievalMethod },
-  })
-
-  const expectedActions = scenario.expectedActions as unknown as Array<{
-    action_type: string
-    target: string
-  }>
-  const requiredEvidenceIds = scenario.requiredEvidenceIds as unknown as string[]
-
-  if (isCancelled()) {
-    throw new Error("Evaluation cancelled by user")
-  }
-
-  const result = await generateAIResponse(
-    scenario.prompt,
-    scenario.caseId,
-    session.id,
-    retrievalMethod,
-    {
-      requiredEvidenceIds,
-      expectedActions,
-      temperature: 0.2,
-    }
-  )
-
-  if (isCancelled()) {
-    throw new Error("Evaluation cancelled by user")
-  }
-
-  const log = await prisma.aIInteractionLog.create({
-    data: {
-      sessionId: session.id,
-      caseId: scenario.caseId,
-      scenarioId: scenario.id,
-      userPrompt: scenario.prompt,
-      aiResponse: result.response,
-      retrievedContext: result.context || null,
-      retrievedContextsList: result.retrieval.retrievedContextsList,
-      retrievedEvidenceIds: result.retrieval.retrievedEvidenceIds,
-      retrievalScores: result.retrieval.retrievalScores,
-      retrievalSuccess: result.retrieval.retrievalSuccess,
-      retrievalPrecision: result.retrieval.retrievalPrecision,
-      retrievalRecall: result.retrieval.retrievalRecall,
-      topKAccuracy: result.retrieval.topKAccuracy,
-      structuredRecommendation: result.structuredRecommendation
-        ? JSON.parse(JSON.stringify(result.structuredRecommendation))
-        : undefined,
-      retrievalMethod,
-      sparseScores: result.retrieval.sparseScores ?? undefined,
-      denseScores: result.retrieval.denseScores ?? undefined,
-      fusionScores: result.retrieval.fusionScores ?? undefined,
-      fusionMethod: result.retrieval.fusionMethod ?? undefined,
-      embeddingTimeMs: result.timings.embeddingTimeMs ?? undefined,
-      retrievalTimeMs: result.timings.retrievalTimeMs,
-      llmResponseTimeMs: result.timings.llmResponseTimeMs,
-      totalResponseTimeMs: result.timings.totalResponseTimeMs,
-      promptTokens: result.tokens.prompt,
-      completionTokens: result.tokens.completion,
-      totalTokens: result.tokens.total,
-      estimatedCost: result.estimatedCost,
-      correctnessScore: result.correctnessScore,
-      promptTemplateVersion: "v1",
-    },
-  })
-
-  // Broadcast live log event over WebSocket
-  broadcastWSEvent({
-    type: "LOG_CREATED",
-    log: {
-      ...log,
-      scenario: {
-        prompt: scenario.prompt,
-        difficulty: scenario.difficulty,
-        referenceAnswer: scenario.referenceAnswer,
-        notes: scenario.notes,
-        case: { title: scenario.case?.title || "Nexus Data Breach" },
-      },
-      ragasEvaluation: null,
-    },
-  })
-
-  return {
-    scenarioId: scenario.id,
-    retrievalMethod,
-    logId: log.id,
-    correctnessScore: result.correctnessScore,
-    retrievalPrecision: result.retrieval.retrievalPrecision,
-    retrievalRecall: result.retrieval.retrievalRecall,
-    topKAccuracy: result.retrieval.topKAccuracy,
-    retrievalSuccess: result.retrieval.retrievalSuccess,
-    totalResponseTimeMs: result.timings.totalResponseTimeMs,
-    totalTokens: result.tokens.total,
-    estimatedCost: result.estimatedCost,
+export interface RunIdentity { runId: string; repetition: number }
+export async function runScenario(scenarioId: string, retrievalMethod: RetrievalMethod, signal?: AbortSignal,
+  identity: RunIdentity = { runId: randomUUID(), repetition: 1 },
+  deps = { db: prisma, generate: generateAIResponse }): Promise<RunResult> {
+  const checkCancelled = () => { if (isEvaluationCancelled() || signal?.aborted) throw new Error("Evaluation cancelled by user") }
+  checkCancelled()
+  if (!identity.runId.trim() || !Number.isInteger(identity.repetition) || identity.repetition < 1 || identity.repetition > 3) throw new Error("Invalid run identity/repetition")
+  const manifest = datasetManifest()
+  const scenario = await deps.db.evaluationScenario.findUnique({ where: { id: scenarioId } })
+  if (!scenario || scenario.datasetVersion !== manifest.datasetVersion) throw new Error(`Scenario ${scenarioId} is not in the selected dataset`)
+  const reference = requireReference(scenario.referenceAnswer, scenario.questionId || scenario.id)
+  const gold = scenario.requiredEvidenceIds as string[]
+  if (!Array.isArray(gold) || !gold.length) throw new Error(`Scenario ${scenarioId}: missing gold labels`)
+  const key = `${identity.runId}:${manifest.datasetVersion}:${scenarioId}:${retrievalMethod}:${identity.repetition}`
+  if (await deps.db.aIInteractionLog.findUnique({ where: { observationKey: key } })) throw new Error("Successful observation already exists; use a new run ID")
+  const runConfig = frozenRunConfig()
+  const runConfigHash = createHash("sha256").update(JSON.stringify(runConfig)).digest("hex")
+  const existingRun = await deps.db.aIInteractionLog.findFirst({ where: { runId: identity.runId }, orderBy: { createdAt: "asc" } })
+  if (existingRun && (existingRun.datasetVersion !== manifest.datasetVersion ||
+      (existingRun.runManifest as any)?.runConfigHash !== runConfigHash)) throw new Error("Run configuration/dataset changed; use a new run ID")
+  const previous = await deps.db.aIInteractionLog.findFirst({ where: { runId: identity.runId, scenarioId, retrievalMethod, repetition: identity.repetition }, orderBy: { createdAt: "desc" } })
+  const session = await deps.db.investigationSession.create({ data: { caseId: scenario.caseId, retrievalMethod } })
+  const log = await deps.db.aIInteractionLog.create({ data: {
+    sessionId: session.id, caseId: scenario.caseId, scenarioId, retrievalMethod, userPrompt: scenario.prompt,
+    aiResponse: "", llmResponseTimeMs: 0, totalResponseTimeMs: 0, promptTokens: 0, completionTokens: 0, totalTokens: 0,
+    datasetVersion: manifest.datasetVersion, runId: identity.runId, repetition: identity.repetition,
+    attempt: (previous?.attempt ?? 0) + 1, retryOf: previous?.id, status: "started", referenceAnswerSnapshot: reference,
+    promptTemplateVersion: PROMPT_VERSION, modelSettings: generationSettings(), runManifest: { ...manifest, runConfig, runConfigHash, candidateDepth: retrievalMethod === "hybrid" ? CANDIDATE_DEPTH : CONTEXT_LIMIT,
+      embeddingModel: EMBEDDING_MODEL, embeddingDimensions: 1536, ftsConfig: FTS_CONFIG, contextPolicy: "full-evidence-text", historyPolicy: "none" },
+  } })
+  const start = performance.now()
+  try {
+    const result = await deps.generate(scenario.prompt, scenario.caseId, session.id, retrievalMethod, { requiredEvidenceIds: gold, temperature: 0.2 })
+    checkCancelled()
+    const saved = await deps.db.aIInteractionLog.update({ where: { id: log.id }, data: {
+      status: "succeeded", observationKey: key, finishedAt: new Date(), aiResponse: result.response,
+      retrievedContext: result.context, retrievedContextsList: result.retrieval.retrievedContextsList,
+      retrievedEvidenceIds: result.retrieval.retrievedEvidenceIds, retrievalScores: result.retrieval.retrievalScores,
+      retrievalMetrics: result.retrieval.metrics ?? Prisma.JsonNull, modelSettings: result.modelSettings,
+      retrievalSuccess: true, sparseScores: result.retrieval.sparseScores, denseScores: result.retrieval.denseScores,
+      fusionScores: result.retrieval.fusionScores, fusionMethod: result.retrieval.fusionMethod,
+      embeddingTimeMs: result.timings.embeddingTimeMs, retrievalTimeMs: result.timings.retrievalTimeMs,
+      llmResponseTimeMs: result.timings.llmResponseTimeMs, totalResponseTimeMs: result.timings.totalResponseTimeMs,
+      promptTokens: result.tokens.prompt, completionTokens: result.tokens.completion, totalTokens: result.tokens.total,
+    } })
+    broadcastWSEvent({ type: "LOG_CREATED", log: publicLog(saved) })
+    return { scenarioId, retrievalMethod, logId: log.id, runId: identity.runId, retrievalMetrics: result.retrieval.metrics,
+      totalResponseTimeMs: result.timings.totalResponseTimeMs, totalTokens: result.tokens.total }
+  } catch (error) {
+    await deps.db.aIInteractionLog.update({ where: { id: log.id }, data: { status: "failed", finishedAt: new Date(),
+      totalResponseTimeMs: Math.round(performance.now() - start), failureReason: error instanceof Error ? error.message : String(error) } })
+    throw error
   }
 }
-
+/** Historical nullable columns stay in storage, but never enter current response contracts. */
+export function publicLog<T extends object>(log: T) {
+  const { correctnessScore, structuredRecommendation, retrievalPrecision, retrievalRecall, topKAccuracy, ...active } = log as T & Record<string, unknown>
+  return active
+}
+export async function selectedScope(runId?: string) {
+  const datasetVersion = datasetManifest().datasetVersion
+  if (!runId) {
+    const latest = await prisma.aIInteractionLog.findFirst({ where: { datasetVersion, runId: { not: null } }, orderBy: { createdAt: "desc" } })
+    runId = latest?.runId || undefined
+  }
+  return { datasetVersion, runId: runId || "__no_current_run__" }
+}
 export interface EvaluationStatus {
   isRunning: boolean
   label?: string
@@ -293,6 +207,8 @@ export async function runAllScenarios(
   methods: RetrievalMethod[] = ALL_METHODS,
   signal?: AbortSignal,
   options?: {
+    runId?: string
+    repetition?: number
     limit?: number
     scenarioIds?: string[]
     difficulty?: string
@@ -300,12 +216,24 @@ export async function runAllScenarios(
   }
 ): Promise<{
   results: RunResult[]
-  totalCost: number
   totalDurationMs: number
+  runId: string
+  failedAttempts: number
   cancelled?: boolean
 }> {
   resetEvaluationCancel()
+  const runId = options?.runId || randomUUID()
+  const manifest = datasetManifest()
+  await seedScenarios() // Validates the complete frozen corpus, labels and references before generation.
+  if (methods.some(m => m === "dense" || m === "hybrid")) {
+    const coverage = await prisma.$queryRaw<Array<{ missing: bigint }>>`
+      SELECT COUNT(*) AS missing FROM evidence e JOIN evaluation_scenarios s ON s."caseId" = e."caseId"
+      WHERE s."datasetVersion" = ${manifest.datasetVersion} AND e.embedding IS NULL
+    `
+    if (Number(coverage[0]?.missing)) throw new Error("Dense/Hybrid requires complete precomputed corpus embeddings; run the explicitly approved embedding step first")
+  }
   let scenarios = await prisma.evaluationScenario.findMany({
+    where: { datasetVersion: manifest.datasetVersion },
     orderBy: { createdAt: "asc" },
   })
 
@@ -343,9 +271,11 @@ export async function runAllScenarios(
     scenarios = scenarios.slice(0, options.limit)
   }
 
+  if (!scenarios.length) throw new Error("No scenarios in selected dataset/filter")
   const results: RunResult[] = []
   const start = Date.now()
   let cancelled = false
+  let failedAttempts = 0
 
   const methodLabel = methods.length === 3 ? "All 3 Engines (Sparse, Dense, Hybrid)" : methods.join(", ")
   const isBatch = Boolean(options?.limit || options?.scenarioIds || (options?.difficulty && options.difficulty !== "all"))
@@ -367,7 +297,7 @@ export async function runAllScenarios(
   try {
     const checkCancelled = () =>
       isEvaluationCancelled() ||
-      Boolean(globalThis.__evalAbortController?.signal?.aborted)
+      Boolean(globalThis.__evalAbortController?.signal?.aborted) || Boolean(signal?.aborted)
 
     let scenarioIndex = 0
     for (const s of scenarios) {
@@ -382,7 +312,10 @@ export async function runAllScenarios(
           break
         }
         try {
-          const runRes = await runScenario(s.id, method)
+          const successful = await prisma.aIInteractionLog.findFirst({ where: { runId, datasetVersion: manifest.datasetVersion,
+            scenarioId: s.id, retrievalMethod: method, repetition: options?.repetition ?? 1, status: "succeeded" } })
+          if (successful) continue // Resume only missing/failed observations; never regenerate a success.
+          const runRes = await runScenario(s.id, method, signal, { runId, repetition: options?.repetition ?? 1 })
           results.push(runRes)
           setActiveEvaluationStatus({
             currentScenario: scenarioIndex,
@@ -394,171 +327,50 @@ export async function runAllScenarios(
             cancelled = true
             break
           }
+          failedAttempts++
           console.error(`Scenario ${s.id} ${method} failed:`, e)
         }
       }
     }
 
-    const totalCost = results.reduce((acc, r) => acc + (r.estimatedCost ?? 0), 0)
-    return { results, totalCost, totalDurationMs: Date.now() - start, cancelled }
+    return { results, totalDurationMs: Date.now() - start, runId, failedAttempts, cancelled }
   } finally {
     setActiveEvaluationStatus({ isRunning: false })
   }
 }
 
-export interface AggregateMetrics {
-  retrievalMethod: RetrievalMethod
-  count: number
-  avgCorrectness: number
-  avgPrecision: number
-  avgRecall: number
-  topKAccuracyRate: number
-  avgResponseTimeMs: number
-  avgTokens: number
-  totalCost: number
+
+export async function aggregateMetrics(runId?: string) {
+  const scope = await selectedScope(runId)
+  const logs = await prisma.aIInteractionLog.findMany({ where: { ...scope, status: "succeeded" } })
+  const all = await prisma.aIInteractionLog.findMany({ where: scope })
+  return ALL_METHODS.map(retrievalMethod => {
+    const rows = logs.filter(l => l.retrievalMethod === retrievalMethod)
+    const avg = (fn: (l: typeof rows[number]) => number | null | undefined) => finiteMean(rows.map(fn))
+    const at = (k: string, name: string) => avg(l => (l.retrievalMetrics as any)?.[k]?.[name])
+    const repetitions = [1, 2, 3].map(repetition => {
+      const rr = rows.filter(l => l.repetition === repetition)
+      return { repetition, count: rr.length, precisionAt5: finiteMean(rr.map(l => (l.retrievalMetrics as any)?.at5.precision)),
+        recallAt10: finiteMean(rr.map(l => (l.retrievalMetrics as any)?.at10.recall)),
+        totalResponseTimeMs: finiteMean(rr.map(l => l.totalResponseTimeMs)) }
+    })
+    return { ...scope, retrievalMethod, count: rows.length, failedAttempts: all.filter(l => l.retrievalMethod === retrievalMethod && l.status === "failed").length,
+      precisionAt5: at("at5", "precision"), recallAt5: at("at5", "recall"), hitRateAt5: at("at5", "hit"),
+      precisionAt10: at("at10", "precision"), recallAt10: at("at10", "recall"), hitRateAt10: at("at10", "hit"),
+      returnedCount: at("at10", "returnedCount"), retrievalTimeMs: avg(l => l.retrievalTimeMs),
+      llmResponseTimeMs: avg(l => l.llmResponseTimeMs), totalResponseTimeMs: avg(l => l.totalResponseTimeMs), repetitions }
+  })
 }
-
-export async function aggregateMetrics(): Promise<AggregateMetrics[]> {
-  const out: AggregateMetrics[] = []
-
-  for (const method of ALL_METHODS) {
-    const logs = await prisma.aIInteractionLog.findMany({
-      where: { retrievalMethod: method, scenarioId: { not: null } },
-    })
-
-    if (logs.length === 0) {
-      out.push({
-        retrievalMethod: method,
-        count: 0,
-        avgCorrectness: 0,
-        avgPrecision: 0,
-        avgRecall: 0,
-        topKAccuracyRate: 0,
-        avgResponseTimeMs: 0,
-        avgTokens: 0,
-        totalCost: 0,
-      })
-      continue
-    }
-
-    const sum = (arr: Array<number | null | undefined>) =>
-      arr.reduce<number>((acc, v) => acc + (v ?? 0), 0)
-
-    out.push({
-      retrievalMethod: method,
-      count: logs.length,
-      avgCorrectness: sum(logs.map((l) => l.correctnessScore)) / logs.length,
-      avgPrecision: sum(logs.map((l) => l.retrievalPrecision)) / logs.length,
-      avgRecall: sum(logs.map((l) => l.retrievalRecall)) / logs.length,
-      topKAccuracyRate:
-        logs.filter((l) => l.topKAccuracy === true).length / logs.length,
-      avgResponseTimeMs: sum(logs.map((l) => l.totalResponseTimeMs)) / logs.length,
-      avgTokens: sum(logs.map((l) => l.totalTokens)) / logs.length,
-      totalCost: sum(logs.map((l) => l.estimatedCost)),
-    })
+export async function aggregateRagasMetrics(runId?: string) {
+  const scope = await selectedScope(runId)
+  const logs = await prisma.aIInteractionLog.findMany({ where: { ...scope, status: "succeeded", ragasEvaluation: { is: { evaluatorVersion: PRIMARY_EVALUATOR } } },
+    include: { ragasEvaluation: true, scenario: { select: { difficulty: true } } } })
+  const summarize = (rows: typeof logs, retrievalMethod: RetrievalMethod) => {
+    const metrics = ["faithfulness", "answerRelevance", "contextPrecision", "contextRecall"] as const
+    const scores = Object.fromEntries(metrics.map(metric => [metric, finiteMean(rows.map(l => l.ragasEvaluation?.[metric]))]))
+    const denominators = Object.fromEntries(metrics.map(metric => [metric, rows.filter(l => Number.isFinite(l.ragasEvaluation?.[metric]) && l.ragasEvaluation?.[metric] !== null).length]))
+    return { retrievalMethod, count: rows.length, ...scores, denominators }
   }
-
-  return out
+  return { overall: ALL_METHODS.map(m => summarize(logs.filter(l => l.retrievalMethod === m), m)),
+    byDifficulty: ALL_METHODS.flatMap(m => ["easy", "medium", "hard"].map(difficulty => ({ ...summarize(logs.filter(l => l.retrievalMethod === m && l.scenario?.difficulty === difficulty), m), difficulty }))) }
 }
-
-export interface RagasAggregateMetrics {
-  retrievalMethod: RetrievalMethod
-  count: number
-  avgFaithfulness: number
-  avgAnswerRelevance: number
-  avgContextPrecision: number
-  avgContextRecall: number
-  compositeScore: number
-}
-
-export interface RagasDifficultyMetrics {
-  retrievalMethod: RetrievalMethod
-  difficulty: string
-  count: number
-  avgFaithfulness: number
-  avgAnswerRelevance: number
-  avgContextPrecision: number
-  avgContextRecall: number
-  compositeScore: number
-}
-
-export async function aggregateRagasMetrics(): Promise<{
-  overall: RagasAggregateMetrics[]
-  byDifficulty: RagasDifficultyMetrics[]
-}> {
-  const overall: RagasAggregateMetrics[] = []
-  const byDifficulty: RagasDifficultyMetrics[] = []
-
-  const sum = (arr: Array<number | null | undefined>) =>
-    arr.reduce<number>((acc, v) => acc + (v ?? 0), 0)
-
-  const diffs = ["easy", "medium", "hard"]
-
-  for (const method of ALL_METHODS) {
-    const logs = await prisma.aIInteractionLog.findMany({
-      where: {
-        retrievalMethod: method,
-        scenarioId: { not: null },
-        ragasEvaluation: { isNot: null },
-      },
-      include: {
-        ragasEvaluation: true,
-        scenario: { select: { difficulty: true } },
-      },
-    })
-
-    const count = logs.length
-    if (count === 0) {
-      overall.push({
-        retrievalMethod: method,
-        count: 0,
-        avgFaithfulness: 0,
-        avgAnswerRelevance: 0,
-        avgContextPrecision: 0,
-        avgContextRecall: 0,
-        compositeScore: 0,
-      })
-    } else {
-      const avgFaith = sum(logs.map((l) => l.ragasEvaluation?.faithfulness)) / count
-      const avgAnsRel = sum(logs.map((l) => l.ragasEvaluation?.answerRelevance)) / count
-      const avgCtxPrec = sum(logs.map((l) => l.ragasEvaluation?.contextPrecision)) / count
-      const avgCtxRec = sum(logs.map((l) => l.ragasEvaluation?.contextRecall)) / count
-      const composite = (avgFaith + avgAnsRel + avgCtxPrec + avgCtxRec) / 4
-
-      overall.push({
-        retrievalMethod: method,
-        count,
-        avgFaithfulness: avgFaith,
-        avgAnswerRelevance: avgAnsRel,
-        avgContextPrecision: avgCtxPrec,
-        avgContextRecall: avgCtxRec,
-        compositeScore: composite,
-      })
-    }
-
-    for (const diff of diffs) {
-      const diffLogs = logs.filter((l) => l.scenario?.difficulty === diff)
-      const dCount = diffLogs.length
-      if (dCount > 0) {
-        const avgFaith = sum(diffLogs.map((l) => l.ragasEvaluation?.faithfulness)) / dCount
-        const avgAnsRel = sum(diffLogs.map((l) => l.ragasEvaluation?.answerRelevance)) / dCount
-        const avgCtxPrec = sum(diffLogs.map((l) => l.ragasEvaluation?.contextPrecision)) / dCount
-        const avgCtxRec = sum(diffLogs.map((l) => l.ragasEvaluation?.contextRecall)) / dCount
-        const composite = (avgFaith + avgAnsRel + avgCtxPrec + avgCtxRec) / 4
-        byDifficulty.push({
-          retrievalMethod: method,
-          difficulty: diff,
-          count: dCount,
-          avgFaithfulness: avgFaith,
-          avgAnswerRelevance: avgAnsRel,
-          avgContextPrecision: avgCtxPrec,
-          avgContextRecall: avgCtxRec,
-          compositeScore: composite,
-        })
-      }
-    }
-  }
-
-  return { overall, byDifficulty }
-}
-

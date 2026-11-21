@@ -14,7 +14,10 @@
     "experiment": "npx tsx scripts/run-experiment.ts",
     "eval:ragas": "npx tsx scripts/run-ragas.ts",
     "eval:validate": "node scripts/validate-scenarios.mjs",
-    "test:scenarios": "node --test scripts/validate-scenarios.test.mjs"
+    "test:scenarios": "node --test scripts/validate-scenarios.test.mjs",
+    "test:research": "tsx --test scripts/research.test.ts",
+    "typecheck": "tsc --noEmit",
+    "embed:corpus": "tsx scripts/embed-corpus.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",

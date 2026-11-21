@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- 4. Populate search_vector for all existing evidence (if any)
-UPDATE evidence SET search_vector = to_tsvector('english', content) WHERE search_vector IS NULL;
+UPDATE evidence SET search_vector = to_tsvector('simple', content) WHERE search_vector IS NULL;
 
 -- 5. Create GIN index for full-text search (sparse retrieval)
 CREATE INDEX IF NOT EXISTS idx_evidence_search_vector ON evidence USING GIN (search_vector);
@@ -14,7 +14,7 @@ CREATE INDEX IF NOT EXISTS idx_evidence_embedding ON evidence USING hnsw (embedd
 CREATE OR REPLACE FUNCTION evidence_search_vector_trigger()
 RETURNS trigger AS $$
 BEGIN
-  NEW.search_vector := to_tsvector('english', NEW.content);
+  NEW.search_vector := to_tsvector('simple', NEW.content);
   RETURN NEW;
 END
 $$ LANGUAGE plpgsql;

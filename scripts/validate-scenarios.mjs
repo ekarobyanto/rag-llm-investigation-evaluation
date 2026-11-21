@@ -34,8 +34,8 @@ export function validateScenarios(scenarios, caseFile) {
       const b = pair.evidence_index_b;
       assert(a !== b && ids.includes(a) && ids.includes(b), `${tag}: contradiction endpoints must be distinct labelled evidence`);
     }
-    assert(Array.isArray(scenario.expectedActions) && scenario.expectedActions.length > 0, `${tag}: no actions`);
-    for (const action of scenario.expectedActions) {
+    if (scenario.expectedActions !== undefined) assert(Array.isArray(scenario.expectedActions), `${tag}: invalid actions`);
+    for (const action of scenario.expectedActions ?? []) {
       assert(actions.has(action.action_type), `${tag}: invalid action ${action.action_type}`);
       assert(source.suspects.some(s => s.name === action.target), `${tag}: unknown target ${action.target}`);
     }
@@ -44,7 +44,17 @@ export function validateScenarios(scenarios, caseFile) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const scenarios = JSON.parse(readFileSync(resolve('eval-scenarios/scenario-v2.json'), 'utf8'));
-  const caseFile = JSON.parse(readFileSync(resolve('cases-input/case-1.json'), 'utf8'));
+  const args = process.argv.slice(2);
+  assert(args.length === 0 || args.length === 2, 'Provide both the scenario file and its case file.');
+  const file = process.env.EVAL_SCENARIO_FILE || 'scenario-v3.id.json';
+  const [scenarioPath = `eval-scenarios/${file}`, casePath = file === 'scenario-v3.id.json' ? 'cases-input/id-ID/case-1.v3.json' : 'cases-input/case-1.json'] = args;
+  const scenarios = JSON.parse(readFileSync(resolve(scenarioPath), 'utf8'));
+  const caseFile = JSON.parse(readFileSync(resolve(casePath), 'utf8'));
+  if (scenarioPath.endsWith('scenario-v3.id.json')) {
+    assert.equal(scenarios.length, 30, 'ID v3 requires 30 questions');
+    const source = caseFile.nexus_data_breach;
+    assert.equal(source.evidence.length, 150, 'ID v3 requires 150 evidence records');
+    assert.equal(new Set(source.evidence.map(e => e.content)).size, 150, 'ID v3 evidence must be unique');
+  }
   console.log(`Validated ${validateScenarios(scenarios, caseFile)} scenarios (offline; no database or model calls).`);
 }

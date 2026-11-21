@@ -1,97 +1,25 @@
-import { seedScenarios, runAllScenarios, aggregateMetrics, cancelEvaluation } from "../lib/eval";
-import type { RetrievalMethod } from "../lib/retrieval";
-
-process.on("SIGINT", () => {
-  console.log("\n⚠️ Stop signal received (Ctrl+C). Halting experiment loop gracefully...");
-  cancelEvaluation();
-});
-process.on("SIGTERM", () => {
-  console.log("\n⚠️ Termination signal received. Halting experiment loop gracefully...");
-  cancelEvaluation();
-});
-
+import "dotenv/config"
+import { randomUUID } from "crypto"
+import { seedScenarios, runAllScenarios, aggregateMetrics, cancelEvaluation } from "../lib/eval"
+import { prisma } from "../lib/db"
+import { datasetManifest } from "../lib/research"
+process.on("SIGINT", cancelEvaluation)
 async function main() {
-  const args = process.argv.slice(2);
-  let methods: RetrievalMethod[] = ["sparse", "dense", "hybrid"];
-  let runs = 1;
-  let skipSeed = false;
-
-  // Simple CLI argument parsing
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--methods" && args[i + 1]) {
-      methods = args[i + 1].split(",") as RetrievalMethod[];
-      i++;
-    } else if (args[i] === "--runs" && args[i + 1]) {
-      runs = parseInt(args[i + 1], 10);
-      i++;
-    } else if (args[i] === "--skip-seed") {
-      skipSeed = true;
-    }
+  const args = process.argv.slice(2)
+  const value = (name: string) => args[args.indexOf(name) + 1]
+  if (!args.includes("--execute")) throw new Error("Paid experiment requires explicit --execute. Use npm run test:research for offline fixtures.")
+  const runId = args.includes("--run-id") ? value("--run-id") : randomUUID()
+  const runs = args.includes("--runs") ? Number(value("--runs")) : 3
+  if (![1, 2, 3].includes(runs)) throw new Error("--runs must be 1, 2, or 3")
+  console.log({ runId, ...datasetManifest(), repetitions: runs })
+  await seedScenarios()
+  let failed = 0
+  for (let repetition = 1; repetition <= runs; repetition++) {
+    const result = await runAllScenarios(["sparse", "dense", "hybrid"], undefined, { runId, repetition })
+    failed += result.failedAttempts
+    if (result.cancelled) throw new Error("Experiment cancelled")
   }
-
-  console.log("==========================================");
-  console.log("Starting experiment with configuration:");
-  console.log(`- Methods: ${methods.join(", ")}`);
-  console.log(`- Runs: ${runs}`);
-  console.log(`- Skip Seed: ${skipSeed}`);
-  console.log("==========================================\n");
-
-  // 1. Seed evaluation scenarios
-  if (!skipSeed) {
-    console.log("Seeding scenarios from eval-scenarios/scenarios.json...");
-    try {
-      const summary = await seedScenarios();
-      console.log(`✅ Seeded ${summary.created} scenarios. Skipped: ${summary.skipped}. Total: ${summary.total}`);
-      if (summary.errors && summary.errors.length > 0) {
-        console.warn("⚠️ Errors during seeding:");
-        summary.errors.forEach((e) => console.warn(`  - ${e}`));
-      }
-    } catch (err) {
-      console.error("❌ Failed to seed scenarios:", err);
-      process.exit(1);
-    }
-  }
-
-  let totalExperimentCost = 0;
-  let totalExperimentDurationMs = 0;
-
-  // 2. Run all scenarios
-  for (let run = 1; run <= runs; run++) {
-    console.log(`\n--- Run ${run}/${runs} ---`);
-    console.log(`Running all scenarios for methods: ${methods.join(", ")}...`);
-    try {
-      // Uses the provided runAllScenarios which executes everything and collects results.
-      const runResult = await runAllScenarios(methods);
-      
-      totalExperimentCost += runResult.totalCost;
-      totalExperimentDurationMs += runResult.totalDurationMs;
-      
-      console.log(`✅ Run ${run} completed in ${runResult.totalDurationMs}ms`);
-      console.log(`💰 Run ${run} estimated cost: $${runResult.totalCost.toFixed(5)}`);
-    } catch (err) {
-      console.error(`❌ Run ${run} failed:`, err);
-    }
-  }
-
-  // 3. Aggregate and display metrics
-  console.log("\nAggregating metrics...");
-  try {
-    const metrics = await aggregateMetrics();
-    
-    // 4. Print a formatted summary table to console
-    console.log("\n=================== FINAL SUMMARY ===================");
-    console.table(metrics);
-    console.log("=====================================================");
-    
-    // Print total cost and total duration at the end
-    console.log(`Total Experiment Duration: ${totalExperimentDurationMs} ms`);
-    console.log(`Total Estimated Cost: $${totalExperimentCost.toFixed(5)}`);
-  } catch (err) {
-    console.error("❌ Failed to aggregate metrics:", err);
-  }
+  console.log(JSON.stringify(await aggregateMetrics(runId), null, 2))
+  if (failed) throw new Error(`${failed} attempts failed; inspect logs before reporting completeness`)
 }
-
-main().catch((err) => {
-  console.error("Unhandled error:", err);
-  process.exit(1);
-});
+main().catch(e => { console.error(e.message); process.exitCode = 1 }).finally(() => prisma.$disconnect())

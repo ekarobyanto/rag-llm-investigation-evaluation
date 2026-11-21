@@ -1,0 +1,426 @@
+[
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Menurut tiket Aisha, penerbangan apa yang ia pesan, dari bandara mana, dan kapan jadwal berangkatnya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      91
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Reservasi Aisha mencantumkan United NX-447 dari Washington Dulles dengan jadwal berangkat 14 Januari pukul 23.30 waktu setempat.",
+    "notes": "ID v3 / Q01."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Akses apa yang dimiliki akun kerja James, dan aplikasi apa yang ditemukan di laptop kantornya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      130,
+      131
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "James memakai akun bisnis standar tanpa hak administrator, izin VPN, atau akses infrastruktur teknis. Inventaris laptopnya mencantumkan Office, Salesforce, Zoom, dan Slack. Pemeriksa tidak menemukan klien VPN, perangkat pengembangan, atau emulator terminal.",
+    "notes": "ID v3 / Q02."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Akun apa yang terhubung ke VPN pada dini hari 15 Januari, dan akun siapa yang dulu membuatnya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      0,
+      1
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Sesi pukul 02.00–05.00 memakai svc-threatfeed. Pada 3 Oktober 2026, akun marcus.chen@company.com membuat akun layanan itu. Log pembuatan tidak mengidentifikasi orang yang menjalankan sesi Januari.",
+    "notes": "ID v3 / Q03."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Kapan Sarah keluar dari kantor menurut kartu aksesnya, dan siapa yang melihatnya keluar?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      30,
+      36
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Kartu Sarah dipindai di pintu keluar sekitar pukul 01.30 pada 15 Januari. Robert Torres, petugas keamanan, melihat Sarah melewati lobi utama sekitar waktu itu sambil membawa tas laptop.",
+    "notes": "ID v3 / Q04."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa tanggung jawab Viktor atas VPN dan akun layanan produksi? Apa yang boleh ia lakukan pada kredensial svc-threatfeed?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      60,
+      70
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Sebagai insinyur DevOps utama, Viktor menangani gateway VPN dan mengawasi pembuatan akun layanan produksi. Akun administratornya berwenang mengganti atau mengatur ulang kredensial svc-threatfeed.",
+    "notes": "ID v3 / Q05."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa yang terjadi dengan promosi Marcus, bagaimana reaksinya menurut rekan kerja, dan berapa cicilan pinjamannya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      8,
+      9,
+      16
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Posisi Kepala Keamanan Siber ditawarkan kepada kandidat luar. Marcus sempat dipertimbangkan dan gugur sebelum tahap akhir. Menurut rekannya, Marcus menjadi lebih pendiam dan mempertanyakan penghargaan atas masa kerjanya. Cicilan pinjamannya US$1.200 per bulan. Keterangan ini memberi konteks untuk mendalami kemungkinan motif.",
+    "notes": "ID v3 / Q06."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Untuk tugas apa Aisha diminta memakai data yang ia unduh pada 7 Januari? Apakah akunnya punya izin ekspor massal?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      97,
+      99,
+      109
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Log mencatat unduhan 500 MB dengan kode RK-Q4-17. Sehari sebelumnya, koordinator meminta Aisha memakai data berkode sama untuk merangkum risiko klien sebagai bahan presentasi. Akun Aisha memiliki akses baca tanpa izin ekspor massal.",
+    "notes": "ID v3 / Q07."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Bagaimana perjalanan pulang James pada 14 Januari menurut bukti Uber dan kamera rumahnya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      123,
+      124
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Uber menjemput James di Harbour Steak House pukul 22.55 dan mencatat perjalanan berakhir di alamat rumahnya pukul 23.20. Kamera pintu depan merekam James masuk pukul 23.25.",
+    "notes": "ID v3 / Q08."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Siapa yang tercatat membuat dan mereset svc-threatfeed pada awal Oktober dan pertengahan Januari? Siapa lagi yang berwenang mengelolanya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      1,
+      19,
+      41,
+      70
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Akun Marcus membuat svc-threatfeed pada 3 Oktober dan mereset kata sandinya pada 13 Januari pukul 14.22. Hak root Sarah mencakup akun itu. Akun administrator Viktor juga berwenang mengganti kredensialnya.",
+    "notes": "ID v3 / Q09."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa isi email Marcus tentang escrow, dan berapa dana yang kemudian masuk ke dompet yang dikaitkan dengannya?",
+    "difficulty": "easy",
+    "requiredEvidenceIndices": [
+      6,
+      7
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Email 12 Januari menyebut paket siap tanggal 15, meminta dana di dompet escrow, dan menyebut pengiriman akhir dalam 72 jam. Pada 18 Januari, dompet yang kunci privatnya dikaitkan dengan Marcus menerima 15 ETH, sekitar US$48.000. Belum ada pengenal transaksi yang menghubungkan kedua catatan itu.",
+    "notes": "ID v3 / Q10."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Marcus mengaku sudah tidur dan laptop kantornya mati. Apa yang bisa diperiksa dari log laptop, sensor ruang kerja, dan keterangan tetangga?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      2,
+      3,
+      17,
+      18
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Laptop kantor tidak mencatat aktivitas jaringan dari pukul 18.30 hingga 08.15 keesokan hari. Itu konsisten dengan keterangannya, meski log jaringan saja tidak memastikan laptop mati. Sensor mendeteksi orang dan lampu menyala pukul 01.45–05.35. Tetangga melihat lampu sekitar pukul 03.00. Identitas orang di ruangan dan waktu tidur Marcus masih terbuka.",
+    "notes": "ID v3 / Q11."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Mengapa Sarah memeriksa daftar akun layanan menjelang insiden? Cocokkan kuerinya dengan permintaan tim audit dan hak aksesnya.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      40,
+      41,
+      52
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Tim audit meminta daftar akun layanan beserta izin masing-masing untuk lampiran kontrol akses Q4. Kueri akun Sarah pukul 01.12 menghasilkan daftar seperti yang diminta. Sarah memang punya hak root untuk mengelola svc-threatfeed, tetapi entri tersebut hanya memperlihatkan pembacaan daftar.",
+    "notes": "ID v3 / Q12."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Dua bagian mana dari cerita pulang Viktor yang bertentangan dengan rekaman lobi dan bukti perjalanan?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      61,
+      62,
+      64
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 62
+      },
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 64
+      }
+    ],
+    "referenceAnswer": "Viktor mengaku keluar kantor pukul 17.00 dan langsung menyetir pulang. Kamera lobi merekamnya keluar pukul 19.15. Bukti perjalanan mencatat penjemputan di kantor pukul 19.20 dan tujuan sebuah bar pukul 19.40. Kedua perbedaan ini menyangkut alibi, belum menjelaskan siapa yang memakai VPN dini hari.",
+    "notes": "ID v3 / Q13."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Marcus dan James sama-sama punya alasan untuk kecewa pada perusahaan. Bandingkan peristiwa yang menyangkut karier mereka dengan akses teknis yang tercatat untuk masing-masing.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      8,
+      19,
+      126,
+      130,
+      136
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Marcus melewatkan promosi Kepala Keamanan Siber, dan akun kerjanya tercatat mereset kata sandi svc-threatfeed. Perusahaan kehilangan kontrak Meridian yang ditangani James, dan kompensasi variabelnya pada kuartal IV turun 40%. Akunnya bertipe bisnis standar tanpa izin VPN atau akses infrastruktur. Catatan teknis mengaitkan akun Marcus dengan akun layanan secara lebih langsung. Peristiwa karier keduanya belum membuktikan motif pribadi.",
+    "notes": "ID v3 / Q14."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Bandingkan isi korespondensi eksternal Marcus, Viktor, dan James. Apa yang sebenarnya dibahas di masing-masing pesan?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      6,
+      69,
+      127
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Email Marcus menyebut paket, escrow, dan jadwal pengiriman. Dua klien Viktor meminta pemeriksaan keamanan cloud serta laporan. Diana Walsh menyinggung peluang untuk James tanpa merinci bentuknya. Hanya pesan Marcus yang menyebut pengaturan pengiriman dan escrow, dan isi paketnya tetap tidak disebutkan.",
+    "notes": "ID v3 / Q15."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Sejauh mana izin dan aktivitas akun Aisha serta inventaris akses dan perangkat James mendukung dugaan bahwa mereka sendiri menjalankan ekspor lewat VPN?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      97,
+      113,
+      130,
+      131
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Akun Aisha memiliki akses baca tanpa izin ekspor massal atau akses kredensial akun layanan. Pemantauan tidak mencatat login ataupun panggilan API atas namanya dalam periode pemeriksaan, dengan zona waktu awal yang tidak dicantumkan. Akun James tidak punya izin VPN atau akses infrastruktur. Inventaris laptop kantornya juga tidak memuat klien VPN. Temuan ini melemahkan dugaan penggunaan akun atau perangkat yang diperiksa, tetapi belum menjawab siapa yang memakai identitas svc-threatfeed.",
+    "notes": "ID v3 / Q16."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa yang ditunjukkan catatan keuangan tentang kelima tersangka jika kita melihat penerimaan kripto Marcus, tabungan Sarah, transfer usaha Viktor, laporan latar belakang Aisha, dan komisi James?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      7,
+      44,
+      68,
+      103,
+      136
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Dompet yang dikaitkan dengan Marcus menerima 15 ETH pada 18 Januari. Tabungan Sarah turun dari US$85.000 menjadi US$12.000, dengan pengeluaran hukum dan rumah tangga tercatat. Usaha Viktor menerima US$6.500 dan US$8.500 dengan dua referensi berbeda. Laporan latar belakang Aisha tidak mencantumkan utang berjalan. Kompensasi variabel James turun 40%. Dari catatan itu saja, sumber transfer kripto dan kaitannya dengan insiden masih perlu ditelusuri.",
+    "notes": "ID v3 / Q17."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Bagaimana riwayat svc-threatfeed dari pembuatan akun hingga reset Januari? Sertakan rotasi Oktober, peninjauan izin November, dan akses ke repositori kredensial.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      1,
+      84,
+      85,
+      13,
+      19
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Akun Marcus membuat svc-threatfeed pada 3 Oktober 2026. Akun Viktor mengganti kata sandinya pada 15 Oktober sebagai bagian dari rotasi triwulanan. Pada November, Viktor menyetujui daftar izin akun layanan produksi. Pada 13 Januari, akun pengembang Marcus mengakses repositori yang memuat token svc-threatfeed dan akun kerjanya mereset kata sandi pukul 14.22. Waktu akses repositori tidak tercantum, sehingga urutan dua kejadian terakhir belum diketahui.",
+    "notes": "ID v3 / Q18."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apakah dua transfer ke PetrovTech lebih cocok dengan pembayaran jasa konsultasi atau penjualan data? Cocokkan referensi pembayaran, tagihan, dan permintaan klien.",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      68,
+      69,
+      87
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "PT-017 senilai US$6.500 dan PT-021 senilai US$8.500 cocok dengan nomor dan nilai dua tagihan pemeriksaan keamanan cloud. Dua rangkaian email klien juga membahas pekerjaan itu dan meminta laporan. Bukti tersebut mendukung penjelasan pembayaran jasa untuk kedua transfer. Identitas klien dalam email tidak bisa dipasangkan ke nomor tagihan dari teks yang tersedia.",
+    "notes": "ID v3 / Q19."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apakah komunikasi James dengan Diana Walsh dan pengiriman PDF harga menunjukkan bahwa James menyerahkan data perusahaan kepada Diana?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      127,
+      134,
+      128,
+      140
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Diana mengirim email tentang sebuah peluang pada 28 Desember. James meneleponnya pada 14 Januari pukul 18.00 selama tujuh menit. Isi panggilan tidak tercatat. PDF harga dikirim ke alamat pribadi James dan terdaftar sebagai dokumen nonrahasia. Tidak ada catatan di sini yang menunjukkan PDF atau data kerentanan itu diterima Diana.",
+    "notes": "ID v3 / Q20."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa perbedaan antara tindakan yang tercatat atas nama Sarah dan Marcus menjelang insiden bila dibandingkan dengan permintaan tim audit dan lokasi penyimpanan token?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      40,
+      52,
+      13,
+      19
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Kueri Sarah pukul 01.12 menampilkan daftar akun layanan dan izin yang sebelumnya diminta tim audit. Pada 13 Januari, akun pengembang Marcus tercatat mengakses repositori yang menyimpan token svc-threatfeed, dan akun kerjanya mereset kata sandi layanan. Akses ke repositori belum menunjukkan bahwa token tertentu dibaca atau disalin.",
+    "notes": "ID v3 / Q21."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Bagaimana catatan VPN perusahaan, penyedia internet, dan router rumah Marcus saling melengkapi untuk menjelaskan transfer dini hari?",
+    "difficulty": "medium",
+    "requiredEvidenceIndices": [
+      0,
+      4,
+      11
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "VPN perusahaan mencatat sesi svc-threatfeed dari 74.125.224.72 pukul 02.00–05.00. Penyedia internet mencatat unggahan dari sambungan rumah Marcus pukul 02.15–04.45. Dalam rentang yang sama, router rumah mencatat sekitar 2,3 TB keluar melalui VPN. Waktunya cocok, tetapi catatan itu belum memetakan alamat IP sesi ke pelanggan secara eksplisit atau mengidentifikasi operatornya.",
+    "notes": "ID v3 / Q22."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Bandingkan keterangan Viktor tentang pulang dari kantor dengan keterangan Marcus tentang tidur. Apa yang dapat dibantah langsung oleh kamera lobi dan bukti perjalanan, dan apa yang masih terbuka setelah membaca sensor ruang kerja?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      61,
+      62,
+      64,
+      2,
+      3
+    ],
+    "expectedContradictions": [
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 62
+      },
+      {
+        "evidence_index_a": 61,
+        "evidence_index_b": 64
+      }
+    ],
+    "referenceAnswer": "Waktu pulang Viktor pukul 17.00 bertentangan dengan kamera yang merekamnya keluar pukul 19.15. Klaim langsung menyetir pulang juga bertentangan dengan perjalanan dari kantor ke bar pukul 19.20. Sensor rumah Marcus mendeteksi seseorang dan lampu menyala pukul 01.45–05.35. Karena tidak mengenali orangnya, sensor hanya memberi alasan untuk menguji klaim Marcus sudah tidur.",
+    "notes": "ID v3 / Q23."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Susun urutan email escrow, reset kredensial, sesi VPN, transfer dari router rumah, dan penerimaan kripto. Bagian mana yang masih berupa dugaan?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      6,
+      19,
+      0,
+      11,
+      7
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Pada 12 Januari, email menyebut paket dan escrow. Pada 13 Januari pukul 14.22, akun Marcus mereset kata sandi layanan. Pada 15 Januari pukul 02.00–05.00, svc-threatfeed terhubung ke VPN. Router rumah Marcus mencatat 2,3 TB keluar pukul 02.15–04.45. Pada 18 Januari, dompet yang dikaitkan dengannya menerima 15 ETH. Urutan itu mendukung dugaan transaksi terkait insiden, tetapi isi paket, identitas operator, dan asal pembayaran belum terverifikasi.",
+    "notes": "ID v3 / Q24."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Siapa yang perlu dimintai klarifikasi tentang sensor ruang kerja, reset akun, dan pembayaran kripto? Susun pertanyaan yang membuka kesempatan menjelaskan ketiga temuan itu.",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      3,
+      19,
+      6,
+      7
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Prioritaskan Marcus. Siapa saja yang bisa memakai ruang kerja saat sensor aktif dini hari? Untuk pekerjaan apa kata sandi svc-threatfeed direset melalui akun Anda pada 13 Januari? Paket dan dompet escrow apa yang dimaksud dalam email 12 Januari, dan dari siapa 15 ETH diterima pada 18 Januari? Pertanyaan ini memberi ruang untuk menjelaskan apakah dua catatan transaksi itu memang berkaitan.",
+    "notes": "ID v3 / Q25."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Susun kronologi Marcus dari keluar kantor hingga dini hari dari kartu akses, GPS ponsel, sensor ruang kerja, dan router. Di bagian mana posisi orangnya masih belum pasti?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      10,
+      12,
+      3,
+      11
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Kartu Marcus tercatat di pintu keluar kantor pukul 18.30 pada 14 Januari. GPS menempatkan ponselnya di rumah pukul 22.00–07.00. Pada 15 Januari, sensor ruang kerja mendeteksi seseorang pukul 01.45–05.35, dan router mencatat 2,3 TB keluar pukul 02.15–04.45. GPS mengikuti ponsel, sensor mendeteksi kehadiran tanpa identitas, dan router mencatat koneksi. Ketiganya belum menempatkan Marcus sendiri di depan perangkat.",
+    "notes": "ID v3 / Q26."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Jika Marcus dan Viktor sama-sama pernah mereset kredensial layanan, siapa yang lebih layak diprioritaskan berdasarkan waktu reset, asal sesi yang diperiksa, dan aktivitas router?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      84,
+      19,
+      74,
+      0,
+      11
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Reset oleh Viktor tercatat pada 15 Oktober dalam rotasi triwulanan. Reset oleh akun Marcus terjadi pada 13 Januari, dua hari sebelum sesi svc-threatfeed. Pemeriksaan VPN pukul 02.00–05.00 tidak menemukan sesi dari IP rumah Viktor. Pada rentang sesi layanan itu, router rumah Marcus mencatat 2,3 TB keluar melalui VPN. Kombinasi waktu dan aktivitas jaringan memprioritaskan Marcus untuk diperiksa, tetapi belum mengidentifikasi orang yang menjalankan sesi.",
+    "notes": "ID v3 / Q27."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Apa hubungan antara halaman yang dipulihkan dari laptop Marcus, cuplikan data di ShadowVault, dan dugaan pembayaran? Bagaimana menilai batas hubungan itu?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      5,
+      28,
+      6,
+      7
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Potongan halaman di laptop memuat kode SV-184. Salinan penawaran dengan kode yang sama memuat cuplikan yang nomor laporan dan temuannya cocok dengan dokumen internal. Email menyebut paket dan escrow, lalu dompet terkait Marcus menerima 15 ETH. Kode yang cocok menghubungkan peramban dengan penawaran tersebut. Bukti yang ada belum menunjukkan siapa pengunggahnya, apakah paketnya berisi arsip itu, atau siapa pengirim ETH.",
+    "notes": "ID v3 / Q28."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Dari reset kredensial, lalu lintas VPN, dan temuan ShadowVault, siapa yang paling kuat terkait dengan dugaan kebocoran dan bagaimana bukti-bukti itu saling menguatkan?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      19,
+      0,
+      11,
+      5,
+      28
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Marcus paling layak diprioritaskan. Akunnya mereset kredensial layanan pada 13 Januari. Dua hari kemudian layanan itu membuka sesi VPN, bersamaan dengan transfer sekitar 2,3 TB lewat VPN dari router rumahnya. Di laptop pribadinya ada jejak penawaran SV-184, dan cuplikan dari penawaran itu cocok dengan data internal. Tiga kaitan tersebut menguatkan dugaan keterlibatan Marcus. Belum ada catatan yang menunjukkan ia sendiri mengoperasikan sesi atau mengunggah penawaran.",
+    "notes": "ID v3 / Q29."
+  },
+  {
+    "caseTitle": "Kebocoran Data Perusahaan (ID v3)",
+    "prompt": "Pada penutupan sementara kasus, apa yang masih harus diverifikasi sebelum isi arsip, identitas pengguna VPN, dan sumber pembayaran dapat dikaitkan ke satu orang?",
+    "difficulty": "hard",
+    "requiredEvidenceIndices": [
+      20,
+      0,
+      11,
+      6,
+      7
+    ],
+    "expectedContradictions": [],
+    "referenceAnswer": "Susunan folder NAS Marcus mirip arsip internal, tetapi isi berkas tidak berhasil dipulihkan. Log VPN mengidentifikasi akun layanan dan IP, sementara router rumah Marcus mencatat transfer yang waktunya tumpang tindih. Masih diperlukan bukti yang mengaitkan sesi ke perangkat dan pengguna tertentu. Email escrow dan penerimaan 15 ETH memerlukan pengenal transaksi atau catatan pihak pengirim untuk membuktikan keduanya berkaitan. Marcus tetap menjadi fokus pemeriksaan, dengan tiga hubungan tersebut masih terbuka.",
+    "notes": "ID v3 / Q30."
+  }
+]

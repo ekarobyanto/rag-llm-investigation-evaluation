@@ -1,3 +1,8 @@
+> CI/CD is paused because the VPS subscription expired. The workflow is archived at
+> `.github/workflows/deploy.yml.disabled`, so repository changes do not build/push
+> images or deploy. Restore the `.yml` extension and re-enable the GitHub Actions
+> workflow only after a replacement server is configured.
+
 # Production Deployment Architecture
 
 This directory houses the containerized production stack for the **RAG Investigation Evaluation System**.
@@ -34,7 +39,7 @@ deployment/
 ## 🚀 Deployment Instructions
 
 ### 1. Automated Deployment (CI/CD)
-Pushing to `master` automatically:
+When explicitly re-enabled after provisioning a replacement server, pushing to `master` automatically:
 1. Builds the Next.js standalone container via GitHub Actions.
 2. Pushes the Docker image to GitHub Container Registry (`ghcr.io`).
 3. Deploys to the VPS over SSH, migrates the database, runs the data seeder, and updates Nginx.

@@ -1,0 +1,69 @@
+[
+  {
+    "id": "fixture-q13-sparse-1",
+    "datasetVersion": "scenario-v3.id.json:b9473d2bf5f27ba1f31af8fe2fff11acdebf545a6b321b019bae83c9daf7c42e:5640913e9dd316bbaf7febd6915829ae715fcd207f9dcefe9b1640b244f88c6c",
+    "runId": "offline-example-only",
+    "scenarioId": "Q13",
+    "repetition": 1,
+    "attempt": 1,
+    "retryOf": null,
+    "retrievalMethod": "sparse",
+    "status": "succeeded",
+    "failureReason": null,
+    "createdAt": "2026-11-22T00:00:00.000Z",
+    "finishedAt": "2026-11-22T00:00:00.003Z",
+    "promptTemplateVersion": "id-v3-evidence-v2",
+    "userPrompt": "Dua bagian mana dari cerita pulang Viktor yang bertentangan dengan rekaman lobi dan bukti perjalanan?",
+    "aiResponse": "Viktor mengaku keluar kantor pukul 17.00 dan langsung menyetir pulang. Kamera lobi merekamnya keluar pukul 19.15. Bukti perjalanan mencatat penjemputan di kantor pukul 19.20 dan tujuan sebuah bar pukul 19.40. Kedua perbedaan ini menyangkut alibi, belum menjelaskan siapa yang memakai VPN dini hari.",
+    "referenceAnswerSnapshot": "Viktor mengaku keluar kantor pukul 17.00 dan langsung menyetir pulang. Kamera lobi merekamnya keluar pukul 19.15. Bukti perjalanan mencatat penjemputan di kantor pukul 19.20 dan tujuan sebuah bar pukul 19.40. Kedua perbedaan ini menyangkut alibi, belum menjelaskan siapa yang memakai VPN dini hari.",
+    "retrievalTimeMs": 2,
+    "llmResponseTimeMs": 1,
+    "totalResponseTimeMs": 3,
+    "retrievalMetrics": {
+      "at5": {
+        "precision": 0.6,
+        "recall": 1,
+        "hit": 1,
+        "returnedCount": 3
+      },
+      "at10": {
+        "precision": 0.3,
+        "recall": 1,
+        "hit": 1,
+        "returnedCount": 3
+      }
+    },
+    "retrievedEvidenceIds": [
+      "fixture-E61",
+      "fixture-E62",
+      "fixture-E64"
+    ],
+    "retrievedContextsList": [
+      "Viktor Petrov memberi keterangan, “Tanggal 14 Januari saya keluar kantor tepat jam lima sore. Saya langsung menyetir pulang. Malam itu saya cuma nonton TV sebentar, lalu tidur lebih awal.”",
+      "Pada 14 Januari pukul 19.15, kamera lobi merekam Viktor Petrov berjalan keluar melalui pintu utama kantor.",
+      "Bukti perjalanan pada akun Viktor mencantumkan kantor sebagai titik jemput dan sebuah bar di pusat kota sebagai tujuan. Perjalanan dimulai pukul 19.20 pada 14 Januari dan berakhir pukul 19.40."
+    ],
+    "modelSettings": {
+      "model": "fixture-no-provider",
+      "temperature": 0.2,
+      "max_completion_tokens": 1000
+    },
+    "runManifest": {
+      "fixture": true,
+      "scenarioHash": "b9473d2bf5f27ba1f31af8fe2fff11acdebf545a6b321b019bae83c9daf7c42e",
+      "corpusHash": "5640913e9dd316bbaf7febd6915829ae715fcd207f9dcefe9b1640b244f88c6c"
+    },
+    "ragasEvaluation": {
+      "evaluatorVersion": "ragas-0.2.15",
+      "judgeModel": "fixture-no-provider",
+      "status": "succeeded",
+      "contextPrecision": 0.75,
+      "contextRecall": 0.75,
+      "faithfulness": 0.75,
+      "answerRelevance": 0.75,
+      "metricStatus": {
+        "fixture": true
+      }
+    }
+  }
+]
