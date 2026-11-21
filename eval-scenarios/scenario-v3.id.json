@@ -6,12 +6,6 @@
     "requiredEvidenceIndices": [
       91
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Aisha Rahman"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Reservasi Aisha mencantumkan United NX-447 dari Washington Dulles dengan jadwal berangkat 14 Januari pukul 23.30 waktu setempat.",
     "notes": "ID v3 / Q01."
@@ -23,12 +17,6 @@
     "requiredEvidenceIndices": [
       130,
       131
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "James memakai akun bisnis standar tanpa hak administrator, izin VPN, atau akses infrastruktur teknis. Inventaris laptopnya mencantumkan Office, Salesforce, Zoom, dan Slack. Pemeriksa tidak menemukan klien VPN, perangkat pengembangan, atau emulator terminal.",
@@ -42,12 +30,6 @@
       0,
       1
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Sesi pukul 02.00–05.00 memakai svc-threatfeed. Pada 3 Oktober 2026, akun marcus.chen@company.com membuat akun layanan itu. Log pembuatan tidak mengidentifikasi orang yang menjalankan sesi Januari.",
     "notes": "ID v3 / Q03."
@@ -60,12 +42,6 @@
       30,
       36
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Dr. Sarah Okonkwo"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Kartu Sarah dipindai di pintu keluar sekitar pukul 01.30 pada 15 Januari. Robert Torres, petugas keamanan, melihat Sarah melewati lobi utama sekitar waktu itu sambil membawa tas laptop.",
     "notes": "ID v3 / Q04."
@@ -77,12 +53,6 @@
     "requiredEvidenceIndices": [
       60,
       70
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Viktor Petrov"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Sebagai insinyur DevOps utama, Viktor menangani gateway VPN dan mengawasi pembuatan akun layanan produksi. Akun administratornya berwenang mengganti atau mengatur ulang kredensial svc-threatfeed.",
@@ -97,12 +67,6 @@
       9,
       16
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Posisi Kepala Keamanan Siber ditawarkan kepada kandidat luar. Marcus sempat dipertimbangkan dan gugur sebelum tahap akhir. Menurut rekannya, Marcus menjadi lebih pendiam dan mempertanyakan penghargaan atas masa kerjanya. Cicilan pinjamannya US$1.200 per bulan. Keterangan ini memberi konteks untuk mendalami kemungkinan motif.",
     "notes": "ID v3 / Q06."
@@ -116,12 +80,6 @@
       99,
       109
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Aisha Rahman"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Log mencatat unduhan 500 MB dengan kode RK-Q4-17. Sehari sebelumnya, koordinator meminta Aisha memakai data berkode sama untuk merangkum risiko klien sebagai bahan presentasi. Akun Aisha memiliki akses baca tanpa izin ekspor massal.",
     "notes": "ID v3 / Q07."
@@ -133,12 +91,6 @@
     "requiredEvidenceIndices": [
       123,
       124
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Uber menjemput James di Harbour Steak House pukul 22.55 dan mencatat perjalanan berakhir di alamat rumahnya pukul 23.20. Kamera pintu depan merekam James masuk pukul 23.25.",
@@ -154,20 +106,6 @@
       41,
       70
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Dr. Sarah Okonkwo"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Viktor Petrov"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Akun Marcus membuat svc-threatfeed pada 3 Oktober dan mereset kata sandinya pada 13 Januari pukul 14.22. Hak root Sarah mencakup akun itu. Akun administrator Viktor juga berwenang mengganti kredensialnya.",
     "notes": "ID v3 / Q09."
@@ -179,12 +117,6 @@
     "requiredEvidenceIndices": [
       6,
       7
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Email 12 Januari menyebut paket siap tanggal 15, meminta dana di dompet escrow, dan menyebut pengiriman akhir dalam 72 jam. Pada 18 Januari, dompet yang kunci privatnya dikaitkan dengan Marcus menerima 15 ETH, sekitar US$48.000. Belum ada pengenal transaksi yang menghubungkan kedua catatan itu.",
@@ -200,12 +132,6 @@
       17,
       18
     ],
-    "expectedActions": [
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Laptop kantor tidak mencatat aktivitas jaringan dari pukul 18.30 hingga 08.15 keesokan hari. Itu konsisten dengan keterangannya, meski log jaringan saja tidak memastikan laptop mati. Sensor mendeteksi orang dan lampu menyala pukul 01.45–05.35. Tetangga melihat lampu sekitar pukul 03.00. Identitas orang di ruangan dan waktu tidur Marcus masih terbuka.",
     "notes": "ID v3 / Q11."
@@ -219,12 +145,6 @@
       41,
       52
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Dr. Sarah Okonkwo"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Tim audit meminta daftar akun layanan beserta izin masing-masing untuk lampiran kontrol akses Q4. Kueri akun Sarah pukul 01.12 menghasilkan daftar seperti yang diminta. Sarah memang punya hak root untuk mengelola svc-threatfeed, tetapi entri tersebut hanya memperlihatkan pembacaan daftar.",
     "notes": "ID v3 / Q12."
@@ -237,12 +157,6 @@
       61,
       62,
       64
-    ],
-    "expectedActions": [
-      {
-        "action_type": "INTERROGATE",
-        "target": "Viktor Petrov"
-      }
     ],
     "expectedContradictions": [
       {
@@ -268,12 +182,6 @@
       130,
       136
     ],
-    "expectedActions": [
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Marcus melewatkan promosi Kepala Keamanan Siber, dan akun kerjanya tercatat mereset kata sandi svc-threatfeed. Perusahaan kehilangan kontrak Meridian yang ditangani James, dan kompensasi variabelnya pada kuartal IV turun 40%. Akunnya bertipe bisnis standar tanpa izin VPN atau akses infrastruktur. Catatan teknis mengaitkan akun Marcus dengan akun layanan secara lebih langsung. Peristiwa karier keduanya belum membuktikan motif pribadi.",
     "notes": "ID v3 / Q14."
@@ -286,20 +194,6 @@
       6,
       69,
       127
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Viktor Petrov"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Email Marcus menyebut paket, escrow, dan jadwal pengiriman. Dua klien Viktor meminta pemeriksaan keamanan cloud serta laporan. Diana Walsh menyinggung peluang untuk James tanpa merinci bentuknya. Hanya pesan Marcus yang menyebut pengaturan pengiriman dan escrow, dan isi paketnya tetap tidak disebutkan.",
@@ -314,16 +208,6 @@
       113,
       130,
       131
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Aisha Rahman"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Akun Aisha memiliki akses baca tanpa izin ekspor massal atau akses kredensial akun layanan. Pemantauan tidak mencatat login ataupun panggilan API atas namanya dalam periode pemeriksaan, dengan zona waktu awal yang tidak dicantumkan. Akun James tidak punya izin VPN atau akses infrastruktur. Inventaris laptop kantornya juga tidak memuat klien VPN. Temuan ini melemahkan dugaan penggunaan akun atau perangkat yang diperiksa, tetapi belum menjawab siapa yang memakai identitas svc-threatfeed.",
@@ -340,28 +224,6 @@
       103,
       136
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Dr. Sarah Okonkwo"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Viktor Petrov"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Aisha Rahman"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Dompet yang dikaitkan dengan Marcus menerima 15 ETH pada 18 Januari. Tabungan Sarah turun dari US$85.000 menjadi US$12.000, dengan pengeluaran hukum dan rumah tangga tercatat. Usaha Viktor menerima US$6.500 dan US$8.500 dengan dua referensi berbeda. Laporan latar belakang Aisha tidak mencantumkan utang berjalan. Kompensasi variabel James turun 40%. Dari catatan itu saja, sumber transfer kripto dan kaitannya dengan insiden masih perlu ditelusuri.",
     "notes": "ID v3 / Q17."
@@ -377,12 +239,6 @@
       13,
       19
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Akun Marcus membuat svc-threatfeed pada 3 Oktober 2026. Akun Viktor mengganti kata sandinya pada 15 Oktober sebagai bagian dari rotasi triwulanan. Pada November, Viktor menyetujui daftar izin akun layanan produksi. Pada 13 Januari, akun pengembang Marcus mengakses repositori yang memuat token svc-threatfeed dan akun kerjanya mereset kata sandi pukul 14.22. Waktu akses repositori tidak tercantum, sehingga urutan dua kejadian terakhir belum diketahui.",
     "notes": "ID v3 / Q18."
@@ -395,12 +251,6 @@
       68,
       69,
       87
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Viktor Petrov"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "PT-017 senilai US$6.500 dan PT-021 senilai US$8.500 cocok dengan nomor dan nilai dua tagihan pemeriksaan keamanan cloud. Dua rangkaian email klien juga membahas pekerjaan itu dan meminta laporan. Bukti tersebut mendukung penjelasan pembayaran jasa untuk kedua transfer. Identitas klien dalam email tidak bisa dipasangkan ke nomor tagihan dari teks yang tersedia.",
@@ -416,12 +266,6 @@
       128,
       140
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "James Whitfield"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Diana mengirim email tentang sebuah peluang pada 28 Desember. James meneleponnya pada 14 Januari pukul 18.00 selama tujuh menit. Isi panggilan tidak tercatat. PDF harga dikirim ke alamat pribadi James dan terdaftar sebagai dokumen nonrahasia. Tidak ada catatan di sini yang menunjukkan PDF atau data kerentanan itu diterima Diana.",
     "notes": "ID v3 / Q20."
@@ -436,16 +280,6 @@
       13,
       19
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Dr. Sarah Okonkwo"
-      },
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Kueri Sarah pukul 01.12 menampilkan daftar akun layanan dan izin yang sebelumnya diminta tim audit. Pada 13 Januari, akun pengembang Marcus tercatat mengakses repositori yang menyimpan token svc-threatfeed, dan akun kerjanya mereset kata sandi layanan. Akses ke repositori belum menunjukkan bahwa token tertentu dibaca atau disalin.",
     "notes": "ID v3 / Q21."
@@ -458,12 +292,6 @@
       0,
       4,
       11
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "VPN perusahaan mencatat sesi svc-threatfeed dari 74.125.224.72 pukul 02.00–05.00. Penyedia internet mencatat unggahan dari sambungan rumah Marcus pukul 02.15–04.45. Dalam rentang yang sama, router rumah mencatat sekitar 2,3 TB keluar melalui VPN. Waktunya cocok, tetapi catatan itu belum memetakan alamat IP sesi ke pelanggan secara eksplisit atau mengidentifikasi operatornya.",
@@ -479,16 +307,6 @@
       64,
       2,
       3
-    ],
-    "expectedActions": [
-      {
-        "action_type": "REVIEW_TIMELINE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "REVIEW_TIMELINE",
-        "target": "Viktor Petrov"
-      }
     ],
     "expectedContradictions": [
       {
@@ -514,16 +332,6 @@
       11,
       7
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Pada 12 Januari, email menyebut paket dan escrow. Pada 13 Januari pukul 14.22, akun Marcus mereset kata sandi layanan. Pada 15 Januari pukul 02.00–05.00, svc-threatfeed terhubung ke VPN. Router rumah Marcus mencatat 2,3 TB keluar pukul 02.15–04.45. Pada 18 Januari, dompet yang dikaitkan dengannya menerima 15 ETH. Urutan itu mendukung dugaan transaksi terkait insiden, tetapi isi paket, identitas operator, dan asal pembayaran belum terverifikasi.",
     "notes": "ID v3 / Q24."
@@ -538,12 +346,6 @@
       6,
       7
     ],
-    "expectedActions": [
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Prioritaskan Marcus. Siapa saja yang bisa memakai ruang kerja saat sensor aktif dini hari? Untuk pekerjaan apa kata sandi svc-threatfeed direset melalui akun Anda pada 13 Januari? Paket dan dompet escrow apa yang dimaksud dalam email 12 Januari, dan dari siapa 15 ETH diterima pada 18 Januari? Pertanyaan ini memberi ruang untuk menjelaskan apakah dua catatan transaksi itu memang berkaitan.",
     "notes": "ID v3 / Q25."
@@ -557,12 +359,6 @@
       12,
       3,
       11
-    ],
-    "expectedActions": [
-      {
-        "action_type": "REVIEW_TIMELINE",
-        "target": "Marcus Chen"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Kartu Marcus tercatat di pintu keluar kantor pukul 18.30 pada 14 Januari. GPS menempatkan ponselnya di rumah pukul 22.00–07.00. Pada 15 Januari, sensor ruang kerja mendeteksi seseorang pukul 01.45–05.35, dan router mencatat 2,3 TB keluar pukul 02.15–04.45. GPS mengikuti ponsel, sensor mendeteksi kehadiran tanpa identitas, dan router mencatat koneksi. Ketiganya belum menempatkan Marcus sendiri di depan perangkat.",
@@ -579,16 +375,6 @@
       0,
       11
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Reset oleh Viktor tercatat pada 15 Oktober dalam rotasi triwulanan. Reset oleh akun Marcus terjadi pada 13 Januari, dua hari sebelum sesi svc-threatfeed. Pemeriksaan VPN pukul 02.00–05.00 tidak menemukan sesi dari IP rumah Viktor. Pada rentang sesi layanan itu, router rumah Marcus mencatat 2,3 TB keluar melalui VPN. Kombinasi waktu dan aktivitas jaringan memprioritaskan Marcus untuk diperiksa, tetapi belum mengidentifikasi orang yang menjalankan sesi.",
     "notes": "ID v3 / Q27."
@@ -602,12 +388,6 @@
       28,
       6,
       7
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Potongan halaman di laptop memuat kode SV-184. Salinan penawaran dengan kode yang sama memuat cuplikan yang nomor laporan dan temuannya cocok dengan dokumen internal. Email menyebut paket dan escrow, lalu dompet terkait Marcus menerima 15 ETH. Kode yang cocok menghubungkan peramban dengan penawaran tersebut. Bukti yang ada belum menunjukkan siapa pengunggahnya, apakah paketnya berisi arsip itu, atau siapa pengirim ETH.",
@@ -624,16 +404,6 @@
       5,
       28
     ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
-    ],
     "expectedContradictions": [],
     "referenceAnswer": "Marcus paling layak diprioritaskan. Akunnya mereset kredensial layanan pada 13 Januari. Dua hari kemudian layanan itu membuka sesi VPN, bersamaan dengan transfer sekitar 2,3 TB lewat VPN dari router rumahnya. Di laptop pribadinya ada jejak penawaran SV-184, dan cuplikan dari penawaran itu cocok dengan data internal. Tiga kaitan tersebut menguatkan dugaan keterlibatan Marcus. Belum ada catatan yang menunjukkan ia sendiri mengoperasikan sesi atau mengunggah penawaran.",
     "notes": "ID v3 / Q29."
@@ -648,16 +418,6 @@
       11,
       6,
       7
-    ],
-    "expectedActions": [
-      {
-        "action_type": "EXAMINE_EVIDENCE",
-        "target": "Marcus Chen"
-      },
-      {
-        "action_type": "INTERROGATE",
-        "target": "Marcus Chen"
-      }
     ],
     "expectedContradictions": [],
     "referenceAnswer": "Susunan folder NAS Marcus mirip arsip internal, tetapi isi berkas tidak berhasil dipulihkan. Log VPN mengidentifikasi akun layanan dan IP, sementara router rumah Marcus mencatat transfer yang waktunya tumpang tindih. Masih diperlukan bukti yang mengaitkan sesi ke perangkat dan pengguna tertentu. Email escrow dan penerimaan 15 ETH memerlukan pengenal transaksi atau catatan pihak pengirim untuk membuktikan keduanya berkaitan. Marcus tetap menjadi fokus pemeriksaan, dengan tiga hubungan tersebut masih terbuka.",

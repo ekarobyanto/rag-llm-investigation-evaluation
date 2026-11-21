@@ -35,20 +35,20 @@ export async function sparseRetrieve(
   query: string,
   options?: RetrievalOptions
 ): Promise<RetrievalResult> {
-  const limit = options?.limit ?? 5
+  const limit = options?.limit ?? 10
   const startTime = Date.now()
 
   try {
     // Try plainto_tsquery first for exact multi-token conjunction
     let results = await prisma.$queryRaw<SparseRow[]>`
       SELECT id, type, category,
-        LEFT(content, 500) AS content,
-        ts_rank_cd(search_vector, plainto_tsquery('english', ${query})) AS score
+        content,
+        ts_rank_cd(search_vector, plainto_tsquery('simple', ${query})) AS score
       FROM evidence
       WHERE "caseId" = ${caseId}
         AND search_vector IS NOT NULL
-        AND search_vector @@ plainto_tsquery('english', ${query})
-      ORDER BY score DESC
+        AND search_vector @@ plainto_tsquery('simple', ${query})
+      ORDER BY score DESC, id ASC
       LIMIT ${limit}
     `
 
@@ -58,13 +58,13 @@ export async function sparseRetrieve(
       if (orQuery) {
         results = await prisma.$queryRaw<SparseRow[]>`
           SELECT id, type, category,
-            LEFT(content, 500) AS content,
-            ts_rank_cd(search_vector, websearch_to_tsquery('english', ${orQuery})) AS score
+            content,
+            ts_rank_cd(search_vector, websearch_to_tsquery('simple', ${orQuery})) AS score
           FROM evidence
           WHERE "caseId" = ${caseId}
             AND search_vector IS NOT NULL
-            AND search_vector @@ websearch_to_tsquery('english', ${orQuery})
-          ORDER BY score DESC
+            AND search_vector @@ websearch_to_tsquery('simple', ${orQuery})
+          ORDER BY score DESC, id ASC
           LIMIT ${limit}
         `
       }
@@ -84,15 +84,10 @@ export async function sparseRetrieve(
       retrievalTimeMs: Date.now() - startTime,
       embeddingTimeMs: null,
       method: "sparse",
+      candidateDepth: limit,
       sparseScores: evidence.map((e) => e.sparseScore!),
     }
   } catch (error) {
-    console.error("Sparse retrieval error:", error)
-    return {
-      evidence: [],
-      retrievalTimeMs: Date.now() - startTime,
-      embeddingTimeMs: null,
-      method: "sparse",
-    }
+    throw new Error(`Sparse retrieval failed: ${error instanceof Error ? error.message : String(error)}`)
   }
 }

@@ -12,6 +12,7 @@ export interface RetrievedEvidenceItem {
 }
 
 export interface RetrievalResult {
+  candidateDepth: number
   evidence: RetrievedEvidenceItem[]
   retrievalTimeMs: number
   embeddingTimeMs: number | null

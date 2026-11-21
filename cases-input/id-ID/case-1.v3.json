@@ -954,12 +954,6 @@
         19,
         20,
         28
-      ],
-      "optimal_next_actions": [
-        "INTERROGATE",
-        "EXAMINE_EVIDENCE",
-        "REVIEW_TIMELINE",
-        "SUBMIT_DEDUCTION"
       ]
     }
   }

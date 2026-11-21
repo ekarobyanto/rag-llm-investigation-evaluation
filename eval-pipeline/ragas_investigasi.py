@@ -1,4 +1,7 @@
-"""Score saved investigation responses with standard RAGAS 0.2.15 metrics.
+"""SECONDARY DIAGNOSTIC ONLY: score selected saved responses outside the primary report.
+
+The canonical pipeline is run_ragas.py with pinned requirements.txt. This older
+standalone script writes JSON only; do not import its scores into primary reports.
 
 Python 3.11, in a fresh virtual environment:
   python -m pip install "ragas==0.2.15" "langchain-openai>=0.2.9,<0.3" psycopg2-binary
@@ -102,7 +105,7 @@ def score(rows):
             value = float(values[metric.name])
             scores[metric.name] = value if math.isfinite(value) else None
         output.append({**row, "scores": scores})
-    return {"ragas_version": version("ragas"), "judge": JUDGE, "embedding": EMBEDDING, "rows": output}
+    return {"evaluator_role": "secondary-diagnostic", "ragas_version": version("ragas"), "judge": JUDGE, "embedding": EMBEDDING, "rows": output}
 
 
 def main():

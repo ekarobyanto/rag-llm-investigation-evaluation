@@ -1,6 +1,8 @@
 # Investigation System - RAG-Based LLM Decision Support
 
-Interactive investigation simulation system for evaluating how Retrieval-Augmented Generation (RAG) improves contextual decision-making in LLM-assisted investigative gameplay.
+Interactive investigation simulation for comparing Sparse, Dense, and Hybrid retrieval on the same Indonesian investigation questions.
+
+The active ID v3 workflow, migration instructions, offline checks, and experiment commands are documented in [Research realignment handoff](docs/research-realignment.md). Earlier benchmark reports are historical and must not be combined with v3 results.
 
 ## Project Structure
 
@@ -63,7 +65,7 @@ npm run prisma:migrate
 npm run seed
 ```
 
-This loads 3 sample investigation cases with suspects and evidence.
+By default this loads the Indonesian ID v3 case (150 evidence records and 30 scenarios) into an isolated database. Embeddings require the explicit `--embed` flag; seeding never clears existing research data.
 
 ### 6. Start Development Server
 
@@ -99,7 +101,7 @@ Visit `http://localhost:3000` in your browser.
   - Timing metrics (retrieval_time_ms, llm_response_time_ms, total_response_time_ms)
   - Token usage (prompt_tokens, completion_tokens, total_tokens)
   - Hallucination detection flags
-  - Correctness scoring fields
+  - Historical action-score fields retained for prior runs; active runs use retrieval and RAGAS metrics
 
 ## Creating Custom Cases
 

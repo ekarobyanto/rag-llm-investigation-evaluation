@@ -1,5 +1,7 @@
 # Quick Setup Guide
 
+For the active ID v3 experiment, follow [Research realignment handoff](docs/research-realignment.md). The older walkthrough below describes the original gameplay interface.
+
 ## Prerequisites
 - PostgreSQL running in Docker (checked: running)
 - Node.js 18+
@@ -56,7 +58,7 @@ Open `http://localhost:3000` in browser.
 
 1. Generate case JSON using format in `lib/case-data.ts`
 2. Add to `sampleCases` in `prisma/seed.ts`
-3. Run `npm run seed` (clears and reloads database)
+3. Use a new isolated database and run `npm run seed` (existing research data is never cleared)
 
 Example case JSON format:
 ```json

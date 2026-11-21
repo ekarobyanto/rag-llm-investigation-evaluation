@@ -15,10 +15,17 @@ export async function denseRetrieve(
   query: string,
   options?: RetrievalOptions
 ): Promise<RetrievalResult> {
-  const limit = options?.limit ?? 5
+  const limit = options?.limit ?? 10
   const startTime = Date.now()
 
   try {
+    const coverage = await prisma.$queryRaw<Array<{ count: bigint; missing: bigint }>>`
+      SELECT COUNT(*) AS count, COUNT(*) FILTER (WHERE embedding IS NULL) AS missing
+      FROM evidence WHERE "caseId" = ${caseId}
+    `
+    if (!Number(coverage[0]?.count) || Number(coverage[0]?.missing)) {
+      throw new Error("Case requires a complete precomputed embedding corpus")
+    }
     const embeddingStart = Date.now()
     const queryEmbedding = await generateEmbedding(query)
     const embeddingTimeMs = Date.now() - embeddingStart
@@ -26,12 +33,12 @@ export async function denseRetrieve(
 
     const results = await prisma.$queryRaw<DenseRow[]>`
       SELECT id, type, category,
-        LEFT(content, 500) AS content,
+        content,
         1 - (embedding <=> ${embeddingStr}::vector) AS similarity
       FROM evidence
       WHERE "caseId" = ${caseId}
         AND embedding IS NOT NULL
-      ORDER BY embedding <=> ${embeddingStr}::vector
+      ORDER BY embedding <=> ${embeddingStr}::vector, id ASC
       LIMIT ${limit}
     `
 
@@ -49,15 +56,10 @@ export async function denseRetrieve(
       retrievalTimeMs: Date.now() - startTime,
       embeddingTimeMs,
       method: "dense",
+      candidateDepth: limit,
       denseScores: evidence.map((e) => e.denseScore!),
     }
   } catch (error) {
-    console.error("Dense retrieval error:", error)
-    return {
-      evidence: [],
-      retrievalTimeMs: Date.now() - startTime,
-      embeddingTimeMs: null,
-      method: "dense",
-    }
+    throw new Error(`Dense retrieval failed: ${error instanceof Error ? error.message : String(error)}`)
   }
 }

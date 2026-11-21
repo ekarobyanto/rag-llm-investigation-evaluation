@@ -1,6 +1,8 @@
+import { randomUUID } from "crypto"
 import { NextResponse } from "next/server"
 import {
   runAllScenarios,
+  seedScenarios,
   runScenario,
   resetEvaluationCancel,
   cancelEvaluation,
@@ -19,6 +21,8 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}))
     const {
       scenarioId,
+      runId = randomUUID(),
+      repetition = 1,
       mode,
       methods: rawMethods,
       limit,
@@ -27,6 +31,8 @@ export async function POST(request: Request) {
       balanced,
     } = body as {
       scenarioId?: string
+      runId?: string
+      repetition?: number
       mode?: string // legacy compat — "ALL" runs all methods
       methods?: RetrievalMethod[] // explicit method list
       limit?: number
@@ -47,6 +53,7 @@ export async function POST(request: Request) {
     }
 
     if (scenarioId) {
+      await seedScenarios()
       resetEvaluationCancel()
       setActiveEvaluationStatus({
         isRunning: true,
@@ -66,7 +73,7 @@ export async function POST(request: Request) {
             break
           }
           try {
-            results.push(await runScenario(scenarioId, method))
+            results.push(await runScenario(scenarioId, method, undefined, { runId, repetition }))
             setActiveEvaluationStatus({
               completedRuns: results.length,
               label: `Executing single scenario (${results.length}/${targetMethods.length})...`,
@@ -79,13 +86,14 @@ export async function POST(request: Request) {
             throw err
           }
         }
-        return NextResponse.json({ results, cancelled })
+        return NextResponse.json({ results, runId, cancelled })
       } finally {
         setActiveEvaluationStatus({ isRunning: false })
       }
     }
 
     const summary = await runAllScenarios(targetMethods, undefined, {
+      runId, repetition,
       limit: typeof limit === "number" && limit > 0 ? limit : undefined,
       scenarioIds: Array.isArray(scenarioIds) && scenarioIds.length > 0 ? scenarioIds : undefined,
       difficulty: typeof difficulty === "string" ? difficulty : undefined,
