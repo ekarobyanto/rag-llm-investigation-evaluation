@@ -1,0 +1,966 @@
+{
+  "nexus_data_breach": {
+    "case": {
+      "title": "Kebocoran Data Perusahaan (ID v3)",
+      "description": "Pada 15 Januari 2027, perusahaan teknologi menyelidiki dugaan kebocoran arsip penilaian kerentanan klien. Catatan VPN memperlihatkan sesi dini hari melalui sebuah akun layanan. Tim investigasi perlu menelusuri akses ke akun tersebut, mencocokkan aktivitas yang tercatat, dan menilai apa yang bisa disimpulkan tentang orang yang menggunakannya."
+    },
+    "suspects": [
+      {
+        "name": "Marcus Chen",
+        "profile": "Insinyur Keamanan Senior. Akun kerjanya tercatat membuat akun layanan yang sedang diperiksa."
+      },
+      {
+        "name": "Dr. Sarah Okonkwo",
+        "profile": "Direktur Teknologi. Ia berwenang mengelola akun layanan dan masih berada di kantor menjelang sesi VPN dini hari."
+      },
+      {
+        "name": "Viktor Petrov",
+        "profile": "Insinyur DevOps utama. Ia bertanggung jawab atas gateway VPN dan pengelolaan kredensial akun layanan produksi."
+      },
+      {
+        "name": "Aisha Rahman",
+        "profile": "Analis Data. Akunnya mengunduh kumpulan data untuk analisis pada minggu sebelum insiden. Tim perlu memeriksa jenis data dan izin yang digunakan."
+      },
+      {
+        "name": "James Whitfield",
+        "profile": "Wakil Presiden Penjualan. Ia menangani akun Meridian dan meneruskan dokumen harga ke alamat email pribadi. Tim perlu memeriksa apakah dokumen itu berkaitan dengan data yang bocor."
+      }
+    ],
+    "evidence": [
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.9,
+        "content": "Pada 15 Januari 2027 pukul 02.00, akun layanan svc-threatfeed terhubung ke VPN perusahaan dari alamat IP 74.125.224.72. Sesi itu berakhir pukul 05.00."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "Pada 3 Oktober 2026, akun marcus.chen@company.com membuat akun layanan svc-threatfeed. Sejak dibuat, akun layanan itu memiliki izin untuk membaca dan mengekspor data dalam jumlah besar dari basis data perusahaan."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.9,
+        "content": "Marcus Chen menyatakan, “Malam itu saya di rumah. Sekitar jam sebelas saya sudah tidur. Laptop kantor sudah saya matikan dan saya simpan di ransel. Saya tidak mengakses sistem perusahaan malam itu.”"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.9,
+        "content": "Pada 15 Januari, sensor di ruang kerja rumah Marcus mendeteksi ada orang di ruangan itu sejak pukul 01.45 hingga 05.35. Lampu meja juga tercatat menyala sepanjang waktu tersebut."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "Pada 15 Januari, penyedia internet mencatat bahwa unggahan melalui sambungan rumah Marcus berlangsung terus-menerus dari pukul 02.15 hingga 04.45."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Di laptop pribadi Marcus, pemeriksa menemukan potongan halaman web yang masih tersimpan di peramban. Nama situs ShadowVault dan kode penawaran SV-184 masih terbaca. Bagian yang memuat judul penawaran tidak berhasil dipulihkan."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.9,
+        "content": "Sebuah email terenkripsi tertanggal 12 Januari yang dipulihkan dari akun ProtonMail Marcus berbunyi, “Sesuai pembicaraan kita, paketnya siap tanggal 15. Pastikan dana sudah masuk ke dompet escrow. Pengiriman akhir dalam 72 jam.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.9,
+        "content": "Pada 18 Januari, sebuah dompet kripto menerima 15 ETH, senilai sekitar US$48.000 saat itu. Hasil pemeriksaan mengaitkan kunci privat dompet tersebut dengan Marcus."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.7,
+        "content": "Dalam pemberitahuan internal tanggal 12 Desember 2026, bagian SDM menulis, “Posisi Kepala Keamanan Siber telah kami tawarkan kepada kandidat dari luar perusahaan. Marcus Chen sempat dipertimbangkan, tetapi tidak lolos ke tahap akhir.”"
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "Seorang rekan kerja Marcus bercerita, “Sejak pengumuman soal posisi Kepala Keamanan Siber itu, Marcus jadi lebih pendiam. Waktu makan siang, saya dengar dia bergumam, ‘Jadi selama ini saya kerja bertahun-tahun buat apa?’”"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Pada 14 Januari pukul 18.30, kartu akses Marcus digunakan di pintu keluar kantor. Dalam catatan gedung yang diperiksa, tidak ada pemindaian berikutnya di pintu masuk atas nama Marcus."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Router di rumah Marcus mencatat sekitar 2,3 TB data keluar melalui koneksi VPN pada 15 Januari. Transfer itu berlangsung antara pukul 02.15 dan 04.45."
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.4,
+        "content": "Riwayat GPS menunjukkan bahwa ponsel pribadi Marcus berada di alamat rumahnya dari pukul 22.00 pada 14 Januari hingga pukul 07.00 keesokan harinya."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Pada 13 Januari, akun pengembang Marcus tercatat mengakses repositori tempat perusahaan menyimpan kredensial internal. Salah satu kredensial yang tersimpan di sana adalah token autentikasi svc-threatfeed."
+      },
+      {
+        "type": "cctv_log",
+        "category": "location",
+        "difficulty_weight": 0.3,
+        "content": "Pada 14 Januari pukul 18.35, kamera di area parkir merekam kendaraan Marcus meninggalkan kompleks perusahaan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "communication",
+        "difficulty_weight": 0.7,
+        "content": "Salah satu pesan dalam percakapan Signal di ponsel pribadi Marcus berbunyi, “Sudah masuk. Mau saya cek dulu sebelum saya konfirmasi.” Nomor lawan bicara tidak tersimpan di daftar kontak. Tanggal pesan tidak terbaca."
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "Marcus mengambil pinjaman pada September 2026 dengan cicilan US$1.200 per bulan. Catatan keuangannya menunjukkan sisa pinjaman sebesar US$45.000."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Dari pukul 18.30 pada 14 Januari hingga pukul 08.15 keesokan harinya, laptop kantor Marcus tidak mencatat koneksi VPN maupun aktivitas jaringan lainnya."
+      },
+      {
+        "type": "witness_statement",
+        "category": "location",
+        "difficulty_weight": 0.5,
+        "content": "Tetangga Marcus bercerita, “Sekitar jam tiga pagi saya buka pintu supaya anjing saya bisa keluar. Saya lihat lampu ruang kerja Marcus di lantai atas masih menyala. Biasanya jam segitu sudah gelap.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Pada 13 Januari pukul 14.22, akun marcus.chen@company.com tercatat mengatur ulang kata sandi svc-threatfeed."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.9,
+        "content": "Pemeriksa berhasil memulihkan daftar folder dari perangkat penyimpanan jaringan (NAS) pribadi Marcus. Susunan foldernya sama dengan susunan arsip penilaian kerentanan perusahaan. Isi berkas di dalam folder tersebut tidak berhasil dipulihkan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.7,
+        "content": "Antara 8 dan 13 Januari, peramban di laptop pribadi Marcus mencatat tiga pencarian: “secure large file transfer services”, “Monero vs Ethereum privacy”, dan “cryptocurrency tumbling techniques”."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari, akun Netflix Marcus memutar Cyberpunk: Edgerunners dari pukul 20.30 hingga 23.25 tanpa jeda."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari pukul 20.00, Marcus memesan makan malam dari Golden Dragon Restaurant. Pesanan itu mencantumkan rumah Marcus sebagai alamat pengantaran."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari, pusat kebugaran menagih iuran keanggotaan Marcus sebesar US$49,99 melalui pembayaran otomatis."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Smile Dental Clinic mengirim pengingat otomatis kepada Marcus untuk jadwal pemeriksaan giginya pada 20 Januari."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 12 Januari, tagihan listrik bulanan Marcus sebesar US$127,50 dibayar secara otomatis."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari pukul 19.00–20.15, Spotify mencatat pemutaran musik di akun Marcus dari alamat rumahnya."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.8,
+        "content": "Tim investigasi menyimpan salinan penawaran SV-184 di ShadowVault. Halaman itu menampilkan cuplikan tabel penilaian kerentanan klien. Saat tim keamanan membandingkannya dengan dokumen internal perusahaan, nomor laporan dan isi temuan pada cuplikan tersebut cocok."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Atasan langsung Marcus mengatakan, “Kalau soal teknis, Marcus termasuk salah satu insinyur paling terampil di tim kami. Selama bekerja dengan saya, dia selalu profesional dan bisa diandalkan.”"
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.7,
+        "content": "Pada 15 Januari 2027 sekitar pukul 01.30, kartu akses Dr. Sarah Okonkwo dipindai di pintu keluar kantor pusat."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Sarah Okonkwo memberi keterangan, “Malam itu saya masih mengerjakan laporan audit triwulanan. Saya keluar dari kantor sekitar jam setengah dua pagi, lalu pesan mobil untuk pulang.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Riwayat aktivitas laptop kantor Sarah mencatat kueri basis data dan penyuntingan laporan audit antara pukul 20.00 pada 14 Januari dan pukul 01.15 keesokan harinya."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Dalam log VPN perusahaan, alamat asal sesi milik akun Sarah berada di rentang 10.0.1.x. Rentang alamat itu digunakan di jaringan internal kantor pusat."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "Pada 20 Desember, Sarah membalas email CEO Richard Hayes tentang rencana pemotongan anggaran keamanan. Ia menulis, “Kalau anggaran tim saya tetap dipangkas sebesar ini, Anda juga harus siap menanggung akibatnya.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "Berkas perkara perceraian Sarah mencantumkan biaya hukum sebesar US$30.000 untuk empat bulan terakhir."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Robert Torres, petugas keamanan yang berjaga malam itu, memberi keterangan, “Saya lihat Bu Sarah keluar lewat lobi utama sekitar jam setengah dua pagi. Dia bawa tas laptop. Kelihatannya capek.”"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Bukti perjalanan pada akun Sarah mencantumkan kantor pusat sebagai titik jemput dan alamat rumahnya sebagai tujuan. Pada 15 Januari, perjalanan dimulai pukul 01.35 dan berakhir pukul 02.05."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Kamera di pintu depan rumah Sarah merekamnya masuk pada 15 Januari pukul 02.08."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Antara pukul 02.15 dan 06.45 pada 15 Januari, ponsel pribadi Sarah tidak mencatat penggunaan aplikasi maupun aktivitas jaringan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.6,
+        "content": "Entri terakhir untuk akun administrator Sarah dalam log yang diperiksa bertanggal 15 Januari pukul 01.12. Kueri pada entri itu menampilkan daftar akun layanan beserta izin yang dimiliki masing-masing akun."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Menurut daftar hak akses perusahaan, Sarah memiliki akses root ke seluruh sistem. Hak tersebut mencakup pengelolaan akun layanan, termasuk svc-threatfeed."
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Pada 15 Januari pukul 00.45, Sarah mengirim email ke tim keamanan. “Saya masih merampungkan bagian kontrol akses untuk laporan Q4. Drafnya saya kirim besok pagi paling lambat.”"
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "Seorang rekan kerja Sarah mengatakan, “Sejak mengurus perceraian, Sarah kelihatan banyak pikiran. Belakangan dia memang lebih gampang marah, tapi pekerjaannya tetap dia urus.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "Dalam tiga bulan, saldo tabungan Sarah turun dari US$85.000 menjadi US$12.000. Rekening korannya antara lain mencatat pembayaran biaya hukum dan pengeluaran untuk dua rumah tangga."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Pada laptop kantor Sarah, pemeriksa tidak menemukan jejak penyalinan data tanpa izin, berkas yang dikumpulkan untuk dikirim keluar, atau perangkat lunak yang digunakan untuk memindahkan data tersebut."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Draf presentasi Sarah untuk konferensi keamanan RSA terakhir disunting pada 13 Januari."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 11 Januari, Sarah membagikan tulisan di LinkedIn tentang perkembangan pendekatan zero trust dalam keamanan sistem."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 15 Januari pukul 07.00, kartu anggota Sarah dipindai di pintu masuk pusat kebugaran."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Nota bengkel tertanggal 10 Januari mencantumkan penggantian oli rutin untuk mobil Sarah."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada Januari, rekening Sarah mencatat pembayaran otomatis untuk cicilan rumah, premi asuransi, dan tagihan rumah tangga."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Sarah menjadwalkan audit keamanan triwulanan di kalender kerjanya untuk tanggal 13 hingga 17 Januari."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.6,
+        "content": "Pada 14 Januari, seorang anggota tim audit mengirim email kepada Sarah. “Bu, untuk lampiran kontrol akses Q4, kami masih perlu daftar akun layanan dan izin masing-masing. Bisa Ibu ambilkan waktu menyiapkan laporan malam ini?”"
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Riwayat panggilan Sarah mencatat telepon ke pengacara perceraiannya pada 14 Januari pukul 18.00. Panggilan itu berlangsung 12 menit."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Asisten eksekutif Sarah mengatakan, “Sarah sempat bilang dia akan pulang larut karena harus menyelesaikan audit. Tiap akhir triwulan memang biasanya begitu.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Dari 13 hingga 17 Januari, sistem pemantauan transfer perusahaan tidak mencatat satu pun pengiriman berkas berukuran lebih dari 1 GB atas nama akun Sarah."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Sarah menerima konfirmasi pemesanan tiket pesawat dan hotel untuk menghadiri RSA Conference pada 24–28 Februari."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Bukti pengiriman tertanggal 12 Januari mencatat bahwa Sarah menerima satu eksemplar buku Security Engineering karya Ross Anderson."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.5,
+        "content": "Pada 15 Desember, Sarah melaporkan celah keamanan pada sistem autentikasi internal. Catatan penanganan insiden mencantumkan namanya sebagai orang yang memasang perbaikan."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 15 Januari pukul 06.00, kalender kerja Sarah mengirim pengingat otomatis untuk rapat tim hari Senin pagi."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.6,
+        "content": "Dalam pembagian tugas tim TI, Viktor Petrov tercatat sebagai insinyur DevOps utama. Ia bertanggung jawab atas gateway VPN perusahaan dan mengawasi proses pembuatan akun layanan di lingkungan produksi."
+      },
+      {
+        "type": "witness_statement",
+        "category": "contradiction",
+        "difficulty_weight": 0.7,
+        "content": "Viktor Petrov memberi keterangan, “Tanggal 14 Januari saya keluar kantor tepat jam lima sore. Saya langsung menyetir pulang. Malam itu saya cuma nonton TV sebentar, lalu tidur lebih awal.”"
+      },
+      {
+        "type": "cctv_log",
+        "category": "contradiction",
+        "difficulty_weight": 0.8,
+        "content": "Pada 14 Januari pukul 19.15, kamera lobi merekam Viktor Petrov berjalan keluar melalui pintu utama kantor."
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.7,
+        "content": "Kartu akses Viktor dipindai di pintu keluar gedung pada 14 Januari pukul 19.17."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Bukti perjalanan pada akun Viktor mencantumkan kantor sebagai titik jemput dan sebuah bar di pusat kota sebagai tujuan. Perjalanan dimulai pukul 19.20 pada 14 Januari dan berakhir pukul 19.40."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Viktor terlihat di kamera bar sejak sekitar pukul 19.45 pada 14 Januari. Saat bar tutup pukul 01.30 keesokan harinya, ia masih terlihat di sana."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Riwayat GPS ponsel Viktor menempatkan perangkat itu di bar hingga 15 Januari pukul 01.30. Pada pukul 01.55, lokasinya sudah tercatat di alamat apartemen Viktor."
+      },
+      {
+        "type": "financial_record",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Viktor Petrov mendaftarkan usaha bernama PetrovTech Consulting LLC enam bulan sebelum kebocoran data terjadi."
+      },
+      {
+        "type": "financial_record",
+        "category": "forensic",
+        "difficulty_weight": 0.4,
+        "content": "Rekening PetrovTech Consulting LLC menerima dua transfer. Transfer sebesar US$6.500 mencantumkan referensi PT-017. Transfer sebesar US$8.500 mencantumkan referensi PT-021."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.4,
+        "content": "Dalam dua rangkaian email terpisah, dua klien usaha kecil meminta Viktor memeriksa keamanan infrastruktur cloud mereka. Keduanya membahas sistem yang perlu diperiksa dan meminta laporan hasil pemeriksaan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Menurut daftar hak akses perusahaan, akun administrator Viktor memiliki izin untuk mengganti dan mengatur ulang kredensial seluruh akun layanan produksi, termasuk svc-threatfeed."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.3,
+        "content": "Viktor menerima email konfirmasi pendaftaran untuk konferensi keamanan di Las Vegas yang dijadwalkan pada 3–7 Januari 2027."
+      },
+      {
+        "type": "location_report",
+        "category": "location",
+        "difficulty_weight": 0.3,
+        "content": "Catatan imigrasi menunjukkan bahwa Viktor masuk kembali ke Amerika Serikat melalui bandara di Las Vegas pada 10 Januari."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.4,
+        "content": "Daftar aplikasi yang terpasang di laptop pribadi Viktor mencakup Burp Suite, Metasploit, dan Nmap."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Tim jaringan memeriksa sesi VPN perusahaan yang aktif pada 15 Januari antara pukul 02.00 dan 05.00. Tidak satu pun sesi dalam log itu berasal dari alamat IP sambungan rumah Viktor."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Bartender yang berjaga malam itu mengatakan, “Saya kenal Viktor. Dia sering datang ke sini. Seingat saya, sekitar jam delapan dia sudah duduk nonton hoki. Dia minum kira-kira empat gelas bir dan masih di sini waktu kami tutup jam setengah dua.”"
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Pada 15 Januari pukul 00.05, Viktor mengirim pesan kepada pacarnya, “Pertandingannya masuk perpanjangan waktu. Sebentar lagi aku pulang. Kalau sudah ngantuk, tidur duluan aja.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Pada 14 Januari pukul 19.10, sesi pengguna di laptop kantor Viktor berakhir dengan logout normal. Itu sesi terakhir yang tercatat pada laptop tersebut malam itu."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Dari pukul 19.15 pada 14 Januari hingga pukul 05.00 keesokan harinya, sistem perusahaan tidak mencatat login atau tindakan lain atas nama akun administrator Viktor."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Riwayat Spotify pada akun Viktor mencatat pemutaran musik di lokasi bar dari pukul 20.00 pada 14 Januari hingga pukul 01.15 keesokan harinya."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari pukul 21.00, pesanan makanan senilai US$35 dibuat melalui akun Viktor. Alamat pengantarannya adalah bar di pusat kota."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 11 Januari, Viktor mengajukan penggantian biaya sebesar US$2.400 untuk konferensi keamanan di Las Vegas. Atasannya menyetujui pengajuan tersebut."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 1 Januari, biaya langganan parkir kantor sebesar US$180 dibayar secara otomatis dari rekening Viktor."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 15 Januari pukul 03.00, ponsel Viktor menerima pembaruan iOS otomatis saat terhubung ke Wi-Fi di apartemennya."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.4,
+        "content": "Log rotasi kredensial mencatat penggantian kata sandi svc-threatfeed pada 15 Oktober 2026 melalui akun administrator Viktor. Entri itu tercantum dalam daftar pekerjaan rotasi triwulanan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.3,
+        "content": "Pada November 2026, Viktor meninjau dan menyetujui daftar izin akun layanan produksi. Persetujuannya tercatat dalam riwayat peninjauan kode perusahaan."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.3,
+        "content": "Seorang rekan kerja Viktor mengatakan, “Dia sering cerita soal klien konsultasinya. Pernah dia bercanda, kalau PetrovTech makin ramai, lama-lama itu bisa jadi pekerjaan utamanya.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "forensic",
+        "difficulty_weight": 0.3,
+        "content": "Arsip PetrovTech memuat dua tagihan untuk klien yang berbeda. PT-017 senilai US$6.500 dan PT-021 senilai US$8.500. Keduanya mencantumkan jasa pemeriksaan keamanan infrastruktur cloud."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 8 Januari, Viktor menerima email otomatis yang mengonfirmasi perpanjangan sertifikasi CompTIA Security+ miliknya."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 1 Januari, sewa apartemen Viktor sebesar US$1.850 dibayar melalui pendebitan otomatis."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Aisha Rahman memberi keterangan, “Malam itu saya berangkat ke Chicago. Besok paginya ada presentasi klien. Saya naik pesawat sekitar jam sebelas lewat seperempat malam. Kami mendarat di O’Hare jam 05.45 waktu Chicago.”"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.9,
+        "content": "Reservasi United atas nama Aisha Rahman mencantumkan penerbangan NX-447 dari Washington Dulles. Jadwal keberangkatan pada tiket adalah 14 Januari pukul 23.30 waktu setempat."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.8,
+        "content": "Pada 14 Januari pukul 23.15 waktu setempat, boarding pass atas nama Aisha Rahman dipindai di gerbang B12, Bandara Washington Dulles."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Dalam manifes penerbangan United NX-447, kursi 14C tercatat atas nama Aisha Rahman. Catatan kedatangan maskapai menunjukkan pesawat itu mendarat di Chicago O’Hare pada 15 Januari pukul 05.45 CST."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Pada 15 Januari pukul 05.52 CST, ponsel Aisha kembali terhubung ke jaringan seluler. Operator mencatat sambungan itu di wilayah Chicago."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Chicago Marriott Magnificent Mile mencatat check-in atas nama Aisha Rahman pada 15 Januari pukul 06.30 CST."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Menurut log daya, laptop kantor Aisha dimatikan pada 14 Januari pukul 22.00. Catatan berikutnya menunjukkan laptop menyala kembali pada 15 Januari pukul 07.15 CST. Entri pertama tidak mencantumkan zona waktu."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Daftar izin basis data mencatat bahwa akun Aisha memiliki akses baca. Akun itu tidak memiliki izin untuk menjalankan ekspor massal, mengubah skema basis data, atau membuka kredensial akun layanan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Dalam riwayat kueri 30 hari yang diperiksa, seluruh kueri atas nama akun Aisha berupa SELECT untuk analisis data."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.4,
+        "content": "Pada 7 Januari, log transfer mencatat satu unduhan sebesar 500 MB melalui akun Aisha. Kumpulan data yang diunduh tercatat dengan kode RK-Q4-17."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Seorang awak kabin United mengatakan, “Saya ingat penumpang di kursi 14C. Waktu baru naik, dia minta selimut sama bantal.”"
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Kalender kerja Aisha memuat agenda “Presentasi klien — Meridian Group” di Chicago pada 15 Januari pukul 09.00 CST."
+      },
+      {
+        "type": "email_message",
+        "category": "alibi",
+        "difficulty_weight": 0.3,
+        "content": "Pada 14 Januari pukul 21.00, Aisha mengirim email ke timnya. “Slide finalnya sudah saya lampirkan. Saya berangkat ke bandara sekarang. Besok saya ikut lewat telepon dari Chicago.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "forensic",
+        "difficulty_weight": 0.3,
+        "content": "Laporan pemeriksaan latar belakang Aisha tidak mencantumkan utang yang masih berjalan maupun catatan kriminal."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Menurut arsip SDM, Aisha bergabung dengan perusahaan enam bulan sebelum insiden. Sebelumnya ia bekerja sebagai peneliti sains data di Georgetown University."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.3,
+        "content": "Atasan Aisha mengatakan, “Saya sudah bekerja dengan Aisha sekitar enam bulan. Dia rajin, biasanya tepat waktu, dan banyak membantu tim. Selama itu saya belum pernah melihat sesuatu yang membuat saya curiga.”"
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Bukti perjalanan Uber pada akun Aisha mencatat penjemputan di apartemennya pada 14 Januari pukul 21.30. Perjalanan berakhir di Bandara Washington Dulles pukul 22.05."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Struk dari ruang tunggu United Club mencantumkan satu kopi dan satu roti lapis kalkun dengan total US$15,50. Waktu transaksi yang tertera adalah 14 Januari pukul 22.15."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari pukul 21.45, akun Netflix Aisha mencatat unduhan dua episode serial dokumenter untuk ditonton secara luring."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.5,
+        "content": "Pada 6 Januari, koordinator tim analitik mengirim email kepada Aisha. “Untuk laporan risiko klien kuartal ini, pakai kumpulan data RK-Q4-17. Tolong siapkan ringkasannya untuk bahan presentasi.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Di ponsel Aisha, alarm untuk 15 Januari disetel pukul 06.00 CST."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Konfirmasi pesanan Amazon tertanggal 12 Januari mencantumkan satu adaptor daya perjalanan atas nama Aisha. Alamat pengiriman yang tertera adalah hotel Chicago Marriott."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Tim TI memeriksa arsip permintaan akses. Tidak ada pengajuan penambahan hak akses atas nama akun Aisha dalam arsip tersebut."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Pemantauan sistem perusahaan tidak mencatat login atau panggilan API atas nama akun Aisha selama periode yang diperiksa. Laporan mencantumkan waktu mulai 14 Januari pukul 22.00 tanpa zona waktu dan waktu akhir 15 Januari pukul 07.15 CST."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Dalam percakapan Slack pada 14 Januari pukul 20.30, Aisha dan seorang rekan kerja membahas tata letak slide presentasi."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Kalender Aisha memuat pengingat untuk check-out dari Chicago Marriott pada 16 Januari."
+      },
+      {
+        "type": "location_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 11 Januari, Aisha menambahkan “Analisis Intelijen Ancaman” ke daftar keterampilan di profil LinkedIn miliknya."
+      },
+      {
+        "type": "forensic_report",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 14 Januari pukul 21.00, aplikasi cuaca di ponsel Aisha menampilkan prakiraan cuaca Chicago untuk keesokan harinya."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 10 Januari, rekening Aisha menerima pembayaran gaji dua mingguan sebesar US$3.200."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 8 Januari, sistem SDM mengirim email otomatis kepada Aisha untuk menandai selesainya masa orientasi enam bulan."
+      },
+      {
+        "type": "witness_statement",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "James Whitfield memberi keterangan, “Tanggal 14 Januari saya makan malam di Harbour Steak House bersama tim yang menangani akun Meridian Corp. Kami selesai sekitar jam sebelas kurang seperempat. Setengah dua belas saya sudah di rumah.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.5,
+        "content": "Pada 14 Januari pukul 22.45, Harbour Steak House menutup pesanan meja untuk rombongan dengan nama reservasi Whitfield."
+      },
+      {
+        "type": "financial_record",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Pada 14 Januari pukul 22.50, Harbour Steak House menagihkan US$850 ke kartu kredit perusahaan atas nama James Whitfield."
+      },
+      {
+        "type": "location_report",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Bukti perjalanan Uber pada akun James mencatat penjemputan di Harbour Steak House pada 14 Januari pukul 22.55. Perjalanan berakhir di alamat rumahnya pukul 23.20."
+      },
+      {
+        "type": "cctv_log",
+        "category": "alibi",
+        "difficulty_weight": 0.6,
+        "content": "Kamera di pintu depan rumah James merekamnya masuk pada 14 Januari pukul 23.25."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.4,
+        "content": "Riwayat penggunaan ponsel pribadi James mencatat aktivitas di aplikasi CNN dan Bloomberg hingga 15 Januari pukul 00.15. Setelah itu, tidak ada aktivitas yang tercatat hingga pukul 07.00."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.7,
+        "content": "Memo internal tim penjualan tertanggal 15 November 2026 menyebut perusahaan kehilangan kontrak layanan keamanan Meridian Corp senilai US$2,1 juta per tahun. James Whitfield tercantum sebagai penanggung jawab akun tersebut."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.6,
+        "content": "Pada 28 Desember, Diana Walsh, CEO CyberShield Inc., mengirim email kepada James. “James, senang bisa ngobrol lagi. Awal tahun nanti kita cari waktu untuk membahas peluang yang kemarin sempat kita singgung. Pengalaman kamu akan sangat berguna.”"
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.5,
+        "content": "Dalam folder email terkirim James, terdapat pesan bertanggal 30 Desember 2026 dengan lampiran ringkasan-harga-Q4.pdf. Alamat tujuan yang tercantum adalah alamat email pribadi James."
+      },
+      {
+        "type": "witness_statement",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "Seorang rekan di tim penjualan mengatakan, “James kecewa berat waktu kontrak Meridian lepas. Beberapa kali dia bilang keputusan pimpinan bikin dia sulit mempertahankan klien itu.”"
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.8,
+        "content": "Dalam daftar hak akses perusahaan, akun James terdaftar sebagai akun bisnis standar. Akun itu tidak memiliki hak administrator, izin VPN, atau akses ke infrastruktur teknis perusahaan."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Inventaris laptop kantor James mencantumkan Microsoft Office, Salesforce, Zoom, dan Slack. Pemeriksa tidak menemukan klien VPN, perangkat pengembangan, atau emulator terminal dalam daftar aplikasi yang terpasang."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Berkas pelatihan James di bagian SDM tidak mencantumkan sertifikasi teknis maupun pelatihan keamanan, pemrograman, atau administrasi sistem."
+      },
+      {
+        "type": "forensic_report",
+        "category": "alibi",
+        "difficulty_weight": 0.7,
+        "content": "Profil akses James mencantumkan dasbor Salesforce sebagai sarana untuk melihat data penjualan. Dalam log basis data yang diperiksa, tidak ada kueri langsung atas nama akunnya."
+      },
+      {
+        "type": "forensic_report",
+        "category": "communication",
+        "difficulty_weight": 0.4,
+        "content": "Pada 14 Januari pukul 18.00, James menelepon Diana Walsh, CEO CyberShield Inc. Riwayat telepon mencatat durasi panggilan tujuh menit."
+      },
+      {
+        "type": "email_message",
+        "category": "motive",
+        "difficulty_weight": 0.4,
+        "content": "Dalam email kepada seorang rekan kerja pada 10 Januari, James menulis, “Mereka bakal bayar untuk apa yang terjadi dengan Meridian. Perusahaan ini sama sekali nggak menghargai orang yang selama ini kasih hasil.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "motive",
+        "difficulty_weight": 0.5,
+        "content": "Laporan komisi James untuk kuartal IV 2026 mencatat penurunan kompensasi variabel sebesar 40% setelah perusahaan kehilangan kontrak Meridian."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Dalam prakiraan penjualan kuartal I 2027, James mencantumkan tiga perusahaan baru sebagai calon klien."
+      },
+      {
+        "type": "witness_statement",
+        "category": "noise",
+        "difficulty_weight": 0.4,
+        "content": "Asisten eksekutif James mengatakan, “Kalau lagi kesal sama pimpinan, James memang suka ngomel. Kalau urusan teknis, biasanya dia minta bantuan. Kata sandi emailnya sendiri saja pernah dia minta tolong saya reset.”"
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 1 Januari, James menerima tagihan iuran bulanan country club sebesar US$350."
+      },
+      {
+        "type": "forensic_report",
+        "category": "forensic",
+        "difficulty_weight": 0.5,
+        "content": "Dalam daftar dokumen tim penjualan, ringkasan-harga-Q4.pdf tercatat sebagai ikhtisar perbandingan harga layanan. Kolom klasifikasi pada entri tersebut bertuliskan “Nonrahasia”."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 5 Januari, rekening James didebit sebesar US$780 untuk pembayaran sewa kendaraan."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Nota penatu tertanggal 13 Januari mencatat pembayaran US$45 atas nama James Whitfield untuk layanan cuci kering."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Sekolah anak James mengirim email pada 14 Januari tentang pertemuan orang tua dan guru yang dijadwalkan pada 22 Januari."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 2 Januari, James ditagih US$39,99 untuk perpanjangan langganan digital The Wall Street Journal."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "James menerima konfirmasi pendaftaran untuk Sales Leadership Summit di Miami yang dijadwalkan pada 10–12 Februari."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 12 Januari, liga fantasy football yang diikuti James mengirim pemberitahuan otomatis berisi klasemen akhir musim."
+      },
+      {
+        "type": "financial_record",
+        "category": "noise",
+        "difficulty_weight": 0.2,
+        "content": "Pada 1 Januari, cicilan rumah James sebesar US$3.200 dibayar melalui pendebitan otomatis."
+      },
+      {
+        "type": "email_message",
+        "category": "communication",
+        "difficulty_weight": 0.3,
+        "content": "Pada 13 Januari, James mengirim undangan rapat kepada CEO perusahaan, Richard Hayes, dengan subjek “Arah Tim Penjualan dan Dukungan dari Pimpinan”."
+      },
+      {
+        "type": "email_message",
+        "category": "noise",
+        "difficulty_weight": 0.1,
+        "content": "Pada 7 Januari, sistem SDM mengirim email otomatis kepada James atas lima tahun masa kerjanya di perusahaan."
+      }
+    ],
+    "ground_truth": {
+      "correct_suspect_name": "Marcus Chen",
+      "contradiction_pairs": [
+        {
+          "evidence_index_a": 61,
+          "evidence_index_b": 62,
+          "explanation": "Viktor mengaku keluar kantor pukul 17.00 pada 14 Januari. CCTV lobi merekamnya keluar pukul 19.15 pada tanggal yang sama."
+        },
+        {
+          "evidence_index_a": 61,
+          "evidence_index_b": 64,
+          "explanation": "Viktor mengaku langsung mengemudi pulang. Catatan perjalanan mencatat penjemputan di kantor dan tujuan di bar pusat kota."
+        }
+      ],
+      "relevant_evidence_indices": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        11,
+        13,
+        19,
+        20,
+        28
+      ],
+      "optimal_next_actions": [
+        "INTERROGATE",
+        "EXAMINE_EVIDENCE",
+        "REVIEW_TIMELINE",
+        "SUBMIT_DEDUCTION"
+      ]
+    }
+  }
+}

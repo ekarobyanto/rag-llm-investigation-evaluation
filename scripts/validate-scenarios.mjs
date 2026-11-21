@@ -44,7 +44,10 @@ export function validateScenarios(scenarios, caseFile) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const scenarios = JSON.parse(readFileSync(resolve('eval-scenarios/scenario-v2.json'), 'utf8'));
-  const caseFile = JSON.parse(readFileSync(resolve('cases-input/case-1.json'), 'utf8'));
+  const args = process.argv.slice(2);
+  assert(args.length === 0 || args.length === 2, 'Provide both the scenario file and its case file.');
+  const [scenarioPath = 'eval-scenarios/scenario-v2.json', casePath = 'cases-input/case-1.json'] = args;
+  const scenarios = JSON.parse(readFileSync(resolve(scenarioPath), 'utf8'));
+  const caseFile = JSON.parse(readFileSync(resolve(casePath), 'utf8'));
   console.log(`Validated ${validateScenarios(scenarios, caseFile)} scenarios (offline; no database or model calls).`);
 }
